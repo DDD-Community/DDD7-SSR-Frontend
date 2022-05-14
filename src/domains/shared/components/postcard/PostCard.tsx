@@ -18,7 +18,7 @@ const PostCard = ({ imageSrc, title, summary, authors }: PostCardProps) => {
   );
 };
 
-const CardLayout = styled('div')`
+const CardLayout = styled.div`
   position: relative;
   border-radius: 20px;
   background-color: red;
