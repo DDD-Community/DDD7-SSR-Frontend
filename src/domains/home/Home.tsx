@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { PostGrid } from '../shared/components/PostGrid';
+import { PostDetail } from '../shared/model/post';
 import { useGetPostsQuery } from './Home.queries';
 
 const Home = () => {
@@ -9,7 +10,7 @@ const Home = () => {
   const postsMock = {
     content: [
       {
-        postIdx: 1,
+        postIdx: 7,
         title: 'server-side rendering',
         contents: 'server-side rendering 은 ~~',
         thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
@@ -20,7 +21,7 @@ const Home = () => {
         deleted: 'N',
       },
       {
-        postIdx: 2,
+        postIdx: 8,
         title: 'server-side rendering',
         contents: 'server-side rendering 은 ~~',
         thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
@@ -31,7 +32,7 @@ const Home = () => {
         deleted: 'N',
       },
       {
-        postIdx: 3,
+        postIdx: 9,
         title: 'server-side rendering',
         contents: 'server-side rendering 은 ~~',
         thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
@@ -42,7 +43,7 @@ const Home = () => {
         deleted: 'N',
       },
       {
-        postIdx: 4,
+        postIdx: 10,
         title: 'server-side rendering',
         contents: 'server-side rendering 은 ~~',
         thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
@@ -53,7 +54,7 @@ const Home = () => {
         deleted: 'N',
       },
       {
-        postIdx: 5,
+        postIdx: 11,
         title: 'server-side rendering',
         contents: 'server-side rendering 은 ~~',
         thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
@@ -64,6 +65,8 @@ const Home = () => {
         deleted: 'N',
       },
     ],
+  } as {
+    content: PostDetail[];
   };
 
   return (
