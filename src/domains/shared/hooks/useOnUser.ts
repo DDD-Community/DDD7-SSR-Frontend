@@ -6,8 +6,8 @@ import { useUserStore } from '../store/user';
 type userOnUserResult = [boolean, ({ token, refreshToken }: TokenSet) => void, () => void];
 
 interface TokenSet {
-  token: string;
-  refreshToken: string;
+  token: string | string[] | undefined;
+  refreshToken: string | string[] | undefined;
 }
 
 export const useOnUser = (): userOnUserResult => {

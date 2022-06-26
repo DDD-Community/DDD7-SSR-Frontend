@@ -18,7 +18,7 @@ const LoginCallback = () => {
 
       router.push('/');
     }
-  }, [router]);
+  }, [loginWithTokens, router]);
 
   return <h1>Loading...</h1>;
 };
