@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 import { PostCard } from '../PostCard';
 import { PostGridProps } from './PostGridType';
 
-const PostGrid = ({ contents, columnCounts = 3 }: PostGridProps) => {
+const PostGrid = ({ contents }: PostGridProps) => {
   return (
-    <PostWrapperStyle columnsCounts={columnCounts}>
+    <PostWrapperStyle>
       {/* {getPostsQuery.data?.content.map((post) => ( */}
       {contents.map((post) => (
         <PostCard key={post.postIdx} data={post} />
@@ -13,9 +13,10 @@ const PostGrid = ({ contents, columnCounts = 3 }: PostGridProps) => {
   );
 };
 
-const PostWrapperStyle = styled.div<{ columnsCounts: number }>`
+const PostWrapperStyle = styled.div`
   display: grid;
-  grid-template-columns: repeat(${(props) => props.columnsCounts}, 1fr);
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 296px);
   gap: 21px;
   width: 1256px;
 `;

@@ -8,9 +8,8 @@ import ProfileInfoRow from './components/ProfileInfoRow';
 import { UserProfileInfo } from './Setting.model';
 
 const Settings = () => {
-  const { register, control } = useForm<UserProfileInfo>();
-  const [description, setDescription] = useState('');
-  const { onChange, ...restRegister } = register('blogDescription');
+  const { register, control, watch } = useForm<UserProfileInfo>();
+  const blogDescription = watch('blogDescription');
 
   return (
     <section css={settingsContainerStyle}>
@@ -27,12 +26,8 @@ const Settings = () => {
             <Spacing col={10} />
             <Textarea
               placeholder="소개글을 입력해주세요."
-              {...restRegister}
-              value={description}
-              onChange={(e) => {
-                onChange(e);
-                setDescription(e.target.value);
-              }}
+              {...register('blogDescription')}
+              value={blogDescription}
               maxLength={150}
               withCount
             />

@@ -7,73 +7,7 @@ import { useGetPostsQuery } from './Home.queries';
 const Home = () => {
   const getPostsQuery = useGetPostsQuery();
 
-  const postsMock = {
-    content: [
-      {
-        postIdx: 7,
-        title: 'server-side rendering',
-        contents: 'server-side rendering 은 ~~',
-        thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-        thumbnailContents: 'server-side rendering 은',
-        boardCount: 15,
-        privated: 'N',
-        dateTime: '2022-06-09 00:01:37',
-        deleted: 'N',
-      },
-      {
-        postIdx: 8,
-        title: 'server-side rendering',
-        contents: 'server-side rendering 은 ~~',
-        thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-        thumbnailContents: 'server-side rendering 은',
-        boardCount: 15,
-        privated: 'N',
-        dateTime: '2022-06-09 00:01:37',
-        deleted: 'N',
-      },
-      {
-        postIdx: 9,
-        title: 'server-side rendering',
-        contents: 'server-side rendering 은 ~~',
-        thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-        thumbnailContents: 'server-side rendering 은',
-        boardCount: 15,
-        privated: 'N',
-        dateTime: '2022-06-09 00:01:37',
-        deleted: 'N',
-      },
-      {
-        postIdx: 10,
-        title: 'server-side rendering',
-        contents: 'server-side rendering 은 ~~',
-        thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-        thumbnailContents: 'server-side rendering 은',
-        boardCount: 15,
-        privated: 'N',
-        dateTime: '2022-06-09 00:01:37',
-        deleted: 'N',
-      },
-      {
-        postIdx: 11,
-        title: 'server-side rendering',
-        contents: 'server-side rendering 은 ~~',
-        thumbnailImg: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-        thumbnailContents: 'server-side rendering 은',
-        boardCount: 15,
-        privated: 'N',
-        dateTime: '2022-06-09 00:01:37',
-        deleted: 'N',
-      },
-    ],
-  } as {
-    content: PostDetail[];
-  };
-
-  return (
-    <div css={HomeGridLayout}>
-      <PostGrid contents={postsMock.content} columnCounts={4} />
-    </div>
-  );
+  return <div css={HomeGridLayout}>{getPostsQuery.data && <PostGrid contents={getPostsQuery.data.content} />}</div>;
 };
 
 const HomeGridLayout = css`
@@ -84,5 +18,4 @@ const HomeGridLayout = css`
   margin-left: auto;
   margin-right: auto;
 `;
-
 export default Home;

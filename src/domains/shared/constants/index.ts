@@ -21,13 +21,19 @@ export const Color = {
   Gray950: '#111111',
 
   Red100: '#EB3C3C',
-};
+} as const;
 
 export const FontSize = {
   xLarge: '28px',
   Large: '16px',
   medium: '14px',
   small: '12px',
+} as const;
+
+export const Screen = {
+  mobile: 599,
+  tablet: 1199,
+  desktop: 1200,
 };
 
 export type ColorType = keyof typeof Color;
