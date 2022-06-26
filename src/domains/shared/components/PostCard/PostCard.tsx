@@ -31,10 +31,10 @@ const PostCard = ({ data }: PostCardProps) => {
           objectFit="cover"
         />
       </ImageSection>
-      <DiscriptionBox>
+      <DescriptionBox>
         <CardTitle>{data.title}</CardTitle>
         <CardSummary>{data.contents}</CardSummary>
-      </DiscriptionBox>
+      </DescriptionBox>
       <CardAuthor>
         <div style={{ width: '20px', height: '20px', borderRadius: '200px', overflow: 'hidden', marginBottom: '5px' }}>
           <Image
@@ -62,6 +62,7 @@ const CardLayout = styled('div')`
   background-color: ${Color.Gray800};
   min-width: 296px;
   height: 378px;
+  cursor: pointer;
 `;
 
 const ImageSection = styled('div')`
@@ -75,7 +76,7 @@ const ImageSection = styled('div')`
   height: 152px;
 `;
 
-const DiscriptionBox = styled('div')`
+const DescriptionBox = styled('div')`
   margin: 20px 21px 21px 21px;
 `;
 
