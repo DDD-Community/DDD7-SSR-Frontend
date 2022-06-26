@@ -23,7 +23,7 @@ const PostCard = ({ data }: PostCardProps) => {
     >
       <ImageSection>
         <Image
-          src={data.thumbnailImg || ''}
+          src={data.thumbnailImg || 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg'}
           width="330px"
           height="152px"
           alt={data.thumbnailContents}
@@ -38,7 +38,7 @@ const PostCard = ({ data }: PostCardProps) => {
       <CardAuthor>
         <div style={{ width: '20px', height: '20px', borderRadius: '200px', overflow: 'hidden', marginBottom: '5px' }}>
           <Image
-            src={data.thumbnailImg || ''}
+            src={data.thumbnailImg || 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg'}
             width="20px"
             height="20px"
             alt={data.thumbnailContents}

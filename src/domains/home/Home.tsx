@@ -7,13 +7,7 @@ import { useGetPostsQuery } from './Home.queries';
 const Home = () => {
   const getPostsQuery = useGetPostsQuery();
 
-  return (
-    <div css={HomeGridLayout}>
-      {getPostsQuery.data && (
-        <PostGrid contents={getPostsQuery.data.content.filter((content) => content.thumbnailImg?.includes('http'))} />
-      )}
-    </div>
-  );
+  return <div css={HomeGridLayout}>{getPostsQuery.data && <PostGrid contents={getPostsQuery.data.content} />}</div>;
 };
 
 const HomeGridLayout = css`
