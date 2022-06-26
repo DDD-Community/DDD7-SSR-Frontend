@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-type BreakPointType = {
+export type BreakPointType = {
   isMobile: boolean;
   isTablet: boolean;
   isDesktop: boolean;

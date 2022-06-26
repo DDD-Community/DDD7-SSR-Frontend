@@ -12,6 +12,7 @@ export const GlobalEditorStyle = css`
   }
 
   .toastui-editor-dark .toastui-editor-defaultUI-toolbar {
+    width: 50%;
     background-color: #191a1c;
     border-bottom-color: #191a1c;
   }
@@ -456,8 +457,23 @@ export const GlobalEditorStyle = css`
     background-color: rgba(255, 250, 193, 0.5);
   }
 
+  .toastui-editor-dark .toastui-editor-contents {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
+    padding-top: 12px !important;
+    padding-right: 24px;
+  }
+
   .toastui-editor-md-preview {
+    position: relative;
     background-color: #212225;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    transform: translate(0, -7.5%);
+    height: calc(100% + 45px) !important;
+    padding: 28px 0px 48px 34px !important;
   }
 
   .toastui-editor-dark .toastui-editor-contents th.toastui-editor-md-preview-highlight,

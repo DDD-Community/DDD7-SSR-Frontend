@@ -12,18 +12,31 @@ import { Editor, EditorProps } from '@toast-ui/react-editor';
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import { useEffect, useRef } from 'react';
+import { Text } from '../Text';
+import { Spacing } from '..';
+import { css } from '@emotion/react';
+import { Color } from '../../constants';
+import { EditorMode } from './EditorType';
+import { useBreakPointStore } from '../../store/breakPoint';
 
 export interface EditorWithForwardedProps extends EditorProps {
   onChange: (value: string) => void;
+  onChangeMode?: (type: EditorMode) => void;
+  editorMode?: EditorMode;
 }
 
-const EditorWithForwarded = (props: EditorWithForwardedProps) => {
+const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: EditorWithForwardedProps) => {
   const ref = useRef<Editor>(null);
 
   const handleChange = () => {
     const writerInstance = ref.current?.getInstance();
     const writerContent = writerInstance?.isMarkdownMode ? writerInstance?.getMarkdown() : writerInstance?.getHTML();
-    props.onChange(writerContent || '');
+    onChange(writerContent || '');
+  };
+
+  const handleModeChange = (mode: EditorMode) => {
+    ref.current?.getInstance().changeMode(mode);
+    onChangeMode?.(mode);
   };
 
   useEffect(() => {
@@ -44,24 +57,90 @@ const EditorWithForwarded = (props: EditorWithForwardedProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (editorMode) {
+      ref.current?.getInstance().changeMode(editorMode);
+    }
+  }, [editorMode]);
+
   return (
-    <Editor
-      {...props}
-      onChange={handleChange}
-      previewStyle="vertical"
-      theme="dark"
-      plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
-      toolbarItems={[
-        ['heading', 'bold', 'italic', 'strike'],
-        ['hr', 'quote'],
-        ['ul', 'ol', 'task', 'indent', 'outdent'],
-        ['table', 'image', 'link'],
-        ['code', 'codeblock'],
-      ]}
-      ref={ref}
-      autofocus
-    />
+    <section css={editorSectionStyle}>
+      <Editor
+        {...props}
+        onChange={handleChange}
+        hideModeSwitch={true}
+        previewStyle="vertical"
+        theme="dark"
+        plugins={[[codeSyntaxHighlight, { highlighter: Prism }], colorSyntax]}
+        toolbarItems={[
+          ['heading', 'bold', 'italic', 'strike'],
+          ['hr', 'quote'],
+          ['ul', 'ol', 'task', 'indent', 'outdent'],
+          ['table', 'image', 'link'],
+          ['code', 'codeblock'],
+        ]}
+        ref={ref}
+        autofocus
+      />
+
+      {!props.hideModeSwitch && <div css={ViewerTopBlindScreenStyle}></div>}
+
+      {!props.hideModeSwitch && (
+        <div css={modeSwitchWrapperStyle}>
+          <button type="button" onClick={() => handleModeChange('markdown')}>
+            <Text type="body14" color={editorMode === 'markdown' ? 'White100' : 'Gray650'}>
+              MarkDown
+            </Text>
+          </button>
+
+          <button type="button" onClick={() => handleModeChange('wysiwyg')}>
+            <Text type="body14" color={editorMode === 'wysiwyg' ? 'White100' : 'Gray650'}>
+              Wysiwyg
+            </Text>
+          </button>
+        </div>
+      )}
+    </section>
   );
 };
 
 export default EditorWithForwarded;
+
+const editorSectionStyle = css`
+  position: relative;
+`;
+
+const ViewerTopBlindScreenStyle = css`
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 49%;
+  height: 48px;
+  background-color: ${Color.Gray850};
+`;
+
+const modeSwitchWrapperStyle = css`
+  display: flex;
+  justify-content: flex-end;
+
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    padding: 9px 15px;
+    border: 1px solid ${Color.Gray650};
+    border-top: none;
+    border-bottom-left-radius: 8px;
+    cursor: pointer;
+
+    & + button {
+      border: 1px solid ${Color.Gray650};
+      border-top: none;
+      border-left: none;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 8px;
+    }
+  }
+`;

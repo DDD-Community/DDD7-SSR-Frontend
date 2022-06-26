@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Writer from 'src/domains/shared/components/Editor/Writer';
 import { Color } from 'src/domains/shared/constants';
@@ -12,9 +12,13 @@ import { usePostCreateMutation } from './PostCreate.queries';
 import Router from 'next/router';
 import { ValueOption } from 'src/domains/shared/components/MultipleSelect/MultipleSelectTypes';
 import Image from 'next/image';
+import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
+import { EditorMode } from 'src/domains/shared/components/Editor/EditorType';
 
 const PostCreate = () => {
   const postCreateMutation = usePostCreateMutation();
+  const { isMobile } = useBreakPointStore();
+  const [editorMode, setEditorMode] = useState<EditorMode>('markdown');
 
   const { register, handleSubmit, control } = useForm<CreatePostData>();
   const onSubmit = handleSubmit((data) => {
@@ -26,8 +30,19 @@ const PostCreate = () => {
   });
 
   const [isModalShown, handleModalOpen, handleModalClose] = useIsShown(false);
+  const [isPreviewPlaceholderShown, handlePreviewPlaceholderAppear, handlePreviewPlaceholderDisappear] =
+    useIsShown(true);
   const [selectedFriendsList, setSelectedFriendsList] = useState<ValueOption[]>([]);
   const [isHaveFriendsChecked, setIsHaveFriendsChecked] = useState(false);
+
+  useEffect(() => {
+    if (isMobile) {
+      setEditorMode('wysiwyg');
+      return;
+    }
+
+    setEditorMode('markdown');
+  }, [isMobile]);
 
   return (
     <section css={createSectionStyle}>
@@ -49,13 +64,38 @@ const PostCreate = () => {
                 initialValue=""
                 onChange={(value) => {
                   field.onChange(value);
+                  if (value.length === 0) {
+                    handlePreviewPlaceholderAppear();
+                    return;
+                  }
+
+                  handlePreviewPlaceholderDisappear();
                 }}
+                editorMode={editorMode}
+                onChangeMode={(mode) => {
+                  setEditorMode(mode);
+                }}
+                hideModeSwitch={isMobile}
               />
             );
           }}
         />
-
-        <div css={previewPlaceholderStyle}>출판 예상 화면</div>
+        {!isPreviewPlaceholderShown && (
+          <div css={previewTopTextStyle}>
+            <Text type="tag12" color="Primary50">
+              출판예상화면
+            </Text>
+          </div>
+        )}
+        {!isMobile && isPreviewPlaceholderShown && (
+          <div css={previewPlaceholderStyle}>
+            <Text type="tag12" color="Gray650">
+              출판예상화면
+            </Text>
+            <Spacing col={4} />
+            <Image src="/dewspaper_gray_logo.png" alt="dewspaper-logo" width={110} height={24} />
+          </div>
+        )}
 
         <Spacing col={34} />
 
@@ -102,12 +142,24 @@ const flexBoxStyle = css`
   display: flex;
 `;
 
+const previewTopTextStyle = css`
+  position: absolute;
+  top: 34%;
+  left: calc(50% + 34px);
+  transform: translate(calc(-50% + 32px), -34%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
 const previewPlaceholderStyle = css`
   position: absolute;
   top: 70%;
   left: 72%;
   transform: translate(-72%, -70%);
-  color: ${Color.White100};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const titleWrapperStyle = css`
@@ -119,7 +171,6 @@ const titleWrapperStyle = css`
     font-weight: bold;
     display: inline-flex;
     width: 80%;
-    /* height: auto; */
     max-width: 1015px;
     font-size: 28px;
     color: ${Color.White100};

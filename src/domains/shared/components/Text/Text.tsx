@@ -9,9 +9,10 @@ interface TextProps {
   color?: ColorType;
   useInline?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
-const Text: React.FC<PropsWithChildren<TextProps>> = ({ children, className, type, color, useInline }) => {
+const Text: React.FC<PropsWithChildren<TextProps>> = ({ children, className, type, color, useInline, onClick }) => {
   const textStyle = useMemo(
     () => css`
       ${TextStyleMap[type]}
@@ -22,7 +23,7 @@ const Text: React.FC<PropsWithChildren<TextProps>> = ({ children, className, typ
   );
 
   return (
-    <div className={className} css={textStyle}>
+    <div className={className} css={textStyle} onClick={onClick}>
       {children}
     </div>
   );
