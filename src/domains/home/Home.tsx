@@ -1,13 +1,14 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { PostGrid } from '../shared/components/PostGrid';
-import { PostDetail } from '../shared/model/post';
 import { useGetPostsQuery } from './Home.queries';
 
 const Home = () => {
   const getPostsQuery = useGetPostsQuery();
 
-  return <div css={HomeGridLayout}>{getPostsQuery.data && <PostGrid contents={getPostsQuery.data.content} />}</div>;
+  return (
+    <div css={HomeGridLayout}>{getPostsQuery.data?.content && <PostGrid contents={getPostsQuery.data.content} />}</div>
+  );
 };
 
 const HomeGridLayout = css`

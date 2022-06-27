@@ -66,6 +66,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
                     key={renderedOption.key || renderedOption.value}
                     css={ListItemStyle}
                     onClick={() => {
+                      console.log(value);
                       if (optionIndex >= 0) {
                         onChange(value.filter((option) => option.value !== renderedOption.value));
 
