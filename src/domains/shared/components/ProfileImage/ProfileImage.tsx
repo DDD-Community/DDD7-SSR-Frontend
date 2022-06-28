@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import React, { useRef } from 'react';
 import { Color } from '../../constants';
+import { BreakPoint } from '../../hooks/useMediaQuery';
 import { ProfileImageProps } from './ProfileImageType';
 
 const ProfileImage = ({ src, onChange }: ProfileImageProps) => {
@@ -30,8 +31,8 @@ const ProfileImage = ({ src, onChange }: ProfileImageProps) => {
 export default ProfileImage;
 
 const profileImageStyle = css`
-  width: 113px;
-  height: 113px;
+  max-width: 113px;
+  max-height: 113px;
   flex: 1 0 auto;
   cursor: pointer;
 
@@ -39,5 +40,11 @@ const profileImageStyle = css`
     width: 100%;
     border-radius: 50%;
     background-color: ${Color.Gray800};
+  }
+
+  ${BreakPoint.Mobile()} {
+    flex: 1 0 auto;
+    max-width: 108px;
+    max-height: 108px;
   }
 `;

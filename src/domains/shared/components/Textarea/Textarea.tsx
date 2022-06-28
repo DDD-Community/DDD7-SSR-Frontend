@@ -84,7 +84,7 @@ const textareaWrapperStyle = css`
   position: relative;
   box-sizing: border-box;
   width: 100%;
-  height: 64px;
+  min-height: 64px;
   max-width: 600px;
 `;
 
