@@ -1,15 +1,29 @@
-import { useQuery } from 'react-query';
-import client, { setAuthToken } from '../api/client';
-
-const userFetcher = () => {
-  const currentToken = localStorage.getItem('dewsToken');
-  if (currentToken) setAuthToken(currentToken);
-
-  return client.get('/me').then((response) => response);
-};
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import client, { clearAuthToken, setAuthToken } from '../api/client';
+import { useUserStore } from '../store/user';
 
 export default function useUser() {
-  const { isLoading, data } = useQuery('me', userFetcher);
+  const { user, login, logout } = useUserStore();
+  const router = useRouter();
 
-  return [isLoading, data];
+  const userFetcher = async () => {
+    const currentToken = localStorage.getItem('dewsToken');
+    if (currentToken) {
+      setAuthToken(currentToken);
+      try {
+        const data = await client.get('/me').then((response) => response);
+        login(data);
+      } catch (e) {
+        clearAuthToken();
+        logout();
+      }
+    }
+  };
+
+  useEffect(() => {
+    userFetcher();
+  }, [router]);
+
+  return user;
 }

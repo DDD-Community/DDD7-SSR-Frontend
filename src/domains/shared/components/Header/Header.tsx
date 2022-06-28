@@ -7,10 +7,9 @@ import { Button } from '../Button';
 import { TextInput } from '../TextInput';
 import { Color } from '../../constants';
 import Loginmodal from '../LoginModal/LoginModal';
-import { useLoginModalStore } from '../../store/modal';
-import { useOnUser } from '../../hooks/useOnUser';
 import { UserProfile } from '../UserProfile';
 import useUser from '../../hooks/useUser';
+import { useIsShown } from '../../hooks/useIsShown';
 
 const customStyles = {
   overlay: {
@@ -33,20 +32,16 @@ const customStyles = {
 
 const Header = () => {
   const [searchText, setSearchText] = useState<string>('');
-  const { showModal, showOnModal, showOffModal } = useLoginModalStore();
-  const [isLoading, data] = useUser();
+  const [isShown, onOpen, onClose] = useIsShown();
+  const user = useUser();
 
   const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setSearchText(text);
   }, []);
 
-  const openModal = useCallback(() => {
-    showOnModal();
-  }, []);
-
   const closeModal = useCallback(() => {
-    showOffModal();
+    onClose();
   }, []);
 
   return (
@@ -60,17 +55,17 @@ const Header = () => {
           onChange={onChangeTextOnSearchBar}
         />
       </SearchBarContainer>
-      {data ? (
-        <UserProfile />
+      {user ? (
+        <UserProfile user={user} />
       ) : (
-        <Button color="Gray800" size="small" onClick={openModal}>
+        <Button color="Gray800" size="small" onClick={onOpen}>
           로그인
         </Button>
       )}
       <ReactModal
         ariaHideApp={false}
-        isOpen={showModal}
-        onRequestClose={closeModal}
+        isOpen={isShown}
+        onRequestClose={onClose}
         style={customStyles}
         contentLabel="Example"
         overlayClassName={{
@@ -81,7 +76,7 @@ const Header = () => {
         bodyOpenClassName={'Modal__body--open'}
         closeTimeoutMS={300}
       >
-        <Loginmodal />
+        <Loginmodal onClose={closeModal} />
       </ReactModal>
     </HeaderContainer>
   );
