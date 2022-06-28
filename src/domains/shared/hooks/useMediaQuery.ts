@@ -8,21 +8,21 @@ export const BreakPoint = {
       return `(max-width: ${Screen.mobile}px)`;
     }
 
-    return `@media only screen and (max-width: ${Screen.mobile})`;
+    return `@media only screen and (max-width: ${Screen.mobile}px)`;
   },
   Tablet(onlyWidth?: boolean) {
     if (onlyWidth) {
       return `(max-width: ${Screen.tablet}px)`;
     }
 
-    return `@media only screen and (max-width: ${Screen.tablet})`;
+    return `@media only screen and (max-width: ${Screen.tablet}px)`;
   },
   Desktop(onlyWidth?: boolean) {
     if (onlyWidth) {
       return `(min-width: ${Screen.desktop}px)`;
     }
 
-    return `@media only screen and (min-width: ${Screen.desktop})`;
+    return `@media only screen and (min-width: ${Screen.desktop}px)`;
   },
 };
 

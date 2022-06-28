@@ -53,7 +53,9 @@ const PostCreate = () => {
         <section css={titleWrapperStyle}>
           <TextareaAutosize maxRows={3} placeholder="제목을 입력해주세요." {...register('title')} maxLength={150} />
           <Button type="button" color="Primary100" size="medium" onClick={handleModalOpen}>
-            출판하기
+            <Text color="White100" type="body14">
+              출판하기
+            </Text>
           </Button>
         </section>
 
