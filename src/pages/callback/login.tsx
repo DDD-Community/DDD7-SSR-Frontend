@@ -9,7 +9,7 @@ interface QueryParams {
 
 const LoginCallback = () => {
   const router = useRouter();
-  const [_, loginWithTokens] = useOnUser();
+  const [loginWithTokens] = useOnUser();
 
   useEffect(() => {
     if (router.isReady) {
@@ -18,7 +18,7 @@ const LoginCallback = () => {
 
       router.push('/');
     }
-  }, [loginWithTokens, router]);
+  }, [router]);
 
   return <h1>Loading...</h1>;
 };

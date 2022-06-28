@@ -10,6 +10,7 @@ import Loginmodal from '../LoginModal/LoginModal';
 import { useLoginModalStore } from '../../store/modal';
 import { useOnUser } from '../../hooks/useOnUser';
 import { UserProfile } from '../UserProfile';
+import useUser from '../../hooks/useUser';
 
 const customStyles = {
   overlay: {
@@ -33,7 +34,7 @@ const customStyles = {
 const Header = () => {
   const [searchText, setSearchText] = useState<string>('');
   const { showModal, showOnModal, showOffModal } = useLoginModalStore();
-  const [isLoggedIn] = useOnUser();
+  const [isLoading, data] = useUser();
 
   const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
@@ -59,7 +60,7 @@ const Header = () => {
           onChange={onChangeTextOnSearchBar}
         />
       </SearchBarContainer>
-      {isLoggedIn ? (
+      {data ? (
         <UserProfile />
       ) : (
         <Button color="Gray800" size="small" onClick={openModal}>

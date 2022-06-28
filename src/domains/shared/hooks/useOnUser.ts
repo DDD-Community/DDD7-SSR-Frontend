@@ -3,32 +3,23 @@ import { useCallback, useState } from 'react';
 import { clearAuthToken, setAuthToken } from '../api/client';
 import { useUserStore } from '../store/user';
 
-type userOnUserResult = [boolean, ({ token, refreshToken }: TokenSet) => void, () => void];
+type userOnUserResult = [({ token, refreshToken }: TokenSet) => void];
 
 interface TokenSet {
-  token: string | string[] | undefined;
-  refreshToken: string | string[] | undefined;
+  token: string;
+  refreshToken: string;
 }
 
 export const useOnUser = (): userOnUserResult => {
-  const { isLoggedIn, login, logout } = useUserStore();
-  const router = useRouter();
+  const { login } = useUserStore();
 
   const setLoginWithTokens = ({ token, refreshToken }: TokenSet) => {
-    setAuthToken(token);
-    localStorage.setItem('refreshToken', refreshToken);
+    localStorage.setItem('dewsToken', token);
+    localStorage.setItem('dewsRefreshToken', refreshToken);
 
     // 백엔드에서 내 정보 가져오기 기능으로 이름과 사진 가져오는 로직 필요
-
     login({ userName: 'peter', imgSrc: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg' });
   };
 
-  const setLogout = () => {
-    clearAuthToken();
-    localStorage.removeItem('refreshToken');
-    logout();
-    router.push('/');
-  };
-
-  return [isLoggedIn, setLoginWithTokens, setLogout];
+  return [setLoginWithTokens];
 };

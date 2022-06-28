@@ -1,4 +1,7 @@
+import { useRouter } from 'next/router';
 import { memo, useMemo } from 'react';
+import { useQuery } from 'react-query';
+import { clearAuthToken } from '../../api/client';
 import { useOnUser } from '../../hooks/useOnUser';
 import { useUserStore } from '../../store/user';
 import { Dropdown } from '../Dropdown';
@@ -7,7 +10,8 @@ import { UserProfileNameCard } from './UserProfileNameCard';
 
 const UserProfile = () => {
   const { user } = useUserStore();
-  const [_, __, logout] = useOnUser();
+  const { remove } = useQuery('me');
+  const router = useRouter();
 
   const profileDropdownList = useMemo(
     () => [
@@ -17,14 +21,16 @@ const UserProfile = () => {
       {
         name: '로그아웃',
         callbackFn: () => {
-          logout();
+          remove();
+          clearAuthToken();
+          router.reload();
         },
       },
     ],
     [],
   );
 
-  if (user.imgSrc) {
+  if (user['imgSrc'] !== undefined) {
     return (
       <Dropdown
         TitleComponent={<UserProfileNameCard img={user.imgSrc} userName={user.userName} />}

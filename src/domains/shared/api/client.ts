@@ -21,31 +21,35 @@ axios.interceptors.response.use(
 
     if (status === 401) {
       const originalRequest = config;
-      const refreshToken = localStorage.getItem('refreshToken');
-      // refresh토큰 만료 상황로직 작성예정
+      const refreshToken = localStorage.getItem('dewsRefreshToken');
+
       try {
-        const { data } = await client.post('/refresh-token', { refreshToken });
-        const { token } = data;
-        setAuthToken(token);
+        const data = await client.post('/refresh-token', { refreshToken });
+        localStorage.setItem('dewsToken', data);
+        originalRequest.headers.Authorization = `Bearer ${data}`;
         return axios(originalRequest);
       } catch (e) {
+        console.log(e);
         clearAuthToken();
-        localStorage.removeItem('refreshToken');
-        return Promise.reject(e);
       }
+    }
+
+    if (status === 500) {
+      clearAuthToken();
     }
     return Promise.reject(error);
   },
 );
 
-export function setAuthToken(authToken: string): void {
+export function setAuthToken(authToken: string | undefined): void {
+  if (authToken == undefined) return;
   axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-  window.sessionStorage.setItem('userInfo', authToken);
 }
 
 export function clearAuthToken(): void {
   axios.defaults.headers.common['Authorization'] = '';
-  window.sessionStorage.removeItem('userInfo');
+  localStorage.removeItem('dewsToken');
+  localStorage.removeItem('dewsRefreshToken');
 }
 
 const client = {
