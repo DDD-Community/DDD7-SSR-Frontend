@@ -8,7 +8,7 @@ export interface IconProps extends React.SVGAttributes<SVGElement> {
   size: number;
 }
 
-const Icon = ({ className, icon, color = 'black', size = 24, useDot, ...props }: IconProps) => {
+const Icon = ({ className, icon, color = 'white', size = 24, useDot, ...props }: IconProps) => {
   if (!icon) {
     return <></>;
   }
