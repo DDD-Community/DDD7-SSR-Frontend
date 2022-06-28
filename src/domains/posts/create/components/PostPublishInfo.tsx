@@ -1,10 +1,12 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Color } from 'src/domains/shared/constants';
-import { Button, Spacing, Text, Switch } from 'src/domains/shared/components';
+import { Button, Spacing, Text, Switch, Icon } from 'src/domains/shared/components';
 import { UseFormRegister } from 'react-hook-form';
 import { CreatePostData } from '../PostCreate.model';
 import { useBodyOverflowHidden } from 'src/domains/shared/hooks/useBodyOverflowHidden';
+import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
+import { BreakPoint } from 'src/domains/shared/hooks/useMediaQuery';
 
 interface PostPublishInfoProps {
   onClose: () => void;
@@ -12,14 +14,23 @@ interface PostPublishInfoProps {
 }
 
 const PostPublishInfo = ({ onClose, register }: PostPublishInfoProps) => {
+  const { isMobile } = useBreakPointStore();
   useBodyOverflowHidden();
 
   return (
     <section css={postPublishContainerStyle}>
       <div css={postPublishWrapperStyle}>
-        <Text type="title28" color="White100">
-          포스트 미리보기
-        </Text>
+        <div css={flexStyle}>
+          {isMobile && (
+            <div css={backIconWrapperStyle} onClick={onClose}>
+              <Icon icon="Back" size={24} />
+            </div>
+          )}
+          <Text type="title28" color="White100">
+            포스트 미리보기
+          </Text>
+        </div>
+
         <Spacing col={39} />
         <div css={postPreviewStyle}>
           <Button color="Primary100" type="button" size="large">
@@ -39,13 +50,24 @@ const PostPublishInfo = ({ onClose, register }: PostPublishInfoProps) => {
             <Spacing row={8} />
             <Switch id="disclosure" onChange={() => {}} checked={true} />
           </label>
-          <div css={flexStyle}>
-            <Button color="transparent" type="button" onClick={onClose}>
-              취소
-            </Button>
-            <Spacing row={12} />
+
+          {isMobile && <Spacing col={51} />}
+          <div css={buttonWrapperStyle}>
+            {!isMobile && (
+              <>
+                <Button color="transparent" type="button" onClick={onClose}>
+                  <Text color="Primary100" type="body14">
+                    취소
+                  </Text>
+                </Button>
+                <Spacing row={12} />
+              </>
+            )}
+
             <Button color="Primary100" type="submit" fixedWidth={256}>
-              출판하기
+              <Text color="White100" type="body16">
+                출판하기
+              </Text>
             </Button>
           </div>
         </div>
@@ -104,9 +126,30 @@ const postDescriptionStyle = css`
 const postPreviewBottomWrapperStyle = css`
   display: flex;
   justify-content: space-between;
+
+  ${BreakPoint.Mobile()} {
+    flex-direction: column;
+  }
+`;
+
+const backIconWrapperStyle = css`
+  margin-top: -1px;
+  cursor: pointer;
 `;
 
 const flexStyle = css`
   display: flex;
   align-items: center;
+`;
+
+const buttonWrapperStyle = css`
+  ${flexStyle};
+
+  ${BreakPoint.Mobile()} {
+    justify-content: center;
+
+    & button {
+      width: 100% !important;
+    }
+  }
 `;

@@ -1,4 +1,5 @@
 import { css } from '@emotion/react';
+import { BreakPoint } from 'src/domains/shared/hooks/useMediaQuery';
 
 export const GlobalEditorStyle = css`
   .toastui-editor-dark.toastui-editor-defaultUI {
@@ -15,6 +16,10 @@ export const GlobalEditorStyle = css`
     width: 50%;
     background-color: #191a1c;
     border-bottom-color: #191a1c;
+
+    ${BreakPoint.Mobile()} {
+      width: 100%;
+    }
   }
 
   .toastui-editor-dark .toastui-editor-toolbar-icons {
