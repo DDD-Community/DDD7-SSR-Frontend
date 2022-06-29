@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import { memo, useMemo } from 'react';
-import { useQuery } from 'react-query';
 import { clearAuthToken } from '../../api/client';
 import { Dropdown } from '../Dropdown';
 import DropdownList from '../Dropdown/DropdownList';
