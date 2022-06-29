@@ -14,9 +14,12 @@ import { ValueOption } from 'src/domains/shared/components/MultipleSelect/Multip
 import Image from 'next/image';
 import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
 import { EditorMode } from 'src/domains/shared/components/Editor/EditorType';
+import { useGetFriendsListQuery } from 'src/domains/shared/queries/friends';
 
 const PostCreate = () => {
   const postCreateMutation = usePostCreateMutation();
+  const friendListQuery = useGetFriendsListQuery('8');
+
   const { isMobile } = useBreakPointStore();
   const [editorMode, setEditorMode] = useState<EditorMode>('markdown');
 
@@ -50,7 +53,9 @@ const PostCreate = () => {
         <section css={titleWrapperStyle}>
           <TextareaAutosize maxRows={3} placeholder="제목을 입력해주세요." {...register('title')} maxLength={150} />
           <Button type="button" color="Primary100" size="medium" onClick={handleModalOpen}>
-            출판하기
+            <Text color="White100" type="body14">
+              출판하기
+            </Text>
           </Button>
         </section>
 
@@ -80,22 +85,24 @@ const PostCreate = () => {
             );
           }}
         />
-        {!isPreviewPlaceholderShown && (
-          <div css={previewTopTextStyle}>
-            <Text type="tag12" color="Primary50">
-              출판예상화면
-            </Text>
-          </div>
-        )}
-        {!isMobile && isPreviewPlaceholderShown && (
-          <div css={previewPlaceholderStyle}>
-            <Text type="tag12" color="Gray650">
-              출판예상화면
-            </Text>
-            <Spacing col={4} />
-            <Image src="/dewspaper_gray_logo.png" alt="dewspaper-logo" width={110} height={24} />
-          </div>
-        )}
+        <section css={editorContainerStyle}>
+          {!isPreviewPlaceholderShown && (
+            <div css={previewTopTextStyle}>
+              <Text type="tag12" color="Primary50">
+                출판예상화면
+              </Text>
+            </div>
+          )}
+          {!isMobile && isPreviewPlaceholderShown && (
+            <div css={previewPlaceholderStyle}>
+              <Text type="tag12" color="Gray650">
+                출판예상화면
+              </Text>
+              <Spacing col={4} />
+              <Image src="/dewspaper_gray_logo.png" alt="dewspaper-logo" width={110} height={24} />
+            </div>
+          )}
+        </section>
 
         <Spacing col={34} />
 
@@ -110,11 +117,13 @@ const PostCreate = () => {
 
         <MultipleSelect
           placeholder="친구를 찾아주세요."
-          options={FRIENDS_LIST.map((value) => ({
+          options={friendListQuery.data?.map((value) => ({
             // key: value.id,
             label: value.email,
             value: value.email,
-            leftComponent: <Image src={value.thumbnail} alt="profile" width="20px" height="20px" />,
+            leftComponent: (
+              <Image src={value.profileImg || '/dewspaper_logo-02.svg'} alt="profile" width="20px" height="20px" />
+            ),
           }))}
           onChange={(values) => setSelectedFriendsList(values)}
           value={selectedFriendsList}
@@ -144,19 +153,25 @@ const flexBoxStyle = css`
 
 const previewTopTextStyle = css`
   position: absolute;
-  top: 34%;
-  left: calc(50% + 34px);
-  transform: translate(calc(-50% + 32px), -34%);
+  top: -604px;
+  left: 33px;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
+const editorContainerStyle = css`
+  position: relative;
+  display: flex;
+  margin-left: auto;
+  width: 50%;
+`;
+
 const previewPlaceholderStyle = css`
   position: absolute;
-  top: 70%;
-  left: 72%;
-  transform: translate(-72%, -70%);
+  top: -350px;
+  left: 50%;
+  transform: translate(-50%, 0);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -4,7 +4,7 @@ import PostCreateRepository from './PostCreate.repository';
 
 export const usePostCreateMutation = () => {
   return useMutation({
-    mutationKey: 'createPost',
+    mutationKey: 'CreatePost',
     mutationFn: (data: CreatePostData) => PostCreateRepository.create(data),
   });
 };

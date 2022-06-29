@@ -89,7 +89,7 @@ const Header = () => {
 export default memo(Header);
 
 const HeaderContainer = styled.header`
-  background-color: ${Color.Gray950};
+  background-color: ${Color.Gray900};
   display: flex;
   justify-content: space-between;
   align-items: center;
