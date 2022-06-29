@@ -5,17 +5,15 @@ import { Color, REQUEST_AUTH_URL } from '../../constants';
 import { useLoginModalStore } from '../../store/modal';
 import { Icon } from '../Icon';
 
-const LoginModal = () => {
-  const { showOffModal } = useLoginModalStore();
+interface LoginModalProps {
+  onClose: () => void;
+}
 
-  const closeModal = () => {
-    showOffModal();
-  };
-
+const LoginModal = ({ onClose }: LoginModalProps) => {
   return (
     <LoginModalContainer>
       <LoginModalTitle>로그인</LoginModalTitle>
-      <LoginModalCloseBtn onClick={closeModal}>
+      <LoginModalCloseBtn onClick={onClose}>
         <Icon icon="Close" size={50} color={`${Color.White100}`} />
       </LoginModalCloseBtn>
       <LoginModalMethodContainer>
