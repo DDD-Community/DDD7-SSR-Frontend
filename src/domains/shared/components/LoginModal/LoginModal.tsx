@@ -19,19 +19,25 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
           <Link
-            href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google"
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google"
             passHref
           >
             <LoginModalSocialBtn>구글로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/kakao" passHref>
+          <Link
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/kakao"
+            passHref
+          >
             <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/naver" passHref>
+          <Link
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/naver"
+            passHref
+          >
             <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>
