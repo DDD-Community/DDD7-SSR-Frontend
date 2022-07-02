@@ -4,16 +4,23 @@ import { Color } from '../../constants';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { DropdownProps } from './DropdownType';
 
-function Dropdown({ title, TitleComponent, listNamesAndCallback, ListComponent }: DropdownProps) {
+function Dropdown({ title, TitleComponent, listNamesAndCallback, ListComponent, setTogleIcon }: DropdownProps) {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
   useOnClickOutside(ref, () => {
     setOpen(false);
+    if (setTogleIcon) setTogleIcon(false);
   });
+
+  const onClickkNameCard = () => {
+    setOpen(!open);
+    if (setTogleIcon) setTogleIcon(!open);
+  };
+
   return (
     <DropdownContainer ref={ref}>
-      <a onClick={() => setOpen(!open)}>{TitleComponent ? TitleComponent : <h1>{title}</h1>}</a>
+      <a onClick={onClickkNameCard}>{TitleComponent ? TitleComponent : <h1>{title}</h1>}</a>
       {open ? (
         <DropdownListcontainer>
           {ListComponent
