@@ -1,15 +1,45 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { Spacing, Text, Viewer, CommentList, CommentProps } from 'src/domains/shared/components';
-import { usePostDetailQuery } from './PostDetail.queries';
+import { Spacing, Text, Viewer, CommentList } from 'src/domains/shared/components';
+import { useCommentListQuery, useCreateCommentMutation, usePostDetailQuery } from './PostDetail.queries';
+import { Textarea, Button } from 'src/domains/shared/components';
+import { UseInfiniteQueryResult, useQueryClient } from 'react-query';
+import { GetCommentsResponse } from './PostDetail.model';
 
 const PostDetail = () => {
+  const queryClient = useQueryClient();
+
   const { query } = useRouter();
+  const postIdx = Number(query.postIdx);
   // TODO: SSR 처리 필요
-  const postDetailQuery = usePostDetailQuery(query.postIdx as string);
-  const [commentList, setCommentList] = useState(COMMENTS_LIST);
-  const [isLoadMore, setIsLoadMore] = useState(true);
+  const postDetailQuery = usePostDetailQuery(postIdx);
+  const commentListQuery = useCommentListQuery(postIdx);
+  const createCommentMutation = useCreateCommentMutation();
+
+  const totalCommentCount = commentListQuery.data?.pages.flatMap((data) => data)[0].totalElements;
+  const commentList = commentListQuery.data?.pages.flatMap((data) => data.content);
+
+  const [commentText, setCommentText] = useState('');
+
+  const handleLoadMore = () => commentListQuery.fetchNextPage();
+
+  const handleCreateComment = () => {
+    createCommentMutation.mutate(
+      {
+        postIdx,
+        comment: commentText,
+        accountIdx: 8,
+      },
+      {
+        onSuccess: () => {
+          // 리팩토링 필요.
+          queryClient.invalidateQueries(['CommentList', postIdx]);
+          setCommentText('');
+        },
+      },
+    );
+  };
 
   return (
     <section css={postDetailSection}>
@@ -20,17 +50,25 @@ const PostDetail = () => {
 
       <Spacing col={117} />
 
-      <CommentList
-        totalCounts={6}
-        isLoadMore={isLoadMore}
-        comments={commentList}
-        onLoadMore={() => {
-          if (isLoadMore) {
-            setCommentList((prev) => [...prev, ...NEXT_COMMENT]);
-            setIsLoadMore(false);
-          }
-        }}
+      {commentList && (
+        <CommentList
+          totalCounts={totalCommentCount || 0}
+          isLoadMore={commentListQuery.hasNextPage}
+          comments={commentList}
+          onLoadMore={handleLoadMore}
+        />
+      )}
+
+      <Textarea
+        value={commentText}
+        onChange={(event) => setCommentText(event.target.value)}
+        maxLength={1000}
+        placeholder="댓글을 적어주세요."
+        withCount
       />
+      <Button type="button" color="Primary100" disabled={commentText.length === 0} onClick={handleCreateComment}>
+        작성하기
+      </Button>
     </section>
   );
 };
@@ -41,45 +79,3 @@ const postDetailSection = css`
   margin: 83px 0px;
   overflow-y: auto;
 `;
-
-const COMMENTS_LIST: CommentProps[] = [
-  {
-    id: 1,
-    author: '문건우',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '호에에에엥',
-  },
-  {
-    id: 2,
-    author: '한재성',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '프론트엔드개발자',
-  },
-  {
-    id: 3,
-    author: '김병수',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '백엔드 개발자',
-  },
-  {
-    id: 4,
-    author: '전준익',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '백엔드 개발자아아',
-  },
-];
-
-const NEXT_COMMENT: CommentProps[] = [
-  {
-    id: 5,
-    author: '민현경',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '디자이너',
-  },
-  {
-    id: 6,
-    author: '윤지혜',
-    avatar: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    contents: '디자이너어어어',
-  },
-];

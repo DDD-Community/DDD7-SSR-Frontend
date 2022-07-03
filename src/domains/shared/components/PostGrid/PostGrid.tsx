@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import { PostCard } from '../PostCard';
 import { PostGridProps } from './PostGridType';
 
-const PostGrid = ({ contents }: PostGridProps) => {
+const PostGrid = ({ contents, loadMore }: PostGridProps) => {
+  const { containerRef } = useInfiniteScroll({ dataLength: contents?.length, loadMore });
+
   return (
-    <PostWrapperStyle>
-      {/* {getPostsQuery.data?.content.map((post) => ( */}
+    <PostWrapperStyle ref={containerRef}>
       {contents.map((post) => (
         <PostCard key={post.postIdx} data={post} />
       ))}

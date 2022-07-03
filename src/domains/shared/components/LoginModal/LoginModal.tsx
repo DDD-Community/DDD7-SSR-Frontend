@@ -5,35 +5,39 @@ import { Color, REQUEST_AUTH_URL } from '../../constants';
 import { useLoginModalStore } from '../../store/modal';
 import { Icon } from '../Icon';
 
-const LoginModal = () => {
-  const { showOffModal } = useLoginModalStore();
+interface LoginModalProps {
+  onClose: () => void;
+}
 
-  const closeModal = () => {
-    showOffModal();
-  };
-
+const LoginModal = ({ onClose }: LoginModalProps) => {
   return (
     <LoginModalContainer>
       <LoginModalTitle>로그인</LoginModalTitle>
-      <LoginModalCloseBtn onClick={closeModal}>
+      <LoginModalCloseBtn onClick={onClose}>
         <Icon icon="Close" size={50} color={`${Color.White100}`} />
       </LoginModalCloseBtn>
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
           <Link
-            href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google"
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google"
             passHref
           >
             <LoginModalSocialBtn>구글로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/kakao" passHref>
+          <Link
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/kakao"
+            passHref
+          >
             <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href="http://dddssrbackend-env.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/naver" passHref>
+          <Link
+            href="http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/naver"
+            passHref
+          >
             <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import React, { memo } from 'react';
 import { Color } from 'src/domains/shared/constants';
-import { useOnUser } from 'src/domains/shared/hooks/useOnUser';
 import { DropdownListProps } from './DropdownListType';
 
 function DropdownList({ name, onClick }: DropdownListProps) {

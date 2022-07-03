@@ -23,7 +23,11 @@ const PostCreate = () => {
   const { isMobile } = useBreakPointStore();
   const [editorMode, setEditorMode] = useState<EditorMode>('markdown');
 
-  const { register, handleSubmit, control } = useForm<CreatePostData>();
+  const { register, handleSubmit, control, setValue, watch } = useForm<CreatePostData>();
+
+  const thumbnailImageValue = watch('thumbnailImg');
+  const thumbnailContentsValue = watch('thumbnailContents');
+
   const onSubmit = handleSubmit((data) => {
     postCreateMutation.mutate(data, {
       onSuccess: (result) => {
@@ -130,7 +134,15 @@ const PostCreate = () => {
           disabled={!isHaveFriendsChecked}
           emptyListMessage="검색된 친구가 없습니다."
         />
-        {isModalShown && <PostPublishInfo onClose={handleModalClose} register={register} />}
+        {isModalShown && (
+          <PostPublishInfo
+            onClose={handleModalClose}
+            register={register}
+            setValue={setValue}
+            thumbnailImage={thumbnailImageValue}
+            thumbnailContents={thumbnailContentsValue}
+          />
+        )}
       </form>
     </section>
   );

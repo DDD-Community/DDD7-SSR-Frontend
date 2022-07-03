@@ -4,7 +4,7 @@ import { Color } from '../../constants';
 import Text from '../Text/Text';
 import { TextareaProps } from './TextareaType';
 
-const Textarea: React.VFC<TextareaProps> = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+const Textarea: React.FC<TextareaProps> = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       disabled,
@@ -93,12 +93,9 @@ const textareaContainerStyle = css`
   display: inline-flex;
   box-sizing: border-box;
   width: 100%;
-  height: 119px;
   max-width: 600px;
   border: none;
-  background-color: ${Color.Gray800};
   border-radius: 8px;
-  padding: 12px 16px;
   overflow-y: auto;
 `;
 
@@ -106,6 +103,8 @@ const textareaStyle = css`
   width: 100%;
   padding: 0;
   color: ${Color.White100};
+  background-color: ${Color.Gray800};
+  padding: 12px 16px;
   box-sizing: border-box;
   outline: none;
   border: none;

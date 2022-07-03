@@ -3,7 +3,7 @@ import { PostDetail } from 'src/domains/shared/model/post';
 import { CreatePostData } from './PostCreate.model';
 
 class PostCreateRepository {
-  async create(data: CreatePostData): Promise<PostDetail> {
+  async createPost(data: CreatePostData): Promise<PostDetail> {
     return client.post('/post', data);
   }
 }

@@ -153,6 +153,7 @@ const userProfileInfoInputWrapperStyle = css`
 
   & textarea {
     width: 100%;
+    height: 119px;
     resize: none;
     background-color: ${Color.Gray800};
   }

@@ -1,13 +1,18 @@
+import { useRouter } from 'next/router';
 import { memo, useMemo } from 'react';
-import { useOnUser } from '../../hooks/useOnUser';
-import { useUserStore } from '../../store/user';
+import { clearAuthToken } from '../../api/client';
 import { Dropdown } from '../Dropdown';
 import DropdownList from '../Dropdown/DropdownList';
 import { UserProfileNameCard } from './UserProfileNameCard';
 
-const UserProfile = () => {
-  const { user } = useUserStore();
-  const [_, __, logout] = useOnUser();
+interface UserProfileProps {
+  user: User | undefined;
+}
+
+type User = { name: string; profileImg?: string };
+
+const UserProfile = ({ user }: UserProfileProps) => {
+  const router = useRouter();
 
   const profileDropdownList = useMemo(
     () => [
@@ -17,23 +22,24 @@ const UserProfile = () => {
       {
         name: '로그아웃',
         callbackFn: () => {
-          logout();
+          clearAuthToken();
+          router.reload();
         },
       },
     ],
     [],
   );
 
-  if (user.imgSrc) {
+  if (user?.profileImg !== undefined) {
     return (
       <Dropdown
-        TitleComponent={<UserProfileNameCard img={user.imgSrc} userName={user.userName} />}
+        TitleComponent={<UserProfileNameCard img={user.profileImg} userName={user.name} />}
         listNamesAndCallback={profileDropdownList}
         ListComponent={DropdownList}
       />
     );
   }
-  return <Dropdown title={user.userName} listNamesAndCallback={profileDropdownList} />;
+  return <Dropdown title={user?.name} listNamesAndCallback={profileDropdownList} />;
 };
 
 export default memo(UserProfile);

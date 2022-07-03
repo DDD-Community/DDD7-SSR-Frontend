@@ -498,4 +498,13 @@ export const GlobalEditorStyle = css`
   .toastui-editor-dark .toastui-editor-contents .toastui-editor-md-preview-highlight::after {
     background-color: rgba(255, 250, 193, 0.25);
   }
+
+  div[aria-label='Insert image'] {
+    label[for='toastuiAltTextInput'] {
+      display: none;
+    }
+    input#toastuiAltTextInput {
+      display: none;
+    }
+  }
 `;
