@@ -142,6 +142,7 @@ const postThumbnailWrapperStyle = css`
 
   & img {
     width: 100%;
+    height: 100%;
   }
 `;
 
