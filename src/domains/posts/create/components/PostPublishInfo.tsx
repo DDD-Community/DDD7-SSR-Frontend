@@ -131,6 +131,7 @@ const postPublishContainerStyle = css`
   width: 100%;
   height: calc(100% - 64px);
   background-color: ${Color.Gray900};
+  z-index: 30;
 `;
 
 const postThumbnailWrapperStyle = css`
