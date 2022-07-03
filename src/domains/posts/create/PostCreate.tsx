@@ -90,21 +90,22 @@ const PostCreate = () => {
           }}
         />
         <section css={editorContainerStyle}>
-          {!isPreviewPlaceholderShown && (
-            <div css={previewTopTextStyle}>
-              <Text type="tag12" color="Primary50">
-                출판예상화면
-              </Text>
-            </div>
-          )}
           {!isMobile && isPreviewPlaceholderShown && (
-            <div css={previewPlaceholderStyle}>
-              <Text type="tag12" color="Gray650">
-                출판예상화면
-              </Text>
-              <Spacing col={4} />
-              <Image src="/dewspaper_gray_logo.png" alt="dewspaper-logo" width={110} height={24} />
-            </div>
+            <>
+              <div css={previewTopTextStyle}>
+                <Text type="tag12" color="Primary50">
+                  출판예상화면
+                </Text>
+              </div>
+
+              <div css={previewPlaceholderStyle}>
+                <Text type="tag12" color="Gray650">
+                  출판예상화면
+                </Text>
+                <Spacing col={4} />
+                <Image src="/dewspaper_gray_logo.png" alt="dewspaper-logo" width={110} height={24} />
+              </div>
+            </>
           )}
         </section>
 
