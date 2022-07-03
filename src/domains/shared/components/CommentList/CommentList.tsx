@@ -22,7 +22,7 @@ const CommentList = ({ totalCounts, comments, isLoadMore, onLoadMore }: CommentL
 
       <ul>
         {comments.map((comment) => (
-          <Comment key={comment.id} {...comment} />
+          <Comment key={comment.commentIdx} {...comment} />
         ))}
       </ul>
       {isLoadMore && (
@@ -31,6 +31,7 @@ const CommentList = ({ totalCounts, comments, isLoadMore, onLoadMore }: CommentL
           <button css={loadMoreButtonStyle} type="button" onClick={onLoadMore}>
             댓글 더 보기
           </button>
+          <Spacing col={41} />
         </>
       )}
     </section>
