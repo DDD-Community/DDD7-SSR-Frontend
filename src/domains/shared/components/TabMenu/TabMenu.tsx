@@ -8,12 +8,14 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import useUser from '../../hooks/useUser';
 import { clearAuthToken } from '../../api/client';
 import { useRouter } from 'next/router';
+import { useLoginModalStore } from '../../store/loginModal';
 
 const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const { isMobile } = useMediaQuery();
   const router = useRouter();
   const user = useUser();
+  const { showOnModal } = useLoginModalStore();
 
   useOnClickOutside(ref, () => {
     closeTabmenu();
@@ -47,7 +49,7 @@ const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
           justify-content: space-between;
         `}
       >
-        <div onClick={closeTabmenu}>
+        <div style={{ cursor: 'pointer' }} onClick={closeTabmenu}>
           <span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="24" height="24" fill="white" fillOpacity="0.01" />
@@ -94,10 +96,12 @@ const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
         )}
       </div>
       <div
+        onClick={showOnModal}
         css={css`
           color: ${Color.White100};
           font-size: ${FontSize.Large};
           margin-top: 12px;
+          cursor: pointer;
         `}
       >
         {user ? <span>{user?.name}</span> : <span>클릭해서 로그인하기</span>}

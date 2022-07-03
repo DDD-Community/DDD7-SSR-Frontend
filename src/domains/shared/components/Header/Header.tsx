@@ -1,4 +1,4 @@
-import React, { useState, memo, useCallback, useRef } from 'react';
+import React, { useState, memo, useCallback, useRef, useEffect } from 'react';
 import Router from 'next/router';
 import styled from '@emotion/styled';
 import ReactModal from 'react-modal';
@@ -11,6 +11,7 @@ import { UserProfile } from '../UserProfile';
 import useUser from '../../hooks/useUser';
 import { useIsShown } from '../../hooks/useIsShown';
 import useMediaQuery, { BreakPoint } from '../../hooks/useMediaQuery';
+import { useLoginModalStore } from '../../store/loginModal';
 
 const customStyles = {
   overlay: {
@@ -31,19 +32,33 @@ const customStyles = {
   },
 };
 
+function useWindowSize() {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      function handleResize() {
+        setWindowWidth(window.innerWidth);
+      }
+      window.addEventListener('resize', handleResize);
+
+      handleResize();
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, []); // Empty array ensures that effect is only run on mount
+  return Boolean(windowWidth && windowWidth < 600);
+}
+
 const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
   const [searchText, setSearchText] = useState<string>('');
-  const [isShown, onOpen, onClose] = useIsShown();
-  const { isMobile } = useMediaQuery();
+  const { showModal, showOnModal, showOffModal } = useLoginModalStore();
+
+  const isMobile = useWindowSize();
   const user = useUser();
 
   const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
     setSearchText(text);
-  }, []);
-
-  const closeModal = useCallback(() => {
-    onClose();
   }, []);
 
   return (
@@ -77,7 +92,7 @@ const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
           {user ? (
             <div>{!isMobile && <UserProfile user={user} />}</div>
           ) : (
-            <Button color="Gray800" size="small" onClick={onOpen}>
+            <Button color="Gray800" size="small" onClick={showOnModal}>
               로그인
             </Button>
           )}
@@ -93,8 +108,8 @@ const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
         </div>
         <ReactModal
           ariaHideApp={false}
-          isOpen={isShown}
-          onRequestClose={onClose}
+          isOpen={showModal}
+          onRequestClose={showOffModal}
           style={customStyles}
           contentLabel="Example"
           overlayClassName={{
@@ -105,7 +120,7 @@ const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
           bodyOpenClassName={'Modal__body--open'}
           closeTimeoutMS={300}
         >
-          <Loginmodal onClose={closeModal} />
+          <Loginmodal onClose={showOffModal} />
         </ReactModal>
       </HeaderContainer>
     </>
