@@ -1,4 +1,4 @@
-import { CommentProps as Comment } from '../Comment/CommentType';
+import { Comment } from 'src/domains/posts/detail/PostDetail.model';
 
 export interface CommentListProps {
   totalCounts?: number;
