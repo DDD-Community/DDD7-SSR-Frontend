@@ -1,20 +1,44 @@
 import { css } from '@emotion/react';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Color } from 'src/domains/shared/constants';
-import { Button, Spacing, Text, Switch, Icon } from 'src/domains/shared/components';
-import { UseFormRegister } from 'react-hook-form';
+import { Button, Spacing, Text, Switch, Icon, Textarea } from 'src/domains/shared/components';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { CreatePostData } from '../PostCreate.model';
 import { useBodyOverflowHidden } from 'src/domains/shared/hooks/useBodyOverflowHidden';
 import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
 import { BreakPoint } from 'src/domains/shared/hooks/useMediaQuery';
+import { useUploadThumbnailImageMutation } from 'src/domains/shared/queries/image';
 
 interface PostPublishInfoProps {
   onClose: () => void;
   register: UseFormRegister<CreatePostData>;
+  setValue: UseFormSetValue<CreatePostData>;
+  thumbnailImage?: string;
+  thumbnailContents?: string;
 }
 
-const PostPublishInfo = ({ onClose, register }: PostPublishInfoProps) => {
+const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnailContents }: PostPublishInfoProps) => {
   const { isMobile } = useBreakPointStore();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const thumbnailUploadMutation = useUploadThumbnailImageMutation();
+
+  const onFileInputClick = () => {
+    inputRef.current?.click();
+  };
+
+  const onThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+
+    if (file) {
+      thumbnailUploadMutation.mutate(file, {
+        onSuccess: (url) => {
+          setValue('thumbnailImg', url);
+        },
+      });
+    }
+  };
+  console.log(thumbnailContents);
   useBodyOverflowHidden();
 
   return (
@@ -32,15 +56,35 @@ const PostPublishInfo = ({ onClose, register }: PostPublishInfoProps) => {
         </div>
 
         <Spacing col={39} />
-        <div css={postPreviewStyle}>
-          <Button color="Primary100" type="button" size="large">
-            <Text color="White100" type="title16">
+        <div css={postPreviewContainerStyle}>
+          {thumbnailImage ? (
+            <div css={postThumbnailWrapperStyle}>
+              <img src={thumbnailImage} alt="thumbnailImage" />
+              <Spacing col={10} />
+              <Button color="transparent" type="button" size="small" onClick={onFileInputClick}>
+                <Text type="body14" color="Primary100">
+                  수정
+                </Text>
+              </Button>
+            </div>
+          ) : (
+            <Button color="Primary100" type="button" size="large" onClick={onFileInputClick}>
               썸네일 업로드
-            </Text>
-          </Button>
+            </Button>
+          )}
+          <input ref={inputRef} hidden type="file" onChange={onThumbnailUpload} />
         </div>
+
         <Spacing col={24} />
-        <textarea css={postDescriptionStyle} placeholder="설명을 입력해주세요" {...register('thumbnailContents')} />
+
+        <Textarea
+          css={postDescriptionStyle}
+          placeholder="설명을 입력해주세요"
+          {...register('thumbnailContents')}
+          value={thumbnailContents}
+          maxLength={150}
+          withCount
+        />
         <Spacing col={24} />
         <div css={postPreviewBottomWrapperStyle}>
           <label css={flexStyle} htmlFor="disclosure">
@@ -89,6 +133,18 @@ const postPublishContainerStyle = css`
   background-color: ${Color.Gray900};
 `;
 
+const postThumbnailWrapperStyle = css`
+  width: 296px;
+  height: 152px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & img {
+    width: 100%;
+  }
+`;
+
 const postPublishWrapperStyle = css`
   width: 100%;
   max-width: 605px;
@@ -96,13 +152,14 @@ const postPublishWrapperStyle = css`
   overflow-y: auto;
 `;
 
-const postPreviewStyle = css`
+const postPreviewContainerStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 310px;
   background-color: ${Color.Gray850};
+  padding-bottom: 44px;
   border-radius: 8px;
 `;
 

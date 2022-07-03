@@ -18,6 +18,7 @@ import { css } from '@emotion/react';
 import { Color } from '../../constants';
 import { EditorMode } from './EditorType';
 import { useBreakPointStore } from '../../store/breakPoint';
+import { useUploadPostImageMutation } from '../../queries/image';
 
 export interface EditorWithForwardedProps extends EditorProps {
   onChange: (value: string) => void;
@@ -27,6 +28,7 @@ export interface EditorWithForwardedProps extends EditorProps {
 
 const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: EditorWithForwardedProps) => {
   const ref = useRef<Editor>(null);
+  const uploadPostImageMutation = useUploadPostImageMutation();
 
   const handleChange = () => {
     const writerInstance = ref.current?.getInstance();
@@ -49,8 +51,12 @@ const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: E
       }
 
       instance.removeHook('addImageBlobHook');
-      instance.addHook('addImageBlobHook', (blob, callback) => {
-        console.log(blob); // 이미지 업로드를 하고, 그 주소를 editor에 보여주게 하기
+      instance.addHook('addImageBlobHook', (file, callback, test) => {
+        uploadPostImageMutation.mutate(file, {
+          onSuccess: (url) => {
+            callback(url, file.name);
+          },
+        });
         // https://velog.io/@developerjhp/Toast-UI-Editor%EC%97%90%EC%84%9C-s3%EB%A1%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%97%85%EB%A1%9C%EB%93%9C-%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95
         // https://myeongjae.kim/blog/2020/04/05/tui-editor-with-nextjs
       });
