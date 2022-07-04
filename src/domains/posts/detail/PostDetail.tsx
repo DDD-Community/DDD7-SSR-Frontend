@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { Spacing, Text, Viewer, CommentList } from 'src/domains/shared/components';
 import { useCommentListQuery, useCreateCommentMutation, usePostDetailQuery } from './PostDetail.queries';
 import { Textarea, Button } from 'src/domains/shared/components';
-import { UseInfiniteQueryResult, useQueryClient } from 'react-query';
-import { GetCommentsResponse } from './PostDetail.model';
+import { useQueryClient } from 'react-query';
+import Image from 'next/image';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -58,17 +58,30 @@ const PostDetail = () => {
           onLoadMore={handleLoadMore}
         />
       )}
-
-      <Textarea
-        value={commentText}
-        onChange={(event) => setCommentText(event.target.value)}
-        maxLength={1000}
-        placeholder="댓글을 적어주세요."
-        withCount
-      />
-      <Button type="button" color="Primary100" disabled={commentText.length === 0} onClick={handleCreateComment}>
-        작성하기
-      </Button>
+      <Spacing col={32} />
+      <div css={commentTextareaWrapper}>
+        <div>
+          <Image src={'/dewspaper_logo-02.svg'} width={48} height={48} alt="profile-image" />
+          <Spacing row={20} />
+          <Textarea
+            value={commentText}
+            onChange={(event) => setCommentText(event.target.value)}
+            maxLength={1000}
+            placeholder="댓글을 적어주세요."
+            withCount
+          />
+        </div>
+        <Spacing col={16} />
+        <Button
+          type="button"
+          color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
+          size="medium"
+          disabled={commentText.length === 0}
+          onClick={handleCreateComment}
+        >
+          <Text type="body14">작성하기</Text>
+        </Button>
+      </div>
     </section>
   );
 };
@@ -76,6 +89,31 @@ const PostDetail = () => {
 export default PostDetail;
 
 const postDetailSection = css`
-  margin: 83px 0px;
+  width: 100%;
+  max-width: 936px;
+  display: flex;
+  flex-direction: column;
+  margin: 83px auto;
+  padding-bottom: 153px;
   overflow-y: auto;
+`;
+
+const commentTextareaWrapper = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 6px;
+
+  & > div {
+    display: flex;
+    align-items: flex-start;
+
+    & textarea {
+      height: 217px;
+    }
+  }
+
+  & button {
+    margin-left: auto;
+  }
 `;

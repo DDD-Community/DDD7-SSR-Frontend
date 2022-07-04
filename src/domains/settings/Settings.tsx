@@ -50,7 +50,7 @@ const Settings = () => {
             <Spacing col={isMobile ? 16 : 7} />
 
             <Button color="Primary100" size="medium" type="submit">
-              저장하기
+              <Text type="body14">저장하기</Text>
             </Button>
           </div>
         </div>
@@ -156,6 +156,12 @@ const userProfileInfoInputWrapperStyle = css`
     height: 119px;
     resize: none;
     background-color: ${Color.Gray800};
+  }
+
+  & textarea,
+  input {
+    font-size: 12px;
+    line-height: 15px;
   }
 
   & button {

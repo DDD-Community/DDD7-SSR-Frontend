@@ -39,7 +39,7 @@ const Textarea: React.FC<TextareaProps> = React.forwardRef<HTMLTextAreaElement, 
 
     return (
       <>
-        <label htmlFor={id}>
+        <label htmlFor={id} css={labelStyle}>
           {labelText && <span>{labelText}</span>}
           <div css={textareaWrapperStyle}>
             <div css={textareaContainerStyle}>
@@ -80,12 +80,16 @@ const Textarea: React.FC<TextareaProps> = React.forwardRef<HTMLTextAreaElement, 
 );
 export default memo(Textarea);
 
+const labelStyle = css`
+  width: 100%;
+`;
+
 const textareaWrapperStyle = css`
   position: relative;
   box-sizing: border-box;
   width: 100%;
   min-height: 64px;
-  max-width: 600px;
+  max-width: 865px;
 `;
 
 const textareaContainerStyle = css`
@@ -93,7 +97,6 @@ const textareaContainerStyle = css`
   display: inline-flex;
   box-sizing: border-box;
   width: 100%;
-  max-width: 600px;
   border: none;
   border-radius: 8px;
   overflow-y: auto;
