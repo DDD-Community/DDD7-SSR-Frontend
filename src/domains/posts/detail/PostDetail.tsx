@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Spacing, Text, Viewer, CommentList } from 'src/domains/shared/components';
 import { useCommentListQuery, useCreateCommentMutation, usePostDetailQuery } from './PostDetail.queries';
 import { Textarea, Button } from 'src/domains/shared/components';
@@ -18,7 +18,10 @@ const PostDetail = () => {
   const createCommentMutation = useCreateCommentMutation();
 
   const totalCommentCount = commentListQuery.data?.pages.flatMap((data) => data)[0].totalElements;
-  const commentList = commentListQuery.data?.pages.flatMap((data) => data.content);
+  const commentList = useMemo(
+    () => [...(commentListQuery.data?.pages || [])].reverse().flatMap((data) => [...data.content].reverse()),
+    [commentListQuery.data?.pages],
+  );
 
   const [commentText, setCommentText] = useState('');
 
@@ -61,7 +64,7 @@ const PostDetail = () => {
       <Spacing col={32} />
       <div css={commentTextareaWrapper}>
         <div>
-          <Image src={'/dewspaper_logo-02.svg'} width={48} height={48} alt="profile-image" />
+          <Image src={'/defaultProfileImage.png'} width={48} height={48} alt="profile-image" />
           <Spacing row={20} />
           <Textarea
             value={commentText}

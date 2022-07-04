@@ -10,7 +10,7 @@ const Comment = ({ account, comment }: CommentType) => {
   return (
     <li css={commentWrapperStyle}>
       <div css={commentAuthorInfoStyle}>
-        <Image src={account.profileImg || '/dewspaper_logo-02.svg'} width={32} height={32} alt="profile-image" />
+        <Image src={account.profileImg || '/defaultProfileImage.png'} width={32} height={32} alt="profile-image" />
         <Spacing row={8} />
         <Text type="tag12" color="White100" useInline>
           {account.name}
