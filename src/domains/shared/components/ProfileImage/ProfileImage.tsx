@@ -20,7 +20,6 @@ const ProfileImage = ({ src, onChange }: ProfileImageProps) => {
     if (file) {
       uploadProfileImageMutation.mutate(file, {
         onSuccess: (url) => {
-          console.log(url);
           setProfileImg(url);
           onChange?.(url);
         },
