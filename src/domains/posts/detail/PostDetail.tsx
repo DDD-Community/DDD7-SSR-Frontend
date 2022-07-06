@@ -6,6 +6,7 @@ import { useCommentListQuery, useCreateCommentMutation, usePostDetailQuery } fro
 import { Textarea, Button } from 'src/domains/shared/components';
 import { useQueryClient } from 'react-query';
 import Image from 'next/image';
+import { DEFAULT_PROFILE_IMAGE } from 'src/domains/shared/constants';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -64,7 +65,7 @@ const PostDetail = () => {
       <Spacing col={32} />
       <div css={commentTextareaWrapper}>
         <div>
-          <Image src={'/defaultProfileImage.png'} width={48} height={48} alt="profile-image" />
+          <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
           <Spacing row={20} />
           <Textarea
             value={commentText}

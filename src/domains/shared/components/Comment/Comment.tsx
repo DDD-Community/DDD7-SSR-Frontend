@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import React from 'react';
-import { Color } from '../../constants';
+import { Color, DEFAULT_PROFILE_IMAGE } from '../../constants';
 import { Text } from '../Text';
 import { Spacing } from '../Spacing';
 import Image from 'next/image';
@@ -10,7 +10,7 @@ const Comment = ({ account, comment }: CommentType) => {
   return (
     <li css={commentWrapperStyle}>
       <div css={commentAuthorInfoStyle}>
-        <Image src={account.profileImg || '/defaultProfileImage.png'} width={32} height={32} alt="profile-image" />
+        <Image src={account.profileImg ?? DEFAULT_PROFILE_IMAGE} width={32} height={32} alt="profile-image" />
         <Spacing row={8} />
         <Text type="tag12" color="White100" useInline>
           {account.name}

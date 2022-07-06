@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 import React, { useRef, useState } from 'react';
-import { Color } from '../../constants';
+import { Color, DEFAULT_PROFILE_IMAGE } from '../../constants';
 import { BreakPoint } from '../../hooks/useMediaQuery';
 import { useUploadProfileImageMutation } from '../../queries/image';
 import { ProfileImageProps } from './ProfileImageType';
 
-const ProfileImage = ({ src, onChange }: ProfileImageProps) => {
+const ProfileImage = ({ src, onChange, updatable }: ProfileImageProps) => {
   const ref = useRef<HTMLInputElement | null>(null);
   const [profileImg, setProfileImg] = useState(src);
   const uploadProfileImageMutation = useUploadProfileImageMutation();
@@ -28,9 +28,15 @@ const ProfileImage = ({ src, onChange }: ProfileImageProps) => {
   };
 
   return (
-    <div css={profileImageStyle} onClick={handleClick}>
-      <input ref={ref} type="file" onChange={handleChange} hidden />
-      <img src={profileImg ?? '/defaultProfileImage.png'} alt="profile-image" />
+    <div
+      css={css`
+        ${profileImageStyle}
+        ${updatable && cursorPointerStyle}
+      `}
+      onClick={handleClick}
+    >
+      {updatable && <input ref={ref} type="file" onChange={handleChange} hidden />}
+      <img src={profileImg ?? DEFAULT_PROFILE_IMAGE} alt="profile-image" />
     </div>
   );
 };
@@ -41,7 +47,6 @@ const profileImageStyle = css`
   max-width: 113px;
   max-height: 113px;
   flex: 1 0 auto;
-  cursor: pointer;
 
   & img {
     width: 100%;
@@ -54,4 +59,8 @@ const profileImageStyle = css`
     max-width: 108px;
     max-height: 108px;
   }
+`;
+
+const cursorPointerStyle = css`
+  cursor: pointer;
 `;
