@@ -22,6 +22,10 @@ const GlobalStyle = () => (
         overflow-y: hidden;
       }
 
+      ul {
+        list-style: none;
+      }
+
       ${emotionNormalize}
       ${GlobalEditorStyle}
       ${GlobalModalStyle}
