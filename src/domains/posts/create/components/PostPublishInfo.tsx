@@ -38,7 +38,6 @@ const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnai
       });
     }
   };
-  console.log(thumbnailContents);
   useBodyOverflowHidden();
 
   return (

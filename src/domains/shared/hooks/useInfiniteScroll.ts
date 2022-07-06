@@ -25,14 +25,12 @@ const useInfiniteScroll = ({ loadMore, dataLength }: UseInfiniteScroll) => {
         return;
       }
 
-      console.log('로드 모얼');
       loadMore();
       observer.unobserve(entries[0].target);
     });
   }, []);
 
   useEffectIfMounted(() => {
-    console.log('ㅋㅋ');
     nextObserve();
   }, [dataLength]);
 
