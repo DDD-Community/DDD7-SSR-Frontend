@@ -1,3 +1,8 @@
+interface Tab {
+  value: string;
+  label: string;
+}
 export interface TabsProps {
-  tabsList: string[];
+  tabList: Tab[];
+  onTabChange: (value: string) => void;
 }

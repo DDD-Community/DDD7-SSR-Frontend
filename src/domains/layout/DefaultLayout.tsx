@@ -1,12 +1,22 @@
 import styled from '@emotion/styled';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useRef } from 'react';
 import { Header } from '../shared/components';
-import { BreakPoint } from '../shared/hooks/useMediaQuery';
+import TabMenu from '../shared/components/TabMenu/TabMenu';
+import { useIsShown } from '../shared/hooks/useIsShown';
+import useMediaQuery, { BreakPoint } from '../shared/hooks/useMediaQuery';
+import { useOnClickOutside } from '../shared/hooks/useOnClickOutside';
+import useUser from '../shared/hooks/useUser';
 
 const DefaultLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+  const [isTabMenuShown, openTabmenu, closeTabmenu] = useIsShown();
+
+  const { isMobile } = useMediaQuery();
+  const user = useUser();
+
   return (
     <>
-      <Header />
+      <Header openTabmenu={openTabmenu} />
+      {isTabMenuShown && <TabMenu closeTabmenu={closeTabmenu} />}
       <LayoutMain>{children}</LayoutMain>
       {/* <Footer /> */}
     </>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommentListProps } from './CommentListType';
-import { Spacing, Comment } from '..';
+import { Spacing, Comment, Button } from '..';
 import { css } from '@emotion/react';
 import { Color } from '../../constants';
 import { Text } from '../Text';
@@ -20,20 +20,21 @@ const CommentList = ({ totalCounts, comments, isLoadMore, onLoadMore }: CommentL
 
       <Spacing col={16} />
 
+      {isLoadMore && (
+        <div css={loadMoreStyle}>
+          <Button color="transparent" type="button" onClick={onLoadMore}>
+            <Text type="tag12" color="Primary100">
+              이전댓글보기
+            </Text>
+          </Button>
+        </div>
+      )}
+
       <ul>
         {comments.map((comment) => (
           <Comment key={comment.commentIdx} {...comment} />
         ))}
       </ul>
-      {isLoadMore && (
-        <>
-          <Spacing col={24} />
-          <button css={loadMoreButtonStyle} type="button" onClick={onLoadMore}>
-            댓글 더 보기
-          </button>
-          <Spacing col={41} />
-        </>
-      )}
     </section>
   );
 };
@@ -49,12 +50,13 @@ const commentCountStyle = css`
   display: flex;
 `;
 
-const loadMoreButtonStyle = css`
-  color: ${Color.White100};
-  border: 1px solid ${Color.Gray750};
-  margin: 0 auto;
-  padding: 11px 12px;
-  border-radius: 4px;
-  background-color: transparent;
-  cursor: pointer;
+const loadMoreStyle = css`
+  width: 100%;
+  display: flex;
+  border-top: 1px solid ${Color.Gray750};
+  padding: 21px 0;
+
+  & button {
+    margin: 0 auto;
+  }
 `;

@@ -1,82 +1,82 @@
 import styled from '@emotion/styled';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Color } from '../../constants';
+import { Text } from '../Text';
 import { TabsProps } from './TabsType';
 
-const CATEGORY = {
-  post: '글',
-  series: '시리즈',
-  author: '작가소개',
-};
-
-function Tabs({ tabsList }: TabsProps) {
-  const [tabView, setTabView] = useState(CATEGORY.post);
+function Tabs({ tabList, onTabChange }: TabsProps) {
+  const [tabView, setTabView] = useState(tabList[0].value);
   const [tabBarPosition, setTabBarPosition] = useState(0);
 
-  function moveTabBar() {
-    if (tabView === CATEGORY.post) {
+  const moveTabBar = useCallback(() => {
+    const tabViewIndex = tabList.findIndex((tab) => tab.value === tabView);
+    if (tabViewIndex === 0) {
       setTabBarPosition(0);
-    } else if (tabView === CATEGORY.series) {
-      setTabBarPosition(100 / 3);
-    } else if (tabView === CATEGORY.author) {
-      setTabBarPosition((100 / 3) * 2);
+      return;
     }
-  }
 
-  function onClickTab(e: React.MouseEvent<HTMLDivElement>) {
-    e.preventDefault();
-    if (e.target instanceof HTMLDivElement) {
-      const { innerText } = e.target;
-      setTabView(innerText);
-    }
-  }
+    setTabBarPosition(120 * tabViewIndex);
+  }, [tabList, tabView]);
+
+  const onClickTab = useCallback(
+    (value: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      if (e.target instanceof HTMLDivElement) {
+        setTabView(value);
+        onTabChange(value);
+      }
+    },
+    [onTabChange],
+  );
 
   useEffect(() => {
     moveTabBar();
   }, [tabView]);
 
   return (
-    <>
-      <TabsList style={{ display: 'flex', justifyContent: 'space-around', position: 'relative', height: '70px' }}>
-        {tabsList.map((tab, index) => (
-          <Tab key={tab} onClick={(e) => onClickTab(e)}>
-            {tab}
-          </Tab>
-        ))}
-        <PointBar tabsList={tabsList} tabBarPosition={tabBarPosition}></PointBar>
-      </TabsList>
-      {tabView === CATEGORY.post && <div>글 목록</div>}
-      {tabView === CATEGORY.series && <div>시리즈</div>}
-      {tabView === CATEGORY.author && <div>작가소개</div>}
-    </>
+    <TabsList listCount={tabList.length} tabBarPosition={tabBarPosition}>
+      {tabList.map((tab, index) => (
+        <Tab key={tab.value} onClick={onClickTab(tab.value)}>
+          <Text type="body16" color="White100">
+            {tab.label}
+          </Text>
+        </Tab>
+      ))}
+    </TabsList>
   );
 }
 
-type PointBarProps = {
-  tabsList: string[];
+interface PointBarProps {
   tabBarPosition: number;
-};
+  listCount: number;
+}
 
-const TabsList = styled('div')`
+const TabsList = styled('nav')<PointBarProps>`
   display: flex;
-  justify-content: space-around;
   position: relative;
+  min-width: 360px;
   height: 70px;
-`;
+  border-top: 1px solid ${Color.Gray700};
+  padding-top: 16px;
 
-const PointBar = styled('span')<PointBarProps>`
-  position: absolute;
-  left: ${(props) => props.tabBarPosition}%;
-  bottom: 42px;
-  display: block;
-  height: 3px;
-  background: #00b6ff;
-  width: ${(props) => 100 / props.tabsList?.length}%;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 0px;
+    transform: translateX(${(props) => props.tabBarPosition}px);
+    display: block;
+    width: 120px;
+    border-top: 1px solid ${Color.Primary100};
+    transition: all 0.2s linear;
+  }
 `;
 
 const Tab = styled('div')`
-  display: flex;
+  display: inline-flex;
   justify-content: center;
-  width: 100%;
+  cursor: pointer;
+  width: 120px;
 `;
 
 export default Tabs;

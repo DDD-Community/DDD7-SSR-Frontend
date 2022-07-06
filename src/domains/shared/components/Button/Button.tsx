@@ -35,17 +35,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           background-color: ${color === 'transparent' ? 'transparent' : Color[color]};
           color: ${color === 'Gray800' || color === 'transparent' ? Color.Primary100 : Color.White100};
           transition: background-color 0.2s linear;
-
-          ${(color === 'Gray800' || color === 'Primary100') &&
-          css`
-            &:hover {
-              background-color: ${color === 'Gray800' ? Color.Gray750 : Color.Primary50};
-            }
-
-            &:active {
-              background-color: ${color === 'Gray800' ? Color.Gray850 : Color.Primary200};
-            }
-          `}
         `};
       `,
       [color, size, fixedWidth],

@@ -8,7 +8,7 @@ class PostDetailRepository {
   }
 
   async getComments({ postIdx, pageParam }: GetCommentRequest): Promise<GetCommentsResponse> {
-    return client.get(`/post/${postIdx}/comments?size=${pageParam?.size}&page=${pageParam?.page}`);
+    return client.get(`/post/${postIdx}/comments?size=${pageParam?.size}&page=${pageParam?.page}&sort=createDate`);
   }
 
   async createComment({ accountIdx, comment, postIdx }: CreateCommentRequest): Promise<Comment> {
