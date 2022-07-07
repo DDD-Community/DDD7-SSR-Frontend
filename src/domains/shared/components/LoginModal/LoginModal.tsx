@@ -27,7 +27,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/kakao`} passHref>
+          <Link href={`${BASE_URL}/oauth2/authorization/naver`} passHref>
             <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>
