@@ -26,9 +26,24 @@ const UserProfile = ({ user }: UserProfileProps) => {
 
   const profileDropdownList = useMemo(
     () => [
-      { name: '마이페이지', callbackFn: () => {} },
-      { name: '내가 쓴 글 보기', callbackFn: () => {} },
-      { name: '설정페이지', callbackFn: () => {} },
+      {
+        name: '마이페이지',
+        callbackFn: () => {
+          router.push('/author/1');
+        },
+      },
+      {
+        name: '내가 쓴 글 보기',
+        callbackFn: () => {
+          router.push('/author/mypost');
+        },
+      },
+      {
+        name: '설정페이지',
+        callbackFn: () => {
+          router.push('/settings');
+        },
+      },
       {
         name: '로그아웃',
         callbackFn: () => {

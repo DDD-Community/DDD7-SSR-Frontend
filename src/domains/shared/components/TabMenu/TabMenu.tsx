@@ -10,7 +10,7 @@ import { clearAuthToken } from '../../api/client';
 import { useRouter } from 'next/router';
 import { useLoginModalStore } from '../../store/loginModal';
 
-const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
+const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const { isMobile } = useMediaQuery();
   const router = useRouter();
@@ -18,26 +18,43 @@ const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
   const { showOnModal } = useLoginModalStore();
 
   useOnClickOutside(ref, () => {
-    closeTabmenu();
+    closeTabMenu();
   });
 
   const tabMenuList = [
-    { name: '마이페이지', callbackFn: () => {} },
-    { name: '내가 쓴 글 보기', callbackFn: () => {} },
-    { name: '설정페이지', callbackFn: () => {} },
+    {
+      name: '마이페이지',
+      callbackFn: () => {
+        router.reload();
+
+        router.push('/author/1');
+      },
+    },
+    {
+      name: '내가 쓴 글 보기',
+      callbackFn: () => {
+        router.push('/author/my-post');
+      },
+    },
+    {
+      name: '설정페이지',
+      callbackFn: () => {
+        router.push('/settings');
+      },
+    },
     {
       name: '로그아웃',
       callbackFn: () => {
         clearAuthToken();
         router.reload();
-        closeTabmenu();
+        closeTabMenu();
       },
     },
   ];
 
   useEffect(() => {
     if (!isMobile) {
-      closeTabmenu();
+      closeTabMenu();
     }
   }, [isMobile]);
 
@@ -49,7 +66,7 @@ const TabMenu = ({ closeTabmenu }: { closeTabmenu: () => void }) => {
           justify-content: space-between;
         `}
       >
-        <div style={{ cursor: 'pointer' }} onClick={closeTabmenu}>
+        <div style={{ cursor: 'pointer' }} onClick={closeTabMenu}>
           <span>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect width="24" height="24" fill="white" fillOpacity="0.01" />

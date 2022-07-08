@@ -35,7 +35,7 @@ function Tabs({ tabList, onTabChange }: TabsProps) {
 
   return (
     <TabsList listCount={tabList.length} tabBarPosition={tabBarPosition}>
-      {tabList.map((tab, index) => (
+      {tabList.map((tab) => (
         <Tab key={tab.value} onClick={onClickTab(tab.value)}>
           <Text type="body16" color="White100">
             {tab.label}

@@ -5,7 +5,7 @@ import { BreakPoint } from '../../hooks/useMediaQuery';
 import { useUploadProfileImageMutation } from '../../queries/image';
 import { ProfileImageProps } from './ProfileImageType';
 
-const ProfileImage = ({ src, onChange, updatable }: ProfileImageProps) => {
+const ProfileImage = ({ src, onChange, updatable, width = 113 }: ProfileImageProps) => {
   const ref = useRef<HTMLInputElement | null>(null);
   const [profileImg, setProfileImg] = useState(src);
   const uploadProfileImageMutation = useUploadProfileImageMutation();
@@ -30,22 +30,22 @@ const ProfileImage = ({ src, onChange, updatable }: ProfileImageProps) => {
   return (
     <div
       css={css`
-        ${profileImageStyle}
+        ${profileImageStyle(width)}
         ${updatable && cursorPointerStyle}
       `}
       onClick={handleClick}
     >
       {updatable && <input ref={ref} type="file" onChange={handleChange} hidden />}
-      <img src={profileImg ?? DEFAULT_PROFILE_IMAGE} alt="profile-image" />
+      <img src={profileImg || DEFAULT_PROFILE_IMAGE} alt="profile-image" />
     </div>
   );
 };
 
 export default ProfileImage;
 
-const profileImageStyle = css`
-  max-width: 113px;
-  max-height: 113px;
+const profileImageStyle = (width: number) => css`
+  max-width: ${width}px;
+  max-height: ${width}px;
   flex: 1 0 auto;
 
   & img {
@@ -56,8 +56,8 @@ const profileImageStyle = css`
 
   ${BreakPoint.Mobile()} {
     flex: 1 0 auto;
-    max-width: 108px;
-    max-height: 108px;
+    max-width: ${width - 5} px;
+    max-height: ${width - 5}px;
   }
 `;
 

@@ -1,13 +1,13 @@
 import React from 'react';
+import MyPost from 'src/domains/author/myPost/MyPost';
 import DefaultLayout from 'src/domains/layout/DefaultLayout';
-import Author from 'src/domains/author/Author';
 
-const AccountPage = () => {
+const AuthorMyPostPage = () => {
   return (
     <DefaultLayout>
-      <Author />
+      <MyPost />
     </DefaultLayout>
   );
 };
 
-export default AccountPage;
+export default AuthorMyPostPage;

@@ -6,12 +6,12 @@ import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { TextInput } from '../TextInput';
 import { Color } from '../../constants';
-import Loginmodal from '../LoginModal/LoginModal';
+import LoginModal from '../LoginModal/LoginModal';
 import { UserProfile } from '../UserProfile';
 import useUser from '../../hooks/useUser';
-import { useIsShown } from '../../hooks/useIsShown';
-import useMediaQuery, { BreakPoint } from '../../hooks/useMediaQuery';
 import { useLoginModalStore } from '../../store/loginModal';
+import { useBreakPointStore } from '../../store/breakPoint';
+import { BreakPoint } from '../../hooks/useMediaQuery';
 
 const customStyles = {
   overlay: {
@@ -32,28 +32,11 @@ const customStyles = {
   },
 };
 
-function useWindowSize() {
-  const [windowWidth, setWindowWidth] = useState<number>(0);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      function handleResize() {
-        setWindowWidth(window.innerWidth);
-      }
-      window.addEventListener('resize', handleResize);
-
-      handleResize();
-      return () => window.removeEventListener('resize', handleResize);
-    }
-  }, []); // Empty array ensures that effect is only run on mount
-  return Boolean(windowWidth && windowWidth < 600);
-}
-
-const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
+const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
   const [searchText, setSearchText] = useState<string>('');
   const { showModal, showOnModal, showOffModal } = useLoginModalStore();
 
-  const isMobile = useWindowSize();
+  const { isMobile } = useBreakPointStore();
   const user = useUser();
 
   const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +80,7 @@ const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
             </Button>
           )}
           {isMobile && (
-            <div onClick={openTabmenu} style={{ marginLeft: '15px', marginTop: '5px' }}>
+            <div onClick={openTabMenu} style={{ marginLeft: '15px', marginTop: '5px' }}>
               <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="20" height="2.5" rx="1.25" fill="white" />
                 <rect y="7.5" width="20" height="2.5" rx="1.25" fill="white" />
@@ -120,7 +103,7 @@ const Header = ({ openTabmenu }: { openTabmenu: () => void }) => {
           bodyOpenClassName={'Modal__body--open'}
           closeTimeoutMS={300}
         >
-          <Loginmodal onClose={showOffModal} />
+          <LoginModal onClose={showOffModal} />
         </ReactModal>
       </HeaderContainer>
     </>

@@ -104,7 +104,7 @@ const settingsContainerStyle = css`
   display: flex;
   flex-direction: column;
   margin-top: 56px;
-  margin: 0 auto;
+  margin: 50px auto 0px;
   max-width: 701px;
   min-width: 568px;
 

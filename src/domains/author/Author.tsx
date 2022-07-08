@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ProfileImage, Tabs, Text, Spacing, Button } from 'src/domains/shared/components';
 import { EmptyContent } from '../shared/components/EmptyContent';
 import { useGetFriendsListQuery } from '../shared/queries/friends';
+import { CrewItem } from './components/CrewItem';
 
 const tabList = [
   {
@@ -23,11 +24,50 @@ const tabList = [
   },
 ];
 
+const friendsList = [
+  {
+    id: 2,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 3,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 4,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 5,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 6,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 7,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+];
+
 const Author = () => {
   const [selectedTab, setSelectedTab] = useState('author');
   const getFriendsListQuery = useGetFriendsListQuery(1);
 
-  const handleChangeTab = (value: string) => {
+  const handleTabChange = (value: string) => {
     setSelectedTab(value);
   };
 
@@ -55,7 +95,7 @@ const Author = () => {
       </div>
 
       <Spacing col={62} />
-      <Tabs tabList={tabList} onTabChange={handleChangeTab} />
+      <Tabs tabList={tabList} onTabChange={handleTabChange} />
 
       {selectedTab === 'author' && (
         <div>
@@ -97,10 +137,23 @@ const Author = () => {
       )}
       {selectedTab === 'crew' && (
         <div>
-          {(getFriendsListQuery.data?.length || 0) > 0 ? (
-            <ul>
-              {getFriendsListQuery.data?.map((friend) => (
-                <li>{friend.email}</li>
+          {(friendsList?.length || 0) > 0 ? (
+            <ul css={crewGridStyle}>
+              {/* {getFriendsListQuery.data?.map((friend) => (
+                <CrewItem
+                  id={friend.accountIdx}
+                  profileImg={friend.profileImg}
+                  blogName={friend.email}
+                  blogDescription={friend.name}
+                />
+              ))} */}
+              {friendsList.map((friend) => (
+                <CrewItem
+                  id={friend.id}
+                  profileImg={friend.profileImg}
+                  blogName={friend.blogName}
+                  blogDescription={friend.blogDescription}
+                />
               ))}
             </ul>
           ) : (
@@ -117,9 +170,8 @@ export default Author;
 const authorContainerStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   max-width: 942px;
-  margin: 0 auto;
+  margin: 56px auto 0;
 `;
 
 const authorTopStyle = css`
@@ -135,4 +187,11 @@ const authorBaseInfoWrapperStyle = css`
 
 const authorBaseInfoStyle = css`
   margin-left: 21px;
+`;
+
+const crewGridStyle = css`
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 296px);
+  gap: 21px;
 `;
