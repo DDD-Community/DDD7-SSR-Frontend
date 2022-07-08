@@ -2,7 +2,7 @@ import client from 'src/domains/shared/api/client';
 import { Friend, FriendRequest } from '../model/friends';
 
 class FriendsRepository {
-  getFriendsList(accountIdx: string): Promise<Friend[]> {
+  getFriendsList(accountIdx: number): Promise<Friend[]> {
     return client.get(`/friends/${accountIdx}`);
   }
 

@@ -1,5 +1,9 @@
+import { css } from '@emotion/react';
 import React, { useState } from 'react';
-import { ProfileImage, Tabs, Text, Spacing } from 'src/domains/shared/components';
+import { ProfileImage, Tabs, Text, Spacing, Button } from 'src/domains/shared/components';
+import { EmptyContent } from '../shared/components/EmptyContent';
+import { useGetFriendsListQuery } from '../shared/queries/friends';
+import { CrewItem } from './components/CrewItem';
 
 const tabList = [
   {
@@ -14,29 +18,84 @@ const tabList = [
     label: '크루',
     value: 'crew',
   },
+  {
+    label: '태그',
+    value: 'tag',
+  },
+];
+
+const friendsList = [
+  {
+    id: 2,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 3,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 4,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 5,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 6,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
+  {
+    id: 7,
+    profileImg: '',
+    blogName: 'Test',
+    blogDescription: 'test desc',
+  },
 ];
 
 const Author = () => {
-  const [selectedTab, setSelectedTab] = useState('');
+  const [selectedTab, setSelectedTab] = useState('author');
+  const getFriendsListQuery = useGetFriendsListQuery(1);
 
-  const handleChangeTab = (value: string) => {
+  const handleTabChange = (value: string) => {
     setSelectedTab(value);
   };
 
   return (
-    <section>
-      <div>
-        <ProfileImage src={undefined} />
-        <Text type="title24" color="White100">
-          김이름의 블로그
-        </Text>
-        <Text type="tag12" color="White100">
-          ansejrrhkd@naver.com
-        </Text>
+    <section css={authorContainerStyle}>
+      <div css={authorTopStyle}>
+        <div css={authorBaseInfoWrapperStyle}>
+          <ProfileImage src={undefined} updatable={false} />
+          <div css={authorBaseInfoStyle}>
+            <Text type="title24" color="White100">
+              김이름의 블로그
+            </Text>
+            <Spacing col={10} />
+            <Text type="tag12" color="White100">
+              ansejrrhkd@naver.com
+            </Text>
+          </div>
+        </div>
+
+        <Button type="button" color="Primary100" size="medium">
+          <Text type="body14" color="White100">
+            크루 추가하기
+          </Text>
+        </Button>
       </div>
 
       <Spacing col={62} />
-      <Tabs tabList={tabList} onTabChange={handleChangeTab} />
+      <Tabs tabList={tabList} onTabChange={handleTabChange} />
 
       {selectedTab === 'author' && (
         <div>
@@ -59,8 +118,80 @@ const Author = () => {
           </div>
         </div>
       )}
+
+      {selectedTab === 'text' && (
+        <div>
+          <EmptyContent
+            icon="Exclamation"
+            iconColor="Primary100"
+            description={'아직 블로그에 글을 작성하지 않으셨어요.\n 오늘 설레는 첫 글을 작성해볼까요?'}
+            additionalComponent={
+              <Button color="Primary100" type="button" size="medium">
+                <Text color="White100" type="body14">
+                  글 작성하러 가기
+                </Text>
+              </Button>
+            }
+          />
+        </div>
+      )}
+      {selectedTab === 'crew' && (
+        <div>
+          {(friendsList?.length || 0) > 0 ? (
+            <ul css={crewGridStyle}>
+              {/* {getFriendsListQuery.data?.map((friend) => (
+                <CrewItem
+                  id={friend.accountIdx}
+                  profileImg={friend.profileImg}
+                  blogName={friend.email}
+                  blogDescription={friend.name}
+                />
+              ))} */}
+              {friendsList.map((friend) => (
+                <CrewItem
+                  id={friend.id}
+                  profileImg={friend.profileImg}
+                  blogName={friend.blogName}
+                  blogDescription={friend.blogDescription}
+                />
+              ))}
+            </ul>
+          ) : (
+            <EmptyContent icon="Exclamation" iconColor="Primary100" description="추가된 크루가 없습니다." />
+          )}
+        </div>
+      )}
     </section>
   );
 };
 
 export default Author;
+
+const authorContainerStyle = css`
+  display: flex;
+  flex-direction: column;
+  max-width: 942px;
+  margin: 56px auto 0;
+`;
+
+const authorTopStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const authorBaseInfoWrapperStyle = css`
+  display: flex;
+  align-items: center;
+`;
+
+const authorBaseInfoStyle = css`
+  margin-left: 21px;
+`;
+
+const crewGridStyle = css`
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 296px);
+  gap: 21px;
+`;

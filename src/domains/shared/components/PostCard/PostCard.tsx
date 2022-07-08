@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { memo } from 'react';
-import { Color } from '../../constants';
+import { Color, DEFAULT_POST_IMAGE } from '../../constants';
 import { PostCardProps } from './PostCardType';
 
 const PostCard = ({ data }: PostCardProps) => {
@@ -23,12 +23,10 @@ const PostCard = ({ data }: PostCardProps) => {
     >
       <ImageSection>
         <Image
-          src={data.thumbnailImg || 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg'}
+          src={data.thumbnailImg || DEFAULT_POST_IMAGE}
           width="330px"
           height="152px"
           alt={data.thumbnailContents}
-          layout="intrinsic"
-          objectFit="cover"
         />
       </ImageSection>
       <DescriptionBox>
@@ -38,7 +36,7 @@ const PostCard = ({ data }: PostCardProps) => {
       <CardAuthor>
         <div style={{ width: '20px', height: '20px', borderRadius: '200px', overflow: 'hidden', marginBottom: '5px' }}>
           <Image
-            src={data.thumbnailImg || 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg'}
+            src={data.thumbnailImg || DEFAULT_POST_IMAGE}
             width="20px"
             height="20px"
             alt={data.thumbnailContents}

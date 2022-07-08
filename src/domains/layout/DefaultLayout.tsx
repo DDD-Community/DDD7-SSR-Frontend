@@ -8,15 +8,15 @@ import { useOnClickOutside } from '../shared/hooks/useOnClickOutside';
 import useUser from '../shared/hooks/useUser';
 
 const DefaultLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [isTabMenuShown, openTabmenu, closeTabmenu] = useIsShown();
+  const [isTabMenuShown, openTabMenu, closeTabMenu] = useIsShown();
 
   const { isMobile } = useMediaQuery();
   const user = useUser();
 
   return (
     <>
-      <Header openTabmenu={openTabmenu} />
-      {isTabMenuShown && <TabMenu closeTabmenu={closeTabmenu} />}
+      <Header openTabMenu={openTabMenu} />
+      {isTabMenuShown && <TabMenu closeTabMenu={closeTabMenu} />}
       <LayoutMain>{children}</LayoutMain>
       {/* <Footer /> */}
     </>

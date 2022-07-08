@@ -1,6 +1,8 @@
+import React from 'react';
+
 interface Tab {
   value: string;
-  label: string;
+  label: React.ReactNode;
 }
 export interface TabsProps {
   tabList: Tab[];

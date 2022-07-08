@@ -2,7 +2,7 @@ import { useMutation, useQuery } from 'react-query';
 import { FriendRequest } from '../model/friends';
 import FriendsRepository from '../repository/friends';
 
-export const useGetFriendsListQuery = (accountIdx: string) => {
+export const useGetFriendsListQuery = (accountIdx: number) => {
   return useQuery(['getFriendList', accountIdx], () => FriendsRepository.getFriendsList(accountIdx));
 };
 
