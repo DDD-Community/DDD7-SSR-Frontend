@@ -4,7 +4,14 @@ import { Color } from '../../constants';
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import { DropdownProps } from './DropdownType';
 
-function Dropdown({ title, TitleComponent, listNamesAndCallback, ListComponent, setTogleIcon }: DropdownProps) {
+function Dropdown({
+  title,
+  TitleComponent,
+  listNamesAndCallback,
+  ListComponent,
+  setTogleIcon,
+  width = '151px',
+}: DropdownProps) {
   const [open, setOpen] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
@@ -22,7 +29,7 @@ function Dropdown({ title, TitleComponent, listNamesAndCallback, ListComponent, 
     <DropdownContainer ref={ref}>
       <a onClick={onClickkNameCard}>{TitleComponent ? TitleComponent : <h1>{title}</h1>}</a>
       {open ? (
-        <DropdownListcontainer>
+        <DropdownListcontainer width={width}>
           {ListComponent
             ? listNamesAndCallback.map((item) => (
                 <ListComponent
@@ -45,15 +52,16 @@ function Dropdown({ title, TitleComponent, listNamesAndCallback, ListComponent, 
 const DropdownContainer = styled.div`
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   width: 98px;
   height: 32px;
+  margin-left: 11px;
 `;
 
-const DropdownListcontainer = styled.div`
+const DropdownListcontainer = styled.div<{ width: string }>`
   padding: 10px 0 10px 0;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -61,7 +69,8 @@ const DropdownListcontainer = styled.div`
   text-align: center;
   position: absolute;
   top: 50px;
-  width: 151px;
+  right: -37px;
+  width: ${(props) => props.width};
   height: 184px;
   border-radius: 8px;
   background-color: ${Color.Gray800};
