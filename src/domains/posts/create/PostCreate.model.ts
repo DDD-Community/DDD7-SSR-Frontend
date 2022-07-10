@@ -1,3 +1,3 @@
-import { PostBase } from 'src/domains/shared/model/post';
+import { PostCreate } from 'src/domains/shared/model/post';
 
-export interface CreatePostData extends PostBase {}
+export interface CreatePostData extends PostCreate {}

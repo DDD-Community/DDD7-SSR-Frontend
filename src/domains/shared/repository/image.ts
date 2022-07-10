@@ -1,5 +1,4 @@
 import client from 'src/domains/shared/api/client';
-import { Friend, FriendRequest } from '../model/friends';
 
 class ImageRepository {
   uploadPostImage(file: File): Promise<string> {
