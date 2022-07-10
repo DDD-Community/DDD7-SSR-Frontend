@@ -27,7 +27,7 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
       callbackFn: () => {
         router.reload();
 
-        router.push('/author/1');
+        router.push(`/author/${user?.accountIdx}`);
       },
     },
     {
