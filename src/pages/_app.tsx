@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import useMediaQuery from 'src/domains/shared/hooks/useMediaQuery';
 import { usePreserveScroll } from 'src/domains/shared/hooks/usePreserveScroll';
+import useUser from 'src/domains/shared/hooks/useUser';
 import GlobalStyle from 'src/style/GlobalStyle';
 
 const queryClient = new QueryClient();
@@ -11,6 +12,7 @@ const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }: AppProps) {
   useMediaQuery();
   usePreserveScroll();
+  useUser(true);
 
   return (
     <>

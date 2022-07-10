@@ -1,9 +1,16 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { ProfileImage, Tabs, Text, Spacing, Button } from 'src/domains/shared/components';
-import { EmptyContent } from '../shared/components/EmptyContent';
-import { useGetFriendsListQuery } from '../shared/queries/friends';
-import { CrewItem } from './components/CrewItem';
+import { TabValues } from './Author.model';
+import { useAuthorDetailQuery } from './Author.quries';
+import { AuthorTag } from './components/AuthorTag';
+import { AuthorPost } from './components/AuthorPost';
+import { AuthorCrew } from './components/AuthorCrew';
+import { useDeleteCrewMutation, useRequireCrewMutation } from '../shared/queries/crews';
+import useUser from '../shared/hooks/useUser';
+import { useQueryClient } from 'react-query';
 
 const tabList = [
   {
@@ -12,7 +19,7 @@ const tabList = [
   },
   {
     label: '글',
-    value: 'text',
+    value: 'post',
   },
   {
     label: '크루',
@@ -24,51 +31,50 @@ const tabList = [
   },
 ];
 
-const friendsList = [
-  {
-    id: 2,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-  {
-    id: 3,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-  {
-    id: 4,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-  {
-    id: 5,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-  {
-    id: 6,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-  {
-    id: 7,
-    profileImg: '',
-    blogName: 'Test',
-    blogDescription: 'test desc',
-  },
-];
-
 const Author = () => {
-  const [selectedTab, setSelectedTab] = useState('author');
-  const getFriendsListQuery = useGetFriendsListQuery(1);
+  const queryClient = useQueryClient();
+
+  const { query } = useRouter();
+  const accountIdx = Number(query.accountIdx);
+  const profile = useUser();
+
+  const [selectedTab, setSelectedTab] = useState<TabValues>('author');
+
+  const authorDetailQuery = useAuthorDetailQuery(accountIdx);
+  const requireCrewMutation = useRequireCrewMutation();
+  const deleteCrewMutation = useDeleteCrewMutation();
 
   const handleTabChange = (value: string) => {
-    setSelectedTab(value);
+    setSelectedTab(value as TabValues);
+  };
+
+  const handleRequireCrew = () => {
+    if (profile?.accountIdx) {
+      requireCrewMutation.mutate(
+        { requesterIdx: profile.accountIdx, accepterIdx: accountIdx },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['GetAuthorDetail', accountIdx]);
+          },
+        },
+      );
+    }
+  };
+
+  const handleDeleteCrew = () => {
+    if (profile?.accountIdx) {
+      deleteCrewMutation.mutate(
+        {
+          requesterIdx: profile.accountIdx,
+          accepterIdx: accountIdx,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['GetAuthorDetail', accountIdx]);
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -78,20 +84,32 @@ const Author = () => {
           <ProfileImage src={undefined} updatable={false} />
           <div css={authorBaseInfoStyle}>
             <Text type="title24" color="White100">
-              김이름의 블로그
+              {authorDetailQuery.data?.name}
             </Text>
             <Spacing col={10} />
             <Text type="tag12" color="White100">
-              ansejrrhkd@naver.com
+              {authorDetailQuery.data?.email}
             </Text>
           </div>
         </div>
 
-        <Button type="button" color="Primary100" size="medium">
-          <Text type="body14" color="White100">
-            크루 추가하기
-          </Text>
-        </Button>
+        {!authorDetailQuery.data?.owner && (
+          <>
+            {authorDetailQuery.data?.crew ? (
+              <Button type="button" color="Red100" size="medium" onClick={handleDeleteCrew}>
+                <Text type="body14" color="White100">
+                  크루 해제하기
+                </Text>
+              </Button>
+            ) : (
+              <Button type="button" color="Primary100" size="medium" onClick={handleRequireCrew}>
+                <Text type="body14" color="White100">
+                  크루 추가하기
+                </Text>
+              </Button>
+            )}
+          </>
+        )}
       </div>
 
       <Spacing col={62} />
@@ -104,11 +122,9 @@ const Author = () => {
               소개
             </Text>
             <Spacing col={24} />
-            <Text type="tag12" color="White100">
-              비트겐슈타인을 동경하며 철학과 컴퓨터 공학을 복수 전공한, 한때는 철학자를 꿈꿨던 개발자. 지금은 라인에서
-              메신저/비지인 중심 커뮤니케이션 서비스 서버 개발을 하고 있다. 깨질수록 강해진다는 믿음으로 이리저리
-              부딪쳐보고 있는 1년 차 초보 개발자.
-            </Text>
+            <PreWrapText type="tag12" color="White100">
+              {authorDetailQuery.data?.introduction}
+            </PreWrapText>
           </div>
           <Spacing col={42} />
           <div>
@@ -119,48 +135,9 @@ const Author = () => {
         </div>
       )}
 
-      {selectedTab === 'text' && (
-        <div>
-          <EmptyContent
-            icon="Exclamation"
-            iconColor="Primary100"
-            description={'아직 블로그에 글을 작성하지 않으셨어요.\n 오늘 설레는 첫 글을 작성해볼까요?'}
-            additionalComponent={
-              <Button color="Primary100" type="button" size="medium">
-                <Text color="White100" type="body14">
-                  글 작성하러 가기
-                </Text>
-              </Button>
-            }
-          />
-        </div>
-      )}
-      {selectedTab === 'crew' && (
-        <div>
-          {(friendsList?.length || 0) > 0 ? (
-            <ul css={crewGridStyle}>
-              {/* {getFriendsListQuery.data?.map((friend) => (
-                <CrewItem
-                  id={friend.accountIdx}
-                  profileImg={friend.profileImg}
-                  blogName={friend.email}
-                  blogDescription={friend.name}
-                />
-              ))} */}
-              {friendsList.map((friend) => (
-                <CrewItem
-                  id={friend.id}
-                  profileImg={friend.profileImg}
-                  blogName={friend.blogName}
-                  blogDescription={friend.blogDescription}
-                />
-              ))}
-            </ul>
-          ) : (
-            <EmptyContent icon="Exclamation" iconColor="Primary100" description="추가된 크루가 없습니다." />
-          )}
-        </div>
-      )}
+      {selectedTab === 'post' && <AuthorPost accountIdx={accountIdx} />}
+      {selectedTab === 'crew' && <AuthorCrew accountIdx={accountIdx} />}
+      {selectedTab === 'tag' && <AuthorTag accountIdx={accountIdx} />}
     </section>
   );
 };
@@ -172,6 +149,10 @@ const authorContainerStyle = css`
   flex-direction: column;
   max-width: 942px;
   margin: 56px auto 0;
+`;
+
+const PreWrapText = styled(Text)`
+  white-space: pre-wrap;
 `;
 
 const authorTopStyle = css`

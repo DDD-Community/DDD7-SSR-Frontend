@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import client, { clearAuthToken, setAuthToken } from '../api/client';
 import { useUserStore } from '../store/user';
 
-export default function useUser() {
+export default function useUser(checkToken?: boolean) {
   const { user, login, logout } = useUserStore();
   const router = useRouter();
 
@@ -22,8 +22,10 @@ export default function useUser() {
   };
 
   useEffect(() => {
-    userFetcher();
-  }, [router]);
+    if (checkToken) {
+      userFetcher();
+    }
+  }, [router.pathname]);
 
   return user;
 }
