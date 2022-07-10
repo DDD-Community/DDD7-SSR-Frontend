@@ -11,12 +11,29 @@ import { DEFAULT_PROFILE_IMAGE } from 'src/domains/shared/constants';
 const PostDetail = () => {
   const queryClient = useQueryClient();
 
-  const { query } = useRouter();
-  const postIdx = Number(query.postIdx);
+  const router = useRouter();
+  const postIdx = Number(router.query.postIdx);
   // TODO: SSR 처리 필요
   const postDetailQuery = usePostDetailQuery(postIdx);
   const commentListQuery = useCommentListQuery(postIdx);
   const createCommentMutation = useCreateCommentMutation();
+
+  const [coWriterIdxs, coWriterProfiles, coWriterNames] = useMemo(() => {
+    if (!postDetailQuery.data) {
+      return [[], [], []];
+    }
+
+    return postDetailQuery.data.coWriter.coWriterInfo.reduce<[number[], string[], string[]]>(
+      (acc, info) => {
+        acc[0].push(info.accountIdx);
+        acc[1].push(info.profileImg || DEFAULT_PROFILE_IMAGE);
+        acc[2].push(info.name);
+
+        return acc;
+      },
+      [[], [], []],
+    );
+  }, [postDetailQuery.data?.coWriter]);
 
   const totalCommentCount = commentListQuery.data?.pages.flatMap((data) => data)[0].totalElements;
   const commentList = useMemo(
@@ -47,6 +64,20 @@ const PostDetail = () => {
 
   return (
     <section css={postDetailSection}>
+      <div css={crewInfoWrapperStyle}>
+        {coWriterProfiles.map((profileImg, index) => (
+          <div key={`${profileImg}${index}`} onClick={() => router.push(`/author/${coWriterIdxs[index]}`)}>
+            <img css={crewProfileImgStyle} src={profileImg} alt="profile" width={32} height={32} />
+          </div>
+        ))}
+        <Spacing row={5} />
+        <div css={crewNameWrapperStyle}>
+          <Text type="tag12" color="White100">
+            {coWriterNames.join(' & ')}
+          </Text>
+        </div>
+      </div>
+      <Spacing col={16} />
       <Text type="title28" color="White100">
         {postDetailQuery.data?.title}
       </Text>
@@ -97,9 +128,30 @@ const postDetailSection = css`
   max-width: 936px;
   display: flex;
   flex-direction: column;
-  margin: 83px auto;
+  margin: 35px auto 0;
   padding-bottom: 153px;
   overflow-y: auto;
+`;
+
+const crewInfoWrapperStyle = css`
+  display: flex;
+  align-items: center;
+`;
+
+const crewProfileImgStyle = css`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 6px;
+  cursor: pointer;
+
+  &:last-of-type {
+    margin: 0;
+  }
+`;
+
+const crewNameWrapperStyle = css`
+  display: flex;
 `;
 
 const commentTextareaWrapper = css`

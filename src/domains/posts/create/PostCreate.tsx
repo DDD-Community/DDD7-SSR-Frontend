@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import Writer from 'src/domains/shared/components/Editor/Writer';
-import { Color } from 'src/domains/shared/constants';
+import { Color, DEFAULT_PROFILE_IMAGE } from 'src/domains/shared/constants';
 import { useIsShown } from 'src/domains/shared/hooks/useIsShown';
 import TextareaAutosize from 'react-textarea-autosize';
 import PostPublishInfo from './components/PostPublishInfo';
@@ -14,11 +14,15 @@ import { ValueOption } from 'src/domains/shared/components/MultipleSelect/Multip
 import Image from 'next/image';
 import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
 import { EditorMode } from 'src/domains/shared/components/Editor/EditorType';
-import { useGetFriendsListQuery } from 'src/domains/shared/queries/friends';
+import { useGetCrewListQuery } from 'src/domains/shared/queries/crews';
+import { cloneDeep } from 'lodash-es';
+import useUser from 'src/domains/shared/hooks/useUser';
 
 const PostCreate = () => {
   const postCreateMutation = usePostCreateMutation();
-  const friendListQuery = useGetFriendsListQuery('8');
+  const user = useUser();
+
+  const friendListQuery = useGetCrewListQuery(user?.accountIdx);
 
   const { isMobile } = useBreakPointStore();
   const [editorMode, setEditorMode] = useState<EditorMode>('markdown');
@@ -29,7 +33,10 @@ const PostCreate = () => {
   const thumbnailContentsValue = watch('thumbnailContents');
 
   const onSubmit = handleSubmit((data) => {
-    postCreateMutation.mutate(data, {
+    const requestData = cloneDeep(data);
+    requestData.coWriter.accountIdx = [data.coWriter.realWriter, ...data.coWriter.accountIdx];
+
+    postCreateMutation.mutate(requestData, {
       onSuccess: (result) => {
         Router.push(`/posts/${result.postIdx}`);
       },
@@ -39,8 +46,8 @@ const PostCreate = () => {
   const [isModalShown, handleModalOpen, handleModalClose] = useIsShown(false);
   const [isPreviewPlaceholderShown, handlePreviewPlaceholderAppear, handlePreviewPlaceholderDisappear] =
     useIsShown(true);
-  const [selectedFriendsList, setSelectedFriendsList] = useState<ValueOption[]>([]);
-  const [isHaveFriendsChecked, setIsHaveFriendsChecked] = useState(false);
+  const [selectedCrewsList, setSelectedCrewsList] = useState<ValueOption[]>([]);
+  const [isHaveCrewsChecked, setIsHaveCrewsChecked] = useState(false);
 
   useEffect(() => {
     if (isMobile) {
@@ -50,6 +57,10 @@ const PostCreate = () => {
 
     setEditorMode('markdown');
   }, [isMobile]);
+
+  useEffect(() => {
+    setValue('coWriter.realWriter', 8);
+  }, []);
 
   return (
     <section css={createSectionStyle}>
@@ -113,28 +124,40 @@ const PostCreate = () => {
 
         <div css={flexBoxStyle}>
           <Text type="title16" color="White100">
-            함께한 사용자가 있나요?
+            함께한 크루가 있나요?
           </Text>
           <Spacing row={5} />
-          <Switch checked={isHaveFriendsChecked} onChange={() => setIsHaveFriendsChecked((prev) => !prev)} />
+          <Switch checked={isHaveCrewsChecked} onChange={() => setIsHaveCrewsChecked((prev) => !prev)} />
         </div>
         <Spacing col={10} />
 
-        <MultipleSelect
-          placeholder="친구를 찾아주세요."
-          options={friendListQuery.data?.map((value) => ({
-            // key: value.id,
-            label: value.email,
-            value: value.email,
-            leftComponent: (
-              <Image src={value.profileImg || '/dewspaper_logo-02.svg'} alt="profile" width="20px" height="20px" />
-            ),
-          }))}
-          onChange={(values) => setSelectedFriendsList(values)}
-          value={selectedFriendsList}
-          disabled={!isHaveFriendsChecked}
-          emptyListMessage="검색된 친구가 없습니다."
+        <Controller
+          control={control}
+          name="coWriter.accountIdx"
+          render={({ field }) => {
+            return (
+              <MultipleSelect
+                placeholder="크루를 찾아주세요."
+                options={friendListQuery.data?.map((crew) => ({
+                  // key: value.id,
+                  label: crew.email,
+                  value: crew.accountIdx,
+                  leftComponent: (
+                    <Image src={crew.profileImg || DEFAULT_PROFILE_IMAGE} alt="profile" width="20px" height="20px" />
+                  ),
+                }))}
+                value={selectedCrewsList}
+                onChange={(values) => {
+                  setSelectedCrewsList(values);
+                  field.onChange(values.map((crew) => crew.value));
+                }}
+                disabled={!isHaveCrewsChecked}
+                emptyListMessage="검색된 친구가 없습니다."
+              />
+            );
+          }}
         />
+
         {isModalShown && (
           <PostPublishInfo
             onClose={handleModalClose}
@@ -210,7 +233,7 @@ const titleWrapperStyle = css`
   }
 `;
 
-const FRIENDS_LIST = [
+const Crews_LIST = [
   {
     id: 0,
     thumbnail: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',

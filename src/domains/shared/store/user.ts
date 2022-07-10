@@ -1,6 +1,7 @@
 import create from 'zustand';
 
 type User = {
+  accountIdx: number;
   profileImg?: string | undefined;
   name: string;
 };
@@ -13,11 +14,11 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>((set) => ({
   user: undefined,
-  login: ({ name, profileImg }) => {
+  login: ({ accountIdx, name, profileImg }) => {
     if (profileImg) {
-      return set(() => ({ user: { profileImg, name } }));
+      return set(() => ({ user: { accountIdx, profileImg, name } }));
     }
-    return set(() => ({ user: { name } }));
+    return set(() => ({ user: { accountIdx, name } }));
   },
   logout: () => set(() => ({ user: undefined })),
 }));
