@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
 import { memo, useCallback, useMemo, useState } from 'react';
 import { clearAuthToken } from '../../api/client';
+import { User } from '../../model/shared';
 import { Dropdown } from '../Dropdown';
 import DropdownList from '../Dropdown/DropdownList';
 import { UserProfileNameCard } from './UserProfileNameCard';
@@ -9,8 +10,6 @@ import { UserProfileNameCard } from './UserProfileNameCard';
 interface UserProfileProps {
   user: User;
 }
-
-type User = { name: string; profileImg?: string };
 
 const UserProfile = ({ user }: UserProfileProps) => {
   const [togleOnIcon, setTogleOnIcon] = useState(false);
@@ -29,7 +28,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
       {
         name: '마이페이지',
         callbackFn: () => {
-          router.push('/author/1');
+          router.push(`/author/${user.accountIdx}`);
         },
       },
       {
