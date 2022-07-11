@@ -57,6 +57,7 @@ const DropdownContainer = styled.div`
   width: 98px;
   height: 32px;
   margin-left: 11px;
+  cursor: pointer;
 `;
 
 const DropdownListcontainer = styled.div<{ width: string }>`
