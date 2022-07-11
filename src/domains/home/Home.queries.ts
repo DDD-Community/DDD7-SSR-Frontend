@@ -1,11 +1,12 @@
 import { useInfiniteQuery, useQuery } from 'react-query';
+import { filteredType } from './Home';
 import { GetPostsResponse } from './Home.model';
 import HomeRepository from './Home.repository';
 
-export const useGetPostsQuery = () => {
+export const useGetPostsQuery = (filteredState: filteredType) => {
   return useInfiniteQuery<GetPostsResponse, Error>(
     'GetPosts',
-    ({ pageParam = { page: 0, size: 20 } }) => HomeRepository.getPosts(pageParam),
+    ({ pageParam = { page: 0, size: 20, ...filteredState } }) => HomeRepository.getPosts(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
         //리팩토링 확인
