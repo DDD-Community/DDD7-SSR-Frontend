@@ -15,13 +15,14 @@ const ListItemStyle = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 35px;
+  height: 50px;
   list-style: none;
   background-color: ${Color.Gray800};
   transition: background 0.25s ease-in-out;
   color: ${Color.Gray300};
   padding: 15px 27px 9px 16px;
   cursor: pointer;
+  justify-content: center;
 
   &:hover {
     background-color: ${Color.Gray750};
