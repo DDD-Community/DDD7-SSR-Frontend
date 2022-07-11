@@ -1,10 +1,5 @@
 import create from 'zustand';
-
-type User = {
-  accountIdx: number;
-  profileImg?: string | undefined;
-  name: string;
-};
+import { User } from '../model/shared';
 
 type UserStore = {
   user: User | undefined;
@@ -14,11 +9,8 @@ type UserStore = {
 
 export const useUserStore = create<UserStore>((set) => ({
   user: undefined,
-  login: ({ accountIdx, name, profileImg }) => {
-    if (profileImg) {
-      return set(() => ({ user: { accountIdx, profileImg, name } }));
-    }
-    return set(() => ({ user: { accountIdx, name } }));
+  login: (userData) => {
+    return set(() => ({ user: userData }));
   },
   logout: () => set(() => ({ user: undefined })),
 }));
