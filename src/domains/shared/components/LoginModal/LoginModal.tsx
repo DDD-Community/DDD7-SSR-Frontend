@@ -17,17 +17,17 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
       </LoginModalCloseBtn>
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/google`} passHref>
+          <Link href={`${process.env.NEXT_PUBLIC_LOGIN_API_URL}/oauth2/authorization/google`} passHref>
             <LoginModalSocialBtn>구글로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/kakao`} passHref>
+          <Link href={`${process.env.NEXT_PUBLIC_LOGIN_API_URL}/oauth2/authorization/kakao`} passHref>
             <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/naver`} passHref>
+          <Link href={`${process.env.NEXT_PUBLIC_LOGIN_API_URL}/oauth2/authorization/naver`} passHref>
             <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>
