@@ -34,7 +34,7 @@ const UserProfile = ({ user }: UserProfileProps) => {
       {
         name: '내가 쓴 글 보기',
         callbackFn: () => {
-          router.push('/author/mypost');
+          router.push('/mypost');
         },
       },
       {

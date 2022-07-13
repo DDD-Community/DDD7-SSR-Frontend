@@ -12,6 +12,10 @@ import useUser from '../../hooks/useUser';
 import { useLoginModalStore } from '../../store/loginModal';
 import { useBreakPointStore } from '../../store/breakPoint';
 import { BreakPoint } from '../../hooks/useMediaQuery';
+import AlarmBell from '../AlarmBell/AlarmBell';
+import { css } from '@emotion/react';
+import { Dropdown } from '../Dropdown';
+import DropdownList from '../Dropdown/DropdownList';
 
 const customStyles = {
   overlay: {
@@ -73,7 +77,23 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
 
         <div style={{ display: 'flex' }}>
           {user ? (
-            <div>{!isMobile && <UserProfile user={user} />}</div>
+            <div>
+              {!isMobile && (
+                <div css={nameCardCss}>
+                  <Dropdown
+                    TitleComponent={<AlarmBell />}
+                    listNamesAndCallback={[
+                      { name: '윤지혜 님과 친구가 되었습니다.' },
+                      { name: '윤지혜 님과 친구가 되었습니다.' },
+                      { name: '윤지혜 님과 친구가 되었습니다.' },
+                    ]}
+                    ListComponent={DropdownList}
+                    width={'257px'}
+                  />
+                  <UserProfile user={user} />
+                </div>
+              )}
+            </div>
           ) : (
             <Button color="Gray800" size="small" onClick={showOnModal}>
               로그인
@@ -135,4 +155,12 @@ const SearchBarMag = styled.div`
   position: absolute;
   top: 12px;
   right: 26px;
+`;
+
+const nameCardCss = css`
+  display: flex;
+  width: 161px;
+  height: 32px;
+  justify-content: space-between;
+  align-items: center;
 `;

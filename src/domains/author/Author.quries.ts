@@ -1,11 +1,6 @@
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import { AuthorPostList } from './Author.model';
 import AuthorRepository from './Author.repository';
-
-export const useAuthorDetailQuery = (accountIdx: number) =>
-  useQuery(['GetAuthorDetail', accountIdx], () => AuthorRepository.getAuthorDetail(accountIdx), {
-    enabled: !!accountIdx,
-  });
 
 export const useAuthorPostListQuery = (accountIdx: number) =>
   useInfiniteQuery<AuthorPostList, Error>(

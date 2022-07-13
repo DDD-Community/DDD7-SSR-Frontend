@@ -1,8 +1,8 @@
 import React from 'react';
-import MyPost from 'src/domains/author/myPost/MyPost';
+import MyPost from 'src/domains/myPost/MyPost';
 import DefaultLayout from 'src/domains/layout/DefaultLayout';
 
-const AuthorMyPostPage = () => {
+const MyPostPage = () => {
   return (
     <DefaultLayout>
       <MyPost />
@@ -10,4 +10,4 @@ const AuthorMyPostPage = () => {
   );
 };
 
-export default AuthorMyPostPage;
+export default MyPostPage;
