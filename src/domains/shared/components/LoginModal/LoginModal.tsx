@@ -22,10 +22,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link
-            href={`http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google`}
-            passHref
-          >
+          <Link href={`${BASE_URL}/oauth2/authorization/kakao`} passHref>
             <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
