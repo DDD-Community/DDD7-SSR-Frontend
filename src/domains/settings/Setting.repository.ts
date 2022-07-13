@@ -1,21 +1,18 @@
 import client from 'src/domains/shared/api/client';
-import { SaveUserInfoRequest, UserProfileInfo } from './Setting.model';
+import { AccountDetail } from '../shared/model/account';
+import { AccountProfile, AlarmRequest } from './Setting.model';
 
 class SettingRepository {
-  getUserInfo(userId: string): Promise<void> {
-    return client.get(`/used/${userId}`);
+  saveAccountInfo(accountInfo: AccountProfile): Promise<AccountDetail> {
+    return client.put(`/account/profile`, accountInfo);
   }
 
-  saveUserInfo({ userId, userInfo }: SaveUserInfoRequest): Promise<UserProfileInfo> {
-    return client.put(`/user/${userId}`, userInfo);
+  withdrawalAccount(): Promise<void> {
+    return client.delete('/account');
   }
 
-  withdrawUser(): Promise<void> {
-    return client.delete('/user');
-  }
-
-  toggleEmailReceive(): Promise<void> {
-    return client.put('/email');
+  toggleAlarm(alarmData: AlarmRequest): Promise<AccountDetail> {
+    return client.put('/account/alarm', alarmData);
   }
 }
 
