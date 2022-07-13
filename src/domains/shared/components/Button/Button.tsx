@@ -56,6 +56,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   },
 );
 
+Button.displayName = 'Button';
 export default memo(Button);
 
 const ButtonBaseCss = css`
@@ -67,6 +68,10 @@ const ButtonBaseCss = css`
   min-width: 55px;
   cursor: pointer;
   word-break: keep-all;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const ButtonSizeCss: Record<ButtonSizeType, SerializedStyles> = {

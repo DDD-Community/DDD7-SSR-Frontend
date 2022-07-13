@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { Text, Spacing, TextInput, Button, ProfileImage, Switch } from '../shared/components';
@@ -27,8 +27,17 @@ const Settings = () => {
   const toggleAlarmMutation = useToggleAlarmMutation();
 
   const { register, watch, reset, handleSubmit } = useForm<AccountProfile>();
+  const name = watch('name');
+  const blogName = watch('blogName');
   const profileImg = watch('profileImg');
   const introduction = watch('introduction');
+
+  const disableSaveButton = useMemo(() => {
+    if (!name || !blogName) {
+      return true;
+    }
+    return false;
+  }, [name, blogName]);
 
   const handleSaveAccount = handleSubmit((data) => {
     saveAccountInfoMutation.mutate(data, {
@@ -137,7 +146,12 @@ const Settings = () => {
               />
               <Spacing col={isMobile ? 16 : 7} />
 
-              <Button color="Primary100" size="medium" type="submit">
+              <Button
+                color={disableSaveButton ? 'Gray300' : 'Primary100'}
+                size="medium"
+                type="submit"
+                disabled={disableSaveButton}
+              >
                 <Text type="body14">저장하기</Text>
               </Button>
             </div>
@@ -162,10 +176,13 @@ const Settings = () => {
             <div css={alarmWrapperStyle}>
               <div css={flexBoxStyle}>
                 <Text type="tag12">배포한 글과 작성한 댓글에 대한 알림을 수신합니다.</Text>
+                <Spacing row={12} />
                 <Switch checked={accountDetailQuery.data?.alarmAgree === 'Y' || false} onChange={handleToggleAlarm} />
               </div>
+              <Spacing col={16} />
               <div css={flexBoxStyle}>
                 <Text type="tag12">듀스페이퍼의 업데이트 소식을 수신합니다..</Text>
+                <Spacing row={12} />
                 <Switch
                   checked={accountDetailQuery.data?.emailAgree === 'Y' || false}
                   onChange={handleToggleEmailAlarm}
