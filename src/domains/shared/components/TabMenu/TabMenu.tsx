@@ -36,7 +36,7 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
     {
       name: '내가 쓴 글 보기',
       callbackFn: () => {
-        router.push('/author/my-post');
+        router.push('/mypost');
       },
     },
     {
