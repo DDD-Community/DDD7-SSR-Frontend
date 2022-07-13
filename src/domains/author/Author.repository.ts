@@ -1,11 +1,7 @@
 import client from 'src/domains/shared/api/client';
-import { AuthorPostList, AuthorProfileDetail } from './Author.model';
+import { AuthorPostList } from './Author.model';
 
 class AuthorRepository {
-  async getAuthorDetail(accountIdx: number): Promise<AuthorProfileDetail> {
-    return client.get(`/account/${accountIdx}`);
-  }
-
   async getAuthorPostList(
     accountIdx: number,
     tab: 'post' | 'tag',
