@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Color, DEFAULT_PROFILE_IMAGE } from '../../constants';
 import { BreakPoint } from '../../hooks/useMediaQuery';
 import { useUploadProfileImageMutation } from '../../queries/image';
@@ -27,6 +27,10 @@ const ProfileImage = ({ src, onChange, updatable, width = 113 }: ProfileImagePro
     }
   };
 
+  useEffect(() => {
+    setProfileImg(src);
+  }, [src]);
+
   return (
     <div
       css={css`
@@ -45,6 +49,7 @@ export default ProfileImage;
 
 const profileImageStyle = (width: number) => css`
   max-width: ${width}px;
+  width: ${width}px;
   max-height: ${width}px;
   flex: 1 0 auto;
 

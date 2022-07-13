@@ -1,10 +1,11 @@
-export interface UserProfileInfo {
+export interface AccountProfile {
+  name: string;
+  profileImg: string;
   blogName: string;
-  blogDescription: string;
-  isAllowEmail?: boolean;
+  introduction: string;
 }
 
-export interface SaveUserInfoRequest {
-  userId: string;
-  userInfo: UserProfileInfo;
+export interface AlarmRequest {
+  emailAgree: 'Y' | 'N';
+  alarmAgree: 'Y' | 'N';
 }

@@ -1,15 +1,11 @@
-import { useQuery, useMutation } from 'react-query';
-import { SaveUserInfoRequest } from './Setting.model';
+import { useMutation } from 'react-query';
+import { AccountProfile, AlarmRequest } from './Setting.model';
 import SettingRepository from './Setting.repository';
 
-export const useGetUserInfo = (userId: string) =>
-  useQuery(['GetUserInfo', userId], () => SettingRepository.getUserInfo(userId), {
-    enabled: !!userId,
-  });
+export const useSaveAccountInfoMutation = () =>
+  useMutation((data: AccountProfile) => SettingRepository.saveAccountInfo(data));
 
-export const useSaveUserInfoMutation = ({ userId, userInfo }: SaveUserInfoRequest) =>
-  useMutation(() => SettingRepository.saveUserInfo({ userId, userInfo }));
+export const useWithdrawAccountMutation = () => useMutation(() => SettingRepository.withdrawalAccount());
 
-export const useWithdrawUserMutation = () => useMutation(() => SettingRepository.withdrawUser());
-
-export const useToggleEmailReceiveMutation = () => useMutation(() => SettingRepository.toggleEmailReceive());
+export const useToggleAlarmMutation = () =>
+  useMutation((alarmData: AlarmRequest) => SettingRepository.toggleAlarm(alarmData));

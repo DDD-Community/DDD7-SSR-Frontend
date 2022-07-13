@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { ProfileImage, Tabs, Text, Spacing, Button } from 'src/domains/shared/components';
 import { TabValues } from './Author.model';
-import { useAuthorDetailQuery } from './Author.quries';
 import { AuthorTag } from './components/AuthorTag';
 import { AuthorPost } from './components/AuthorPost';
 import { AuthorCrew } from './components/AuthorCrew';
 import { useDeleteCrewMutation, useRequireCrewMutation } from '../shared/queries/crews';
 import useUser from '../shared/hooks/useUser';
 import { useQueryClient } from 'react-query';
+import { useAccountDetailQuery } from '../shared/queries/account';
 
 const tabList = [
   {
@@ -40,7 +40,7 @@ const Author = () => {
 
   const [selectedTab, setSelectedTab] = useState<TabValues>('author');
 
-  const authorDetailQuery = useAuthorDetailQuery(accountIdx);
+  const accountDetailQuery = useAccountDetailQuery(accountIdx);
   const requireCrewMutation = useRequireCrewMutation();
   const deleteCrewMutation = useDeleteCrewMutation();
 
@@ -84,18 +84,18 @@ const Author = () => {
           <ProfileImage src={undefined} updatable={false} />
           <div css={authorBaseInfoStyle}>
             <Text type="title24" color="White100">
-              {authorDetailQuery.data?.name}
+              {accountDetailQuery.data?.name}
             </Text>
             <Spacing col={10} />
             <Text type="tag12" color="White100">
-              {authorDetailQuery.data?.email}
+              {accountDetailQuery.data?.email}
             </Text>
           </div>
         </div>
 
-        {!authorDetailQuery.data?.owner && (
+        {!accountDetailQuery.data?.owner && (
           <>
-            {authorDetailQuery.data?.crew ? (
+            {accountDetailQuery.data?.crew ? (
               <Button type="button" color="Red100" size="medium" onClick={handleDeleteCrew}>
                 <Text type="body14" color="White100">
                   크루 해제하기
@@ -123,7 +123,7 @@ const Author = () => {
             </Text>
             <Spacing col={24} />
             <PreWrapText type="tag12" color="White100">
-              {authorDetailQuery.data?.introduction}
+              {accountDetailQuery.data?.introduction}
             </PreWrapText>
           </div>
           <Spacing col={42} />

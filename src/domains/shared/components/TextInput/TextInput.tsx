@@ -98,7 +98,7 @@ const TextInputStyle = (variant: InputVariant, isError?: boolean) => css`
   border: ${isError ? '1px solid red' : '1px solid black'};
   border-radius: 8px;
   padding: 12px 65px 12px 16px;
-  color: ${Color.Gray600};
+  color: ${Color.White100};
   background-color: ${Color.Gray800};
   box-sizing: border-box;
   outline: none;
