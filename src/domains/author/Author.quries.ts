@@ -22,7 +22,7 @@ export const useAuthorPostListQuery = (accountIdx: number) =>
 export const useAuthorTaggedPostListQuery = (accountIdx: number) =>
   useInfiniteQuery<AuthorPostList, Error>(
     ['GetAuthorTaggedPostList', accountIdx],
-    ({ pageParam = { page: 0, size: 20 } }) => AuthorRepository.getAuthorPostList(accountIdx, 'post', pageParam),
+    ({ pageParam = { page: 0, size: 20 } }) => AuthorRepository.getAuthorPostList(accountIdx, 'tag', pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
         //리팩토링 확인
