@@ -99,7 +99,6 @@ const commentInfoWrapperStyle = css`
 
 const commentAuthorInfoStyle = css`
   display: flex;
-  align-items: center;
   & img {
     border-radius: 50%;
   }
