@@ -1,7 +1,8 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { Text, Spacing, TextInput, Button, ProfileImage, Switch } from '../shared/components';
 import { Textarea } from '../shared/components/Textarea';
@@ -99,7 +100,7 @@ const Settings = () => {
       introduction: accountDetailQuery.data?.introduction || '',
       profileImg: accountDetailQuery.data?.profileImg || '',
     });
-  }, [accountDetailQuery.data]);
+  }, [accountDetailQuery.data, reset]);
 
   return (
     <section css={settingsContainerStyle}>
@@ -166,7 +167,12 @@ const Settings = () => {
           </ProfileInfoRow>
           <ProfileInfoRow labelText="소셜 계정 연동">
             <div css={flexBoxStyle}>
-              <img src="/googleIcon.png" alt="login-icon" width={27} />
+              <Image
+                src={accountDetailQuery.data?.platform === 'google' ? '/googleIcon.png' : '/kakaoIcon.png'}
+                alt={`${accountDetailQuery.data?.platform}-icon`}
+                width={27}
+                height={27}
+              />
               <Spacing row={7} />
               <Text type="tag12">{accountDetailQuery.data?.email}</Text>
             </div>

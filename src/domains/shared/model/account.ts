@@ -1,3 +1,5 @@
+import { Platform } from './shared';
+
 export interface AccountDetail {
   accountIdx: number;
   profileImg?: string;
@@ -6,6 +8,7 @@ export interface AccountDetail {
   blogName: string;
   introduction: string;
   email: string;
+  platform: Platform;
 
   commentCount: number;
   crewCount: number;
