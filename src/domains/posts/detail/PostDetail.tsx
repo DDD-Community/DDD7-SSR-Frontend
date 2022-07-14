@@ -2,21 +2,30 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
 import { Spacing, Text, Viewer, CommentList } from 'src/domains/shared/components';
-import { useCommentListQuery, useCreateCommentMutation, usePostDetailQuery } from './PostDetail.queries';
+import {
+  useCommentListQuery,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+  usePostDetailQuery,
+} from './PostDetail.queries';
 import { Textarea, Button } from 'src/domains/shared/components';
 import { useQueryClient } from 'react-query';
 import Image from 'next/image';
 import { DEFAULT_PROFILE_IMAGE } from 'src/domains/shared/constants';
+import useUser from 'src/domains/shared/hooks/useUser';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
 
   const router = useRouter();
   const postIdx = Number(router.query.postIdx);
+
+  const user = useUser();
   // TODO: SSR 처리 필요
   const postDetailQuery = usePostDetailQuery(postIdx);
   const commentListQuery = useCommentListQuery(postIdx);
   const createCommentMutation = useCreateCommentMutation();
+  const deleteCommentMutation = useDeleteCommentMutation();
 
   const [coWriterIdxs, coWriterProfiles, coWriterNames] = useMemo(() => {
     if (!postDetailQuery.data) {
@@ -46,17 +55,35 @@ const PostDetail = () => {
   const handleLoadMore = () => commentListQuery.fetchNextPage();
 
   const handleCreateComment = () => {
+    if (!user?.accountIdx) {
+      return;
+    }
+
     createCommentMutation.mutate(
       {
         postIdx,
         comment: commentText,
-        accountIdx: 8,
+        accountIdx: user?.accountIdx,
       },
       {
         onSuccess: () => {
           // 리팩토링 필요.
           queryClient.invalidateQueries(['CommentList', postIdx]);
           setCommentText('');
+        },
+      },
+    );
+  };
+
+  const handleDeleteComment = (commentIdx: number) => {
+    deleteCommentMutation.mutate(
+      {
+        postIdx,
+        commentIdx: commentIdx,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['CommentList', postIdx]);
         },
       },
     );
@@ -91,6 +118,8 @@ const PostDetail = () => {
           isLoadMore={commentListQuery.hasNextPage}
           comments={commentList}
           onLoadMore={handleLoadMore}
+          userId={user?.accountIdx}
+          handleDeleteComment={handleDeleteComment}
         />
       )}
       <Spacing col={32} />

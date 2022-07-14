@@ -4,10 +4,11 @@ import { Color, DEFAULT_PROFILE_IMAGE } from '../../constants';
 import { Button } from '..';
 import { Text } from '../Text';
 import { Spacing } from '../Spacing';
-import { Comment as CommentType } from 'src/domains/posts/detail/PostDetail.model';
+import { CommentProps } from 'src/domains/posts/detail/PostDetail.model';
 import { throttle } from 'lodash-es';
+import { formatDate } from '../../utils/date';
 
-const Comment = ({ account, comment }: CommentType) => {
+const Comment = ({ account, commentIdx, comment, createDate, isOwner, onDeleteComment }: CommentProps) => {
   const commentRef = useRef<HTMLDivElement>(null);
   const [isLineOver, setIsLineOver] = useState(false);
   const [isShowCommentNextLine, setShowCommentNextLine] = useState(false);
@@ -15,6 +16,10 @@ const Comment = ({ account, comment }: CommentType) => {
   const showCommentNextLine = () => {
     setShowCommentNextLine(true);
     setIsLineOver(false);
+  };
+
+  const onDelete = () => {
+    onDeleteComment(commentIdx);
   };
 
   useEffect(() => {
@@ -36,12 +41,27 @@ const Comment = ({ account, comment }: CommentType) => {
 
   return (
     <li css={commentWrapperStyle}>
-      <div css={commentAuthorInfoStyle}>
-        <img src={account.profileImg ?? DEFAULT_PROFILE_IMAGE} width={32} height={32} alt="profile-image" />
-        <Spacing row={8} />
-        <Text type="tag12" color="White100" useInline>
-          {account.name}
-        </Text>
+      <div css={commentInfoWrapperStyle}>
+        <div css={commentAuthorInfoStyle}>
+          <img src={account.profileImg || DEFAULT_PROFILE_IMAGE} width={32} height={32} alt="profile-image" />
+          <Spacing row={8} />
+          <div>
+            <Text type="tag12" color="White100" useInline>
+              {account.name}
+            </Text>
+            <Text color="Gray650" type="tag12">
+              {formatDate(createDate)}
+            </Text>
+          </div>
+        </div>
+
+        {isOwner && (
+          <Button type="button" color="transparent" onClick={onDelete}>
+            <Text type="tag12" color="Red100">
+              삭제
+            </Text>
+          </Button>
+        )}
       </div>
       <Spacing col={9} />
 
@@ -70,6 +90,11 @@ const commentWrapperStyle = css`
   &:first-of-type {
     border-top: 1px solid ${Color.Gray750};
   }
+`;
+
+const commentInfoWrapperStyle = css`
+  display: flex;
+  justify-content: space-between;
 `;
 
 const commentAuthorInfoStyle = css`
