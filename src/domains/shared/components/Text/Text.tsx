@@ -2,7 +2,7 @@ import { css, SerializedStyles } from '@emotion/react';
 import { memo, PropsWithChildren, useMemo } from 'react';
 import { Color, ColorType } from '../../constants';
 
-type TextType = 'title28' | 'title24' | 'title16' | 'body18' | 'body16' | 'body14' | 'tag12';
+type TextType = 'title28' | 'title24' | 'title20' | 'title16' | 'body18' | 'body16' | 'body14' | 'tag12';
 
 interface TextProps {
   type: TextType;
@@ -40,6 +40,11 @@ export const TextStyleMap: Record<TextType, SerializedStyles> = {
   title24: css`
     font-size: 24px;
     line-height: 29px;
+    font-weight: 700;
+  `,
+  title20: css`
+    font-size: 20px;
+    line-height: 22px;
     font-weight: 700;
   `,
   title16: css`

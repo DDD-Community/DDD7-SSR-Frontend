@@ -69,7 +69,7 @@ const Modal = ({
       bodyOpenClassName={'Modal__body--open'}
       style={{
         content: {
-          top: position === 'center' ? 0 : topOffset,
+          top: position === 'center' ? undefined : topOffset,
         },
       }}
       closeTimeoutMS={300}
@@ -105,7 +105,6 @@ const modalStyle = css`
     -webkit-transform 0.3s cubic-bezier(0.13, 0.62, 0.11, 0.99);
   opacity: 1;
   margin: calc(1rem * (50 / 16));
-  background-color: #fff;
   border-radius: 13px;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.08);
   max-height: calc(100vh - 1rem * (100 / 16));
