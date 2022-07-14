@@ -8,7 +8,6 @@ import { TextInput } from '../TextInput';
 import { Color } from '../../constants';
 import LoginModal from '../LoginModal/LoginModal';
 import { UserProfile } from '../UserProfile';
-import useUser from '../../hooks/useUser';
 import { useLoginModalStore } from '../../store/loginModal';
 import { useBreakPointStore } from '../../store/breakPoint';
 import { BreakPoint } from '../../hooks/useMediaQuery';
@@ -16,6 +15,7 @@ import AlarmBell from '../AlarmBell/AlarmBell';
 import { css } from '@emotion/react';
 import { Dropdown } from '../Dropdown';
 import DropdownList from '../Dropdown/DropdownList';
+import { useUserStore } from '../../store/user';
 
 const customStyles = {
   overlay: {
@@ -41,7 +41,7 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
   const { showModal, showOnModal, showOffModal } = useLoginModalStore();
 
   const { isMobile } = useBreakPointStore();
-  const user = useUser();
+  const { user } = useUserStore();
 
   const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const text = e.target.value;
