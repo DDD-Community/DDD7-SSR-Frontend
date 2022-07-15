@@ -221,8 +221,9 @@ const Settings = () => {
       <Confirm
         isShown={isShownWithdrawalConfirm}
         onClose={handleCloseWithDrawalConfirm}
-        description="정말 탈퇴를 하시겠습니까?"
+        description="정말 탈퇴하시나요?"
         buttonText="탈퇴하기"
+        buttonTextColor="Red100"
         onConfirm={handleWithdrawalAccount}
       />
     </>

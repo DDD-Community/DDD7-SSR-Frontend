@@ -170,8 +170,9 @@ const PostDetail = () => {
         isShown={isShownDeleteCommentConfirm}
         onClose={handleCloseDeleteCommentConfirm}
         onConfirm={handleDeleteComment}
+        description="댓글을 삭제하시나요?"
+        buttonTextColor="Red100"
         buttonText="삭제하기"
-        description="댓글을 삭제하시겠습니까?"
       />
     </>
   );
