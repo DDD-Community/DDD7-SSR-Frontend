@@ -5,9 +5,17 @@ import { DropdownListProps } from './DropdownListType';
 
 function DropdownList({ name, onClick }: DropdownListProps) {
   return (
-    <ListItemStyle key={name} onClick={onClick}>
-      {name}
-    </ListItemStyle>
+    <>
+      {onClick ? (
+        <ListItemStyle key={name} onClick={onClick}>
+          {name}
+        </ListItemStyle>
+      ) : (
+        <ListItemStyle key={name} onClick={onClick}>
+          {name}
+        </ListItemStyle>
+      )}
+    </>
   );
 }
 

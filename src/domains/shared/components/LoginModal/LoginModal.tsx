@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import React from 'react';
-import { BASE_URL, Color, REQUEST_AUTH_URL } from '../../constants';
+import { BASE_URL, Color, OAUTH_URL, REQUEST_AUTH_URL } from '../../constants';
 import { Icon } from '../Icon';
 
 interface LoginModalProps {
@@ -17,20 +17,17 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
       </LoginModalCloseBtn>
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/google`} passHref>
+          <Link href={`${OAUTH_URL}/oauth2/authorization/google`} passHref>
             <LoginModalSocialBtn>구글로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link
-            href={`http://logintest-env.eba-puvvuwps.ap-northeast-2.elasticbeanstalk.com/oauth2/authorization/google`}
-            passHref
-          >
+          <Link href={`${OAUTH_URL}/oauth2/authorization/kakao`} passHref>
             <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href={`${BASE_URL}/oauth2/authorization/naver`} passHref>
+          <Link href={`${OAUTH_URL}/oauth2/authorization/naver`} passHref>
             <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>
