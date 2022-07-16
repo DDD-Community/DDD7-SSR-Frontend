@@ -16,6 +16,6 @@ export interface User {
   blogName: string;
   createDate: string;
   emailAgree: string;
-  introduction: string | null;
+  introduction: string;
   updateDate: string;
 }
