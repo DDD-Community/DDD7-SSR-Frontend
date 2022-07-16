@@ -5,7 +5,7 @@ import HomeRepository from './Home.repository';
 
 export const useGetPostsQuery = (filteredState: filteredType) => {
   return useInfiniteQuery<GetPostsResponse, Error>(
-    'GetPosts',
+    ['GetPosts', filteredState.isTrend, filteredState.period],
     ({ pageParam = { page: 0, size: 20, ...filteredState } }) => HomeRepository.getPosts(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
