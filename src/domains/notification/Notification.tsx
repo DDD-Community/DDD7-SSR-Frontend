@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import NotiCard from '../shared/components/NotiCard/NotiCard';
-import { bellSVG, Color, FontSize } from '../shared/constants';
+import { Color } from '../shared/constants';
 
 const Notification = () => {
   return (
