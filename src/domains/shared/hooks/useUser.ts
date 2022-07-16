@@ -6,7 +6,6 @@ import { useUserStore } from '../store/user';
 export default function useUser(checkToken?: boolean) {
   const { user, login, logout } = useUserStore();
   const router = useRouter();
-  console.log('hooks user');
   const userFetcher = async () => {
     const currentToken = localStorage.getItem('dewsToken');
     if (currentToken) {

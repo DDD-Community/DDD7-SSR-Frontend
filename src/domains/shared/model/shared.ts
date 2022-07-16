@@ -10,7 +10,12 @@ export interface User {
   name: string;
   platform: string;
   profileImg: string | null;
-  introduction: string;
   role: string;
   withdrawal: string;
+  alarmAgree: string;
+  blogName: string;
+  createDate: string;
+  emailAgree: string;
+  introduction: string | null;
+  updateDate: string;
 }
