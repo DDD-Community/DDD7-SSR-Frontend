@@ -15,6 +15,7 @@ import { DEFAULT_PROFILE_IMAGE } from 'src/domains/shared/constants';
 import useUser from 'src/domains/shared/hooks/useUser';
 import { Confirm } from 'src/domains/shared/components/Confirm';
 import { useIsShown } from 'src/domains/shared/hooks/useIsShown';
+import { toast } from 'react-toastify';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -74,7 +75,9 @@ const PostDetail = () => {
       },
       {
         onSuccess: () => {
-          // 리팩토링 필요.
+          toast.success('댓글이 작성되었어요.', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
           queryClient.invalidateQueries(['CommentList', postIdx]);
           setCommentText('');
         },
@@ -99,6 +102,8 @@ const PostDetail = () => {
             handleCloseDeleteCommentConfirm();
           },
           onSuccess: () => {
+            toast.success('댓글이 삭제되었어요.');
+
             queryClient.invalidateQueries(['CommentList', postIdx]);
             setSelectedCommentIdx(null);
           },

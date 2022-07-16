@@ -1,7 +1,10 @@
+import 'react-toastify/dist/ReactToastify.css';
+
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { ToastContainer } from 'react-toastify';
 import useMediaQuery from 'src/domains/shared/hooks/useMediaQuery';
 import { usePreserveScroll } from 'src/domains/shared/hooks/usePreserveScroll';
 import useUser from 'src/domains/shared/hooks/useUser';
@@ -31,6 +34,18 @@ function MyApp({ Component, pageProps }: AppProps) {
         <GlobalStyle />
         <Component {...pageProps} />
         <ReactQueryDevtools initialIsOpen={false} />
+        <ToastContainer
+          theme="dark"
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </QueryClientProvider>
     </>
   );

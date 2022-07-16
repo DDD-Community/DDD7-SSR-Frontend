@@ -6522,6 +6522,7 @@ __metadata:
     react-modal: ^3.15.1
     react-query: ^3.38.1
     react-textarea-autosize: ^8.3.4
+    react-toastify: ^9.0.5
     typescript: 4.6.3
     zustand: ^4.0.0-rc.1
   languageName: unknown
@@ -12446,6 +12447,18 @@ __metadata:
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
   checksum: 87360d4392276d4e87511a73be9b0634b8bcce8f4f648cf659334d993f25ad3d4062f468f1e1944fc614123acae4299580aad00b760c6a96cec190e076f847f5
+  languageName: node
+  linkType: hard
+
+"react-toastify@npm:^9.0.5":
+  version: 9.0.5
+  resolution: "react-toastify@npm:9.0.5"
+  dependencies:
+    clsx: ^1.1.1
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: 5baf2705e20e698619fdffe9fba89d55bd4314ab49075704522a2166fcb6b17d9d34781cef937e818d583a410d11b37bfe6ed8a02638b08a672998741cf40e1c
   languageName: node
   linkType: hard
 

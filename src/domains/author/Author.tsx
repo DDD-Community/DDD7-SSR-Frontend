@@ -13,6 +13,7 @@ import { useQueryClient } from 'react-query';
 import { useAccountDetailQuery } from '../shared/queries/account';
 import { Confirm } from '../shared/components/Confirm';
 import { useIsShown } from '../shared/hooks/useIsShown';
+import { toast } from 'react-toastify';
 
 const tabList = [
   {
@@ -58,6 +59,7 @@ const Author = () => {
         { requesterIdx: profile.accountIdx, accepterIdx: accountIdx },
         {
           onSuccess: () => {
+            toast.success('크루 요청 되었어요.');
             queryClient.invalidateQueries(['GetAuthorDetail', accountIdx]);
           },
         },
@@ -74,6 +76,7 @@ const Author = () => {
         },
         {
           onSuccess: () => {
+            toast.success('크루 해제 되었어요.');
             queryClient.invalidateQueries(['GetAuthorDetail', accountIdx]);
             handleCloseDeleteCrewConfirm();
           },

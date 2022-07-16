@@ -17,6 +17,7 @@ import { EditorMode } from 'src/domains/shared/components/Editor/EditorType';
 import { useGetCrewListQuery } from 'src/domains/shared/queries/crews';
 import { cloneDeep } from 'lodash-es';
 import useUser from 'src/domains/shared/hooks/useUser';
+import { toast } from 'react-toastify';
 
 const PostCreate = () => {
   const postCreateMutation = usePostCreateMutation();
@@ -38,6 +39,7 @@ const PostCreate = () => {
 
     postCreateMutation.mutate(requestData, {
       onSuccess: (result) => {
+        toast.success('글이 작성되었어요.');
         Router.push(`/posts/${result.postIdx}`);
       },
     });
