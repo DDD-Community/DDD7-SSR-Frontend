@@ -26,11 +26,15 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
 
   const tabMenuList = [
     {
-      name: '마이페이지',
+      name: '내 블로그 메인',
       callbackFn: () => {
-        router.reload();
-
-        router.push(`/author/${user?.accountIdx}`);
+        router.push(`/mypost`);
+      },
+    },
+    {
+      name: '새 글 작성',
+      callbackFn: () => {
+        router.push(`/posts/create`);
       },
     },
     {

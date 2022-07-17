@@ -9,8 +9,6 @@ import useUser from '../shared/hooks/useUser';
 
 const DefaultLayout: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const [isTabMenuShown, openTabMenu, closeTabMenu] = useIsShown();
-
-  const { isMobile } = useMediaQuery();
   const user = useUser();
 
   return (
