@@ -24,5 +24,6 @@ const GridWrapperStyle = styled.div`
   justify-content: center;
   grid-template-columns: repeat(auto-fit, 296px);
   gap: 21px;
-  width: 1256px;
+  max-width: 1256px;
+  width: 100%;
 `;
