@@ -1,7 +1,12 @@
 import styled from '@emotion/styled';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import { PostDetail } from '../../model/post';
 import { PostCard } from '../PostCard';
-import { PostGridProps } from './PostGridType';
+
+interface PostGridProps {
+  contents: PostDetail[];
+  loadMore: () => void;
+}
 
 const PostGrid = ({ contents, loadMore }: PostGridProps) => {
   const { containerRef } = useInfiniteScroll({ dataLength: contents?.length, loadMore });
