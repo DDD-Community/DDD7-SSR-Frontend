@@ -50,7 +50,7 @@ const PostDetail = () => {
       },
       [[], [], []],
     );
-  }, [postDetailQuery.data?.coWriter]);
+  }, [postDetailQuery.data]);
 
   const totalCommentCount = commentListQuery.data?.pages.flatMap((data) => data)[0].totalElements;
   const commentList = useMemo(

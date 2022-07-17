@@ -35,7 +35,7 @@ const PostCreate = () => {
 
   const onSubmit = handleSubmit((data) => {
     const requestData = cloneDeep(data);
-    requestData.coWriter.accountIdx = [data.coWriter.realWriter, ...data.coWriter.accountIdx];
+    requestData.coWriter.accountIdx = [data.coWriter.realWriter, ...(data.coWriter.accountIdx || [])];
 
     postCreateMutation.mutate(requestData, {
       onSuccess: (result) => {

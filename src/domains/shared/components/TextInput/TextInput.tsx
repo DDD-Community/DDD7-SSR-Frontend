@@ -77,6 +77,8 @@ const TextInput = forwardRef<HTMLInputElement, InputProps>(
 
 export default TextInput;
 
+TextInput.displayName = 'TextInput';
+
 const TextInputLabelStyle = css`
   width: 100%;
   display: flex;

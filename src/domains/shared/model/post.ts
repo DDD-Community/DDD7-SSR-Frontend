@@ -22,6 +22,7 @@ export interface PostDetail extends PostBase {
     realWriterInfo: User;
   };
   privated: 'Y' | 'N';
-  dateTime: string;
+  createDate: string;
+  updateDate: string;
   deleted: 'Y' | 'N';
 }
