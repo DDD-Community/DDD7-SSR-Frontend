@@ -86,8 +86,8 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
             </svg>
           </span>
         </div>
-
-        <Dropdown
+        <AlarmBell />
+        {/* <Dropdown
           TitleComponent={<AlarmBell />}
           listNamesAndCallback={[
             { name: '윤지혜 님과 친구가 되었습니다.' },
@@ -96,7 +96,7 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
           ]}
           ListComponent={DropdownList}
           width={'257px'}
-        />
+        /> */}
       </div>
       <div
         css={css`

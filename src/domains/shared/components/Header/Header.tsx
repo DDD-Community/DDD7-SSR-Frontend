@@ -80,7 +80,8 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
             <div>
               {!isMobile && (
                 <div css={nameCardCss}>
-                  <Dropdown
+                  <AlarmBell />
+                  {/* <Dropdown
                     TitleComponent={<AlarmBell />}
                     listNamesAndCallback={[
                       { name: '윤지혜 님과 친구가 되었습니다.' },
@@ -89,7 +90,7 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
                     ]}
                     ListComponent={DropdownList}
                     width={'257px'}
-                  />
+                  /> */}
                   <UserProfile user={user} />
                 </div>
               )}
