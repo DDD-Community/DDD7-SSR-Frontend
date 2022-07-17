@@ -52,7 +52,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialKakaoText}>
                   네이버로 로그인
-                  <div css={LoginModalSocialIcon}>
+                  <div css={LoginModalSocialIconNaver}>
                     <Image src="/naverIcon.png" alt="google" width={20} height={19} />
                   </div>
                 </div>
@@ -152,6 +152,12 @@ const LoginModalSocialIcon = css`
   position: absolute;
   top: -35%;
   left: -40px;
+`;
+
+const LoginModalSocialIconNaver = css`
+  position: absolute;
+  top: -10%;
+  left: -32px;
 `;
 
 export default LoginModal;
