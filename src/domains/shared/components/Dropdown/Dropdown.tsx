@@ -72,7 +72,7 @@ const DropdownListcontainer = styled.div<{ width: string }>`
   top: 50px;
   right: -37px;
   width: ${(props) => props.width};
-  height: 220px;
+  height: 230px;
   border-radius: 8px;
   background-color: ${Color.Gray800};
   color: ${Color.White100};
