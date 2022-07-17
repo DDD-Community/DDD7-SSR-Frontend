@@ -8,7 +8,7 @@ const Notification = () => {
     <div css={notificationContainer}>
       <div css={notificationHeader}>
         <span>
-          <Image src="/bell.svg" alt="login-icon" width={22} height={22} />
+          <Image src="/bell.png" alt="login-icon" width={22} height={22} />
         </span>
         <span css={nitificationHeaderText}>알림</span>
       </div>

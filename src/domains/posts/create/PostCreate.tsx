@@ -147,7 +147,7 @@ const PostCreate = () => {
                   label: crew.email,
                   value: crew.accountIdx,
                   leftComponent: (
-                    <Image src={crew.profileImg || DEFAULT_PROFILE_IMAGE} alt="profile" width="20px" height="20px" />
+                    <img css={profileImageStyle} src={crew.profileImg || DEFAULT_PROFILE_IMAGE} alt="profile" />
                   ),
                 }))}
                 value={selectedCrewsList}
@@ -237,25 +237,8 @@ const titleWrapperStyle = css`
   }
 `;
 
-const Crews_LIST = [
-  {
-    id: 0,
-    thumbnail: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    email: 'test@naver.com',
-  },
-  {
-    id: 1,
-    thumbnail: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    email: 'test1@naver.com',
-  },
-  {
-    id: 2,
-    thumbnail: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    email: 'aaa@naver.com',
-  },
-  {
-    id: 3,
-    thumbnail: 'http://upload2.inven.co.kr/upload/2019/12/27/bbs/i14210693079.jpg',
-    email: 'high2@naver.com',
-  },
-];
+const profileImageStyle = css`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+`;

@@ -74,6 +74,8 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
                       onChange([...value, renderedOption]);
                     }}
                   >
+                    {renderedOption.leftComponent}
+                    <Spacing row={3} />
                     {renderedOption.label}
 
                     {optionIndex >= 0 && (
@@ -95,6 +97,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
         {value.map((selectedOption) => (
           <li key={selectedOption.key || selectedOption.value} css={SelectedListItemStyle}>
             {selectedOption.leftComponent}
+            <Spacing row={3} />
             {selectedOption.label}
             <Spacing row={6} />
             <div
