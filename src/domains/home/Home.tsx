@@ -7,9 +7,9 @@ import { useBreakPointStore } from '../shared/store/breakPoint';
 import { PostGrid } from '../shared/components';
 import { useGetPostsQuery } from './Home.queries';
 
-export type priodType = 'daily' | 'weekly' | 'monthly';
+export type periodType = 'daily' | 'weekly' | 'monthly';
 
-export type filteredType = { isTrend: boolean; period: priodType };
+export type filteredType = { isTrend: boolean; period: periodType };
 
 const Home = () => {
   const [filteredState, setFilteredState] = useState<filteredType>({ isTrend: false, period: 'weekly' });
@@ -54,10 +54,17 @@ const HomeGridLayout = styled.div<{ isMobile: boolean }>`
   align-items: center;
   flex-direction: column;
   max-width: 1256px;
-  margin-top: 131px;
-  margin-top: ${(props) => (props.isMobile ? '35px' : '131px')};
+  margin-top: ${(props) => (props.isMobile ? '35px' : '80px')};
   margin-left: auto;
   margin-right: auto;
+
+  @media only screen and (max-width: 1430px) {
+    max-width: 930px;
+  }
+
+  @media only screen and (max-width: 1122px) {
+    max-width: 617px;
+  }
 `;
 
 const HomeSelectContainer = css`

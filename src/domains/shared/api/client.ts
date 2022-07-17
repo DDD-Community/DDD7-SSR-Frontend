@@ -41,7 +41,7 @@ axios.interceptors.response.use(
   },
 );
 
-export function setAuthToken(authToken: string | undefined): void {
+export function setAuthToken(authToken: string | undefined | null): void {
   if (authToken == undefined) return;
   axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
 }

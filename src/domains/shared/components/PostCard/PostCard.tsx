@@ -96,9 +96,9 @@ const PostCard = ({ data }: PostCardProps) => {
             by
           </Text>
           <Spacing row={4} />
-          <Text type="tag12" color="White100">
+          <EllipsisText type="tag12" color="White100">
             {coWriterNames.join(' & ')}
-          </Text>
+          </EllipsisText>
         </div>
       </CardAuthor>
     </CardLayout>
@@ -164,6 +164,12 @@ const CardAuthor = styled.div`
 
 const crewInfoWrapperStyle = css`
   display: flex;
+`;
+
+const EllipsisText = styled(Text)`
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export default memo(PostCard);

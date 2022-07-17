@@ -1,12 +1,12 @@
 import { PostDetail } from '../shared/model/post';
 import { PaginationData } from '../shared/model/shared';
-import { priodType } from './Home';
+import { periodType } from './Home';
 
 export interface GetPostsRequest {
   size: number;
   page: number;
   isTrend: boolean;
-  period: priodType;
+  period: periodType;
 }
 
 export type GetPostsResponse = PaginationData<PostDetail[]>;

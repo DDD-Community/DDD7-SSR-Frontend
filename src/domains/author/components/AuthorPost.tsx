@@ -4,9 +4,10 @@ import { EmptyContent, Text, Button, PostGrid, Spacing } from 'src/domains/share
 
 interface AuthorPostProps {
   accountIdx: number;
+  isOwner: boolean;
 }
 
-export const AuthorPost = ({ accountIdx }: AuthorPostProps) => {
+export const AuthorPost = ({ accountIdx, isOwner }: AuthorPostProps) => {
   const authorPostListQuery = useAuthorPostListQuery(accountIdx);
   const postList = useMemo(
     () => authorPostListQuery.data?.pages.flatMap((posts) => posts.content),
@@ -28,11 +29,13 @@ export const AuthorPost = ({ accountIdx }: AuthorPostProps) => {
             iconColor="Primary100"
             description={'아직 블로그에 글을 작성하지 않으셨어요.\n 오늘 설레는 첫 글을 작성해볼까요?'}
             additionalComponent={
-              <Button color="Primary100" type="button" size="medium">
-                <Text color="White100" type="body14">
-                  글 작성하러 가기
-                </Text>
-              </Button>
+              isOwner && (
+                <Button color="Primary100" type="button" size="medium">
+                  <Text color="White100" type="body14">
+                    글 작성하러 가기
+                  </Text>
+                </Button>
+              )
             }
           />
         )}

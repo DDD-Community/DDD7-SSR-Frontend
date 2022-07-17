@@ -89,7 +89,7 @@ const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: E
         autofocus
       />
 
-      {!props.hideModeSwitch && <div css={ViewerTopBlindScreenStyle}></div>}
+      {!props.hideModeSwitch && editorMode === 'markdown' && <div css={ViewerTopBlindScreenStyle}></div>}
 
       {!props.hideModeSwitch && (
         <div css={modeSwitchWrapperStyle}>
