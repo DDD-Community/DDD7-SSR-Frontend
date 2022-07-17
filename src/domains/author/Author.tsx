@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { ProfileImage, Tabs, Text, Spacing, Button } from 'src/domains/shared/components';
 import { TabValues } from './Author.model';
 import { AuthorTag } from './components/AuthorTag';
@@ -15,25 +15,6 @@ import { Confirm } from '../shared/components/Confirm';
 import { useIsShown } from '../shared/hooks/useIsShown';
 import { toast } from 'react-toastify';
 
-const tabList = [
-  {
-    label: '작가소개',
-    value: 'author',
-  },
-  {
-    label: '글',
-    value: 'post',
-  },
-  {
-    label: '크루',
-    value: 'crew',
-  },
-  {
-    label: '태그',
-    value: 'tag',
-  },
-];
-
 const Author = () => {
   const queryClient = useQueryClient();
 
@@ -42,6 +23,44 @@ const Author = () => {
   const profile = useUser();
 
   const [selectedTab, setSelectedTab] = useState<TabValues>('author');
+
+  const tabList = useMemo(
+    () => [
+      {
+        label: (
+          <Text type="body14" css={tabSelectedStyle(selectedTab === 'author')}>
+            작가소개
+          </Text>
+        ),
+        value: 'author',
+      },
+      {
+        label: (
+          <Text type="body14" css={tabSelectedStyle(selectedTab === 'post')}>
+            글
+          </Text>
+        ),
+        value: 'post',
+      },
+      {
+        label: (
+          <Text type="body14" css={tabSelectedStyle(selectedTab === 'crew')}>
+            크루
+          </Text>
+        ),
+        value: 'crew',
+      },
+      {
+        label: (
+          <Text type="body14" css={tabSelectedStyle(selectedTab === 'tag')}>
+            태그
+          </Text>
+        ),
+        value: 'tag',
+      },
+    ],
+    [selectedTab],
+  );
 
   const accountDetailQuery = useAccountDetailQuery(accountIdx);
   const requireCrewMutation = useRequireCrewMutation();
@@ -123,25 +142,28 @@ const Author = () => {
 
         <Spacing col={62} />
         <Tabs tabList={tabList} onTabChange={handleTabChange} />
-
         {selectedTab === 'author' && (
-          <div>
+          <>
+            <Spacing col={45} />
+
             <div>
-              <Text type="body16" color="White100">
-                소개
-              </Text>
-              <Spacing col={24} />
-              <PreWrapText type="tag12" color="White100">
-                {accountDetailQuery.data?.introduction}
-              </PreWrapText>
+              <div>
+                <Text type="body16" color="White100">
+                  소개
+                </Text>
+                <Spacing col={24} />
+                <PreWrapText type="tag12" color="White100">
+                  {accountDetailQuery.data?.introduction}
+                </PreWrapText>
+              </div>
+              <Spacing col={42} />
+              <div>
+                <Text type="body16" color="White100">
+                  업적
+                </Text>
+              </div>
             </div>
-            <Spacing col={42} />
-            <div>
-              <Text type="body16" color="White100">
-                업적
-              </Text>
-            </div>
-          </div>
+          </>
         )}
 
         {selectedTab === 'post' && <AuthorPost accountIdx={accountIdx} />}
@@ -189,9 +211,6 @@ const authorBaseInfoStyle = css`
   margin-left: 21px;
 `;
 
-const crewGridStyle = css`
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fit, 296px);
-  gap: 21px;
+const tabSelectedStyle = (isSelected: boolean) => css`
+  opacity: ${isSelected ? 1 : 0.5};
 `;
