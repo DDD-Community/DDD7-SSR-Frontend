@@ -31,6 +31,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
 );
 
 export default memo(Switch);
+Switch.displayName = 'Switch';
 
 const SwitchContainer = styled.span`
   position: relative;

@@ -12,6 +12,7 @@ export interface PostCreate extends PostBase {
     accountIdx: number[];
     realWriter: number;
   };
+  privated: 'Y' | 'N';
 }
 
 export interface PostDetail extends PostBase {

@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Color } from 'src/domains/shared/constants';
 import { Button, Spacing, Text, Switch, Icon, Textarea } from 'src/domains/shared/components';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
@@ -21,6 +21,8 @@ const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnai
   const { isMobile } = useBreakPointStore();
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const [isPublic, setIsPublic] = useState(true);
+
   const thumbnailUploadMutation = useUploadThumbnailImageMutation();
 
   const onFileInputClick = () => {
@@ -38,6 +40,11 @@ const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnai
       });
     }
   };
+
+  useEffect(() => {
+    setValue('privated', isPublic === true ? 'N' : 'Y');
+  }, [isPublic, setValue]);
+
   useBodyOverflowHidden();
 
   return (
@@ -91,7 +98,13 @@ const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnai
               전체공개
             </Text>
             <Spacing row={8} />
-            <Switch id="disclosure" onChange={() => {}} checked={true} />
+            <Switch
+              id="disclosure"
+              onChange={() => {
+                setIsPublic((prev) => !prev);
+              }}
+              checked={isPublic}
+            />
           </label>
 
           {isMobile && <Spacing col={51} />}
