@@ -4,11 +4,11 @@ export interface PaginationData<T> {
   totalPages: number;
 }
 
+export type Platform = 'google' | 'kakao';
 export interface User {
   accountIdx: number;
   email: string;
   name: string;
-  platform: string;
   profileImg: string | null;
   role: string;
   withdrawal: string;
@@ -18,4 +18,5 @@ export interface User {
   emailAgree: string;
   introduction: string;
   updateDate: string;
+  platform: Platform;
 }

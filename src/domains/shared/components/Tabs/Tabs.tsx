@@ -1,22 +1,14 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { Color } from '../../constants';
 import { Text } from '../Text';
 import { TabsProps } from './TabsType';
 
-function Tabs({ tabList, onTabChange }: TabsProps) {
+function Tabs({ tabList, onTabChange, useUpperLine = true, tabGap, useInlineTab }: TabsProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [tabView, setTabView] = useState(tabList[0].value);
-  const [tabBarPosition, setTabBarPosition] = useState(0);
-
-  const moveTabBar = useCallback(() => {
-    const tabViewIndex = tabList.findIndex((tab) => tab.value === tabView);
-    if (tabViewIndex === 0) {
-      setTabBarPosition(0);
-      return;
-    }
-
-    setTabBarPosition(120 * tabViewIndex);
-  }, [tabList, tabView]);
 
   const onClickTab = useCallback(
     (value: string) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -29,54 +21,72 @@ function Tabs({ tabList, onTabChange }: TabsProps) {
     [onTabChange],
   );
 
-  useEffect(() => {
-    moveTabBar();
-  }, [tabView]);
-
   return (
-    <TabsList listCount={tabList.length} tabBarPosition={tabBarPosition}>
+    <TabsList ref={ref} useUpperLine={useUpperLine} useInlineTab={useInlineTab}>
       {tabList.map((tab) => (
-        <Tab key={tab.value} onClick={onClickTab(tab.value)}>
-          <Text type="body16" color="White100">
-            {tab.label}
-          </Text>
+        <Tab
+          className={tabView === tab.value ? 'active' : ''}
+          useUpperLine={useUpperLine}
+          key={tab.value}
+          onClick={onClickTab(tab.value)}
+          tabGap={tabGap}
+        >
+          {tab.label}
         </Tab>
       ))}
     </TabsList>
   );
 }
 
-interface PointBarProps {
-  tabBarPosition: number;
-  listCount: number;
-}
+const TabsList = styled.nav(
+  ({ useUpperLine, useInlineTab }: Pick<TabsProps, 'useUpperLine' | 'useInlineTab'>) => css`
+    position: relative;
+    min-width: 300px;
+    height: 35px;
+    ${!useInlineTab &&
+    css`
+      display: flex;
+      justify-content: space-around;
+    `}
+    ${useUpperLine &&
+    css`
+      border-top: 1px solid ${Color.Gray700};
+    `}
+  `,
+);
 
-const TabsList = styled('nav')<PointBarProps>`
-  display: flex;
-  position: relative;
-  min-width: 360px;
-  height: 70px;
-  border-top: 1px solid ${Color.Gray700};
-  padding-top: 16px;
+const Tab = styled.div(
+  ({ useUpperLine, tabGap }: Pick<TabsProps, 'useUpperLine' | 'tabGap'>) => css`
+    display: inline-flex;
+    flex: 1;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    padding-top: 16px;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 0px;
-    transform: translateX(${(props) => props.tabBarPosition}px);
-    display: block;
-    width: 120px;
-    border-top: 1px solid ${Color.Primary100};
-    transition: all 0.2s linear;
-  }
-`;
+    ${tabGap &&
+    css`
+      &:not(:last-of-type) {
+        margin-right: ${tabGap}px;
+      }
+    `}
 
-const Tab = styled('div')`
-  display: inline-flex;
-  justify-content: center;
-  cursor: pointer;
-  width: 120px;
-`;
+    ${useUpperLine &&
+    css`
+      &::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        width: 100%;
+        border-top: 1px solid transparent;
+        transition: all 0.3s linear;
+      }
+
+      &.active::before {
+        border-top: 1px solid ${Color.Primary100};
+      }
+    `}
+  `,
+);
 
 export default Tabs;

@@ -17,7 +17,14 @@ export interface Comment {
     withdrawal: string;
   };
   comment: string;
-  dateTime: string;
+  createDate: string;
+  updateDate: string;
+}
+
+export interface CommentProps extends Comment {
+  isOwner?: boolean;
+
+  onDeleteComment: (commentIdx: number) => void;
 }
 
 export interface DeleteCommentRequest {

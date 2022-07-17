@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useAuthorTaggedPostListQuery } from '../Author.quries';
-import { EmptyContent, PostGrid } from 'src/domains/shared/components';
+import { EmptyContent, PostGrid, Spacing } from 'src/domains/shared/components';
 
 interface AuthorTagProps {
   accountIdx: number;
@@ -14,10 +14,14 @@ export const AuthorTag = ({ accountIdx }: AuthorTagProps) => {
   );
   const loadMorePost = () => authorTaggedPostListQuery.fetchNextPage();
 
+  const isEmpty = postList && postList?.length > 0;
+
   return (
     <>
+      <Spacing col={isEmpty ? 60 : 45} />
+
       <div>
-        {postList && postList?.length > 0 ? (
+        {!isEmpty && postList ? (
           <PostGrid contents={postList} loadMore={loadMorePost} />
         ) : (
           <EmptyContent

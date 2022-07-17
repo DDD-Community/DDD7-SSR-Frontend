@@ -5,7 +5,14 @@ import { css } from '@emotion/react';
 import { Color } from '../../constants';
 import { Text } from '../Text';
 
-const CommentList = ({ totalCounts, comments, isLoadMore, onLoadMore }: CommentListProps) => {
+const CommentList = ({
+  totalCounts,
+  comments,
+  isLoadMore,
+  onLoadMore,
+  handleDeleteComment,
+  userId,
+}: CommentListProps) => {
   return (
     <section css={commentListContainerStyle}>
       <div css={commentCountStyle}>
@@ -32,7 +39,12 @@ const CommentList = ({ totalCounts, comments, isLoadMore, onLoadMore }: CommentL
 
       <ul>
         {comments.map((comment) => (
-          <Comment key={comment.commentIdx} {...comment} />
+          <Comment
+            key={comment.commentIdx}
+            {...comment}
+            isOwner={comment.account.accountIdx === userId}
+            onDeleteComment={handleDeleteComment}
+          />
         ))}
       </ul>
     </section>

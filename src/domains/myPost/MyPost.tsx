@@ -1,5 +1,5 @@
 import { css } from '@emotion/react';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Spacing, Tabs, Text, PostGrid } from 'src/domains/shared/components';
 import LabelWithCount from './components/LabelWithCount';
 import { MyPostDisplay } from './MyPost.model';
@@ -23,23 +23,36 @@ const MyPost = () => {
   const publicBoardCount = publicPostList?.[0]?.boardCount || 0;
   const privateBoardCount = privatePostList?.[0]?.boardCount || 0;
 
-  const publicLoadMorePost = () => publicMyPostListQuery.fetchNextPage();
-  const privateLoadMorePost = () => privateMyPostListQuery.fetchNextPage();
+  const contents = useMemo(
+    () => (selectedTab === 'public' ? publicPostList : privatePostList),
+    [selectedTab, publicPostList, privatePostList],
+  );
 
-  const tabList = [
-    {
-      label: <LabelWithCount label="출간됨" count={publicBoardCount} isSelected={selectedTab === 'public'} />,
-      value: 'published',
-    },
-    // {
-    //   label: <LabelWithCount label="임시저장" count={3} isSelected={selectedTab === 'stored'} />,
-    //   value: 'stored',
-    // },
-    {
-      label: <LabelWithCount label="비공개" count={privateBoardCount} isSelected={selectedTab === 'private'} />,
-      value: 'private',
-    },
-  ];
+  const loadMore = useCallback(() => {
+    if (selectedTab === 'public') {
+      return publicMyPostListQuery.fetchNextPage();
+    }
+
+    return privateMyPostListQuery.fetchNextPage();
+  }, [selectedTab, publicMyPostListQuery, privateMyPostListQuery]);
+
+  const tabList = useMemo(
+    () => [
+      {
+        label: <LabelWithCount label="출간됨" count={publicBoardCount} isSelected={selectedTab === 'public'} />,
+        value: 'public',
+      },
+      // {
+      //   label: <LabelWithCount label="임시저장" count={3} isSelected={selectedTab === 'stored'} />,
+      //   value: 'stored',
+      // },
+      {
+        label: <LabelWithCount label="비공개" count={privateBoardCount} isSelected={selectedTab === 'private'} />,
+        value: 'private',
+      },
+    ],
+    [publicBoardCount, privateBoardCount, selectedTab],
+  );
 
   const handleTabChange = (value: string) => {
     setSelectedTab(value as MyPostDisplay);
@@ -53,15 +66,8 @@ const MyPost = () => {
       <Spacing col={54} />
 
       <Tabs tabList={tabList} onTabChange={handleTabChange} />
-
-      <div>
-        {publicPostList && privatePostList && (
-          <PostGrid
-            contents={selectedTab === 'public' ? publicPostList : privatePostList}
-            loadMore={selectedTab === 'public' ? publicLoadMorePost : privateLoadMorePost}
-          />
-        )}
-      </div>
+      <Spacing col={(contents?.length || 0) > 0 ? 35 : 55} />
+      <div>{contents && <PostGrid contents={contents} loadMore={loadMore} />}</div>
     </section>
   );
 };

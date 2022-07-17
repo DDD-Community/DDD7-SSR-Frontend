@@ -1,69 +1,121 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { memo } from 'react';
-import { Color, DEFAULT_POST_IMAGE } from '../../constants';
+import React, { memo, useCallback, useMemo } from 'react';
+import { Color, DEFAULT_POST_IMAGE, DEFAULT_PROFILE_IMAGE } from '../../constants';
+import { formatDate } from '../../utils/date';
+import { ProfileImage } from '../ProfileImage';
+import { Spacing } from '../Spacing';
+import { Text } from '../Text';
 import { PostCardProps } from './PostCardType';
 
 const PostCard = ({ data }: PostCardProps) => {
   const router = useRouter();
-  return (
-    <CardLayout
-      onClick={() => {
-        router.push(
-          {
-            pathname: `/posts/[postIdx]`,
-            query: {
-              postIdx: `${data.postIdx}`,
-            },
+
+  const handleClickCard = () => {
+    router.push(
+      {
+        pathname: `/posts/[postIdx]`,
+        query: {
+          postIdx: `${data.postIdx}`,
+        },
+      },
+      `/posts/${data.postIdx}`,
+    );
+  };
+
+  const handleClickProfile = useCallback(
+    (accountIdx: number) => (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+
+      router.push(
+        {
+          pathname: '/author/[accountIdx]',
+          query: {
+            accountIdx,
           },
-          `/posts/${data.postIdx}`,
-        );
-      }}
-    >
+        },
+        `author/${accountIdx}`,
+      );
+    },
+    [router],
+  );
+
+  const refinedSummaryContents = useMemo(
+    () => data.thumbnailContents.replace(/!\[(.*?)]\((https?:\/\/\S+\.\w+)\)/gi, ''),
+    [data.thumbnailContents],
+  );
+
+  const [coWriterIdxs, coWriterProfiles, coWriterNames] = useMemo(() => {
+    if (!data) {
+      return [[], [], []];
+    }
+
+    return data.coWriter.coWriterInfo.reduce<[number[], string[], string[]]>(
+      (acc, info) => {
+        acc[0].push(info.accountIdx);
+        acc[1].push(info.profileImg || DEFAULT_PROFILE_IMAGE);
+        acc[2].push(info.name);
+
+        return acc;
+      },
+      [[], [], []],
+    );
+  }, [data]);
+
+  return (
+    <CardLayout onClick={handleClickCard}>
       <ImageSection>
-        <Image
-          src={data.thumbnailImg || DEFAULT_POST_IMAGE}
-          width="330px"
-          height="152px"
-          alt={data.thumbnailContents}
-        />
+        <Image src={data.thumbnailImg || DEFAULT_POST_IMAGE} width="330px" height="152px" alt="thumbnail-image" />
       </ImageSection>
+
       <DescriptionBox>
+        <Text type="tag12" color="Gray500">
+          {formatDate(data.createDate)}
+        </Text>
+        <Spacing col={9} />
         <CardTitle>{data.title}</CardTitle>
-        <CardSummary>{data.contents}</CardSummary>
+        <CardSummary>{refinedSummaryContents}</CardSummary>
       </DescriptionBox>
+
       <CardAuthor>
-        <div style={{ width: '20px', height: '20px', borderRadius: '200px', overflow: 'hidden', marginBottom: '5px' }}>
-          <Image
-            src={data.thumbnailImg || DEFAULT_POST_IMAGE}
-            width="20px"
-            height="20px"
-            alt={data.thumbnailContents}
-            layout="intrinsic"
-            objectFit="cover"
-          />
+        <div css={crewInfoWrapperStyle}>
+          {coWriterProfiles.map((profileImage, index) => (
+            <React.Fragment key={coWriterIdxs[index]}>
+              <div onClick={handleClickProfile(coWriterIdxs[index])}>
+                <ProfileImage src={profileImage || DEFAULT_PROFILE_IMAGE} width={20} />
+              </div>
+              {coWriterProfiles.length > index + 1 && <Spacing row={6} />}
+            </React.Fragment>
+          ))}
         </div>
-        <div style={{ fontSize: '12px' }}>
-          <span style={{ color: `${Color.Gray600}` }}>by</span>
-          <span style={{ color: `${Color.White100}` }}>도토리 & 김진우</span>
+        <Spacing col={6} />
+        <div css={crewInfoWrapperStyle}>
+          <Text color="Gray600" type="tag12">
+            by
+          </Text>
+          <Spacing row={4} />
+          <Text type="tag12" color="White100">
+            {coWriterNames.join(' & ')}
+          </Text>
         </div>
       </CardAuthor>
     </CardLayout>
   );
 };
 
-const CardLayout = styled('div')`
+const CardLayout = styled.div`
   display: inline;
   position: relative;
-  border-radius: 20px;
+  border-radius: 16px;
   background-color: ${Color.Gray800};
   min-width: 296px;
   height: 378px;
   cursor: pointer;
 `;
 
-const ImageSection = styled('div')`
+const ImageSection = styled.div`
   display: flex;
   justify-content: center;
   color: white;
@@ -74,18 +126,18 @@ const ImageSection = styled('div')`
   height: 152px;
 `;
 
-const DescriptionBox = styled('div')`
+const DescriptionBox = styled.div`
   margin: 20px 21px 21px 21px;
 `;
 
-const CardTitle = styled('div')`
+const CardTitle = styled.div`
   color: ${Color.White100};
   font-weight: bold;
   font-size: 16px;
   margin-bottom: 5px;
 `;
 
-const CardSummary = styled('div')`
+const CardSummary = styled.div`
   display: block;
   overflow: hidden;
   color: ${Color.Gray600};
@@ -100,7 +152,7 @@ const CardSummary = styled('div')`
   font-size: 14px;
 `;
 
-const CardAuthor = styled('div')`
+const CardAuthor = styled.div`
   position: absolute;
   padding: 7px 21px 21px 21px;
   width: 100%;
@@ -108,6 +160,10 @@ const CardAuthor = styled('div')`
   bottom: 0;
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
+`;
+
+const crewInfoWrapperStyle = css`
+  display: flex;
 `;
 
 export default memo(PostCard);

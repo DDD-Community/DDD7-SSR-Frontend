@@ -1,5 +1,5 @@
 import React, { useState, memo, useCallback, useRef, useEffect } from 'react';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import styled from '@emotion/styled';
 import ReactModal from 'react-modal';
 import { Logo } from '../Logo';
@@ -18,6 +18,7 @@ import DropdownList from '../Dropdown/DropdownList';
 import { useUserStore } from '../../store/user';
 import Image from 'next/image';
 import { useIsShown } from '../../hooks/useIsShown';
+import { debounce } from 'lodash-es';
 
 const customStyles = {
   overlay: {
@@ -39,17 +40,35 @@ const customStyles = {
 };
 
 const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
-  const [searchText, setSearchText] = useState<string>('');
   const [isShown, onOpen, onclose] = useIsShown(false);
+  const router = useRouter();
+  const [searchText, setSearchText] = useState<string>((router.query.text as string) || '');
   const { showModal, showOnModal, showOffModal } = useLoginModalStore();
 
   const { isMobile } = useBreakPointStore();
   const { user } = useUserStore();
 
-  const onChangeTextOnSearchBar = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const text = e.target.value;
-    setSearchText(text);
-  }, []);
+  const goToSearchPage = useCallback(
+    debounce((text: string) => {
+      router.push({
+        pathname: '/search',
+        query: {
+          text,
+        },
+      });
+    }, 250),
+    [router],
+  );
+
+  const onChangeTextOnSearchBar = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const text = e.target.value;
+      setSearchText(text);
+
+      goToSearchPage(e.target.value);
+    },
+    [goToSearchPage],
+  );
 
   return (
     <>
