@@ -94,11 +94,11 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
                 </div>
               )}
             </div>
-          ) : (
+          ) : !isMobile ? (
             <Button color="Gray800" size="small" onClick={showOnModal}>
               로그인
             </Button>
-          )}
+          ) : null}
           {isMobile && (
             <div onClick={openTabMenu} style={{ marginLeft: '15px', marginTop: '5px' }}>
               <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
