@@ -105,7 +105,7 @@ const PostCreate = () => {
           }}
         />
         <section css={editorContainerStyle}>
-          {!isMobile && isPreviewPlaceholderShown && (
+          {!isMobile && editorMode === 'markdown' && isPreviewPlaceholderShown && (
             <>
               <div css={previewTopTextStyle}>
                 <Text type="tag12" color="Primary50">

@@ -467,7 +467,6 @@ export const GlobalEditorStyle = css`
     word-wrap: break-word;
     word-break: break-all;
     padding-top: 12px !important;
-    padding-right: 24px;
   }
 
   .toastui-editor-md-preview {
