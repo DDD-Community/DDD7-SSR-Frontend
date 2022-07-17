@@ -32,6 +32,12 @@ const UserProfile = ({ user }: UserProfileProps) => {
         },
       },
       {
+        name: '새 글 작성',
+        callbackFn: () => {
+          router.push(`/posts/create`);
+        },
+      },
+      {
         name: '내가 쓴 글 보기',
         callbackFn: () => {
           router.push('/mypost');
