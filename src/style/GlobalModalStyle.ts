@@ -5,6 +5,9 @@ export const GlobalModalStyle = css`
     display: block;
   }
 
+  .Modal__html--open {
+    overflow-y: hidden;
+  }
   /*
     Overlay
   */
@@ -20,7 +23,7 @@ export const GlobalModalStyle = css`
     position: fixed;
     overflow-y: auto;
     /* prettier-ignore */
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.8);
     text-align: center;
   }
 
@@ -45,7 +48,10 @@ export const GlobalModalStyle = css`
   }
 
   .Modal__overlay--centered .Modal__wrap {
-    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   /*

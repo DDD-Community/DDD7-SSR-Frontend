@@ -5,4 +5,6 @@ export interface CommentListProps {
   comments: Comment[];
   isLoadMore?: boolean;
   onLoadMore?: () => void;
+  handleDeleteComment: (commentId: number) => void;
+  userId?: number;
 }

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useAuthorPostListQuery } from '../Author.quries';
-import { EmptyContent, Text, Button, PostGrid } from 'src/domains/shared/components';
+import { EmptyContent, Text, Button, PostGrid, Spacing } from 'src/domains/shared/components';
 
 interface AuthorPostProps {
   accountIdx: number;
@@ -14,10 +14,13 @@ export const AuthorPost = ({ accountIdx }: AuthorPostProps) => {
   );
   const loadMorePost = () => authorPostListQuery.fetchNextPage();
 
+  const isEmpty = postList && postList?.length > 0;
+
   return (
     <>
+      <Spacing col={isEmpty ? 60 : 45} />
       <div>
-        {postList && postList?.length > 0 ? (
+        {!isEmpty && postList ? (
           <PostGrid contents={postList} loadMore={loadMorePost} />
         ) : (
           <EmptyContent

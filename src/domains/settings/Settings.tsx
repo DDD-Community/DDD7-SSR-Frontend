@@ -1,11 +1,14 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { Text, Spacing, TextInput, Button, ProfileImage, Switch } from '../shared/components';
+import { Confirm } from '../shared/components/Confirm';
 import { Textarea } from '../shared/components/Textarea';
 import { Color } from '../shared/constants';
+import { useIsShown } from '../shared/hooks/useIsShown';
 import { BreakPoint } from '../shared/hooks/useMediaQuery';
 import useUser from '../shared/hooks/useUser';
 import { useAccountDetailQuery } from '../shared/queries/account';
@@ -25,6 +28,8 @@ const Settings = () => {
   const saveAccountInfoMutation = useSaveAccountInfoMutation();
   const withdrawalMutation = useWithdrawAccountMutation();
   const toggleAlarmMutation = useToggleAlarmMutation();
+
+  const [isShownWithdrawalConfirm, handleOpenWithdrawalConfirm, handleCloseWithDrawalConfirm] = useIsShown(false);
 
   const { register, watch, reset, handleSubmit } = useForm<AccountProfile>();
   const name = watch('name');
@@ -54,6 +59,9 @@ const Settings = () => {
 
   const handleWithdrawalAccount = () => {
     withdrawalMutation.mutate(undefined, {
+      onSettled: () => {
+        handleCloseWithDrawalConfirm();
+      },
       onSuccess: () => {
         router.push('/');
       },
@@ -99,110 +107,126 @@ const Settings = () => {
       introduction: accountDetailQuery.data?.introduction || '',
       profileImg: accountDetailQuery.data?.profileImg || '',
     });
-  }, [accountDetailQuery.data]);
+  }, [accountDetailQuery.data, reset]);
 
   return (
-    <section css={settingsContainerStyle}>
-      <Text type="title24" color="White100">
-        프로필 설정
-      </Text>
-      <Spacing col={35} />
-      <section css={userInfoContainerStyle}>
-        <form onSubmit={handleSaveAccount}>
-          <div css={userProfileBaseInfoStyle}>
-            <div css={userProfileImageWrapperStyle}>
-              <ProfileImage src={profileImg || undefined} />
-              {isMobile && (
-                <div>
-                  <Button type="button" color="Primary100" size="large">
-                    이미지 업로드
-                  </Button>
-                  <Spacing col={12} />
-                  <Button type="button" color="Gray300" size="large">
-                    이미지 제거
-                  </Button>
+    <>
+      <section css={settingsContainerStyle}>
+        <Text type="title24" color="White100">
+          프로필 설정
+        </Text>
+        <Spacing col={35} />
+        <section css={userInfoContainerStyle}>
+          <form onSubmit={handleSaveAccount}>
+            <div css={userProfileBaseInfoStyle}>
+              <div css={userProfileImageWrapperStyle}>
+                <ProfileImage src={profileImg || undefined} />
+                {isMobile && (
+                  <div>
+                    <Button type="button" color="Primary100" size="large">
+                      이미지 업로드
+                    </Button>
+                    <Spacing col={12} />
+                    <Button type="button" color="Gray300" size="large">
+                      이미지 제거
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <Spacing row={isMobile ? 0 : 29} col={isMobile ? 27 : 0} />
+              <div css={userProfileInfoInputWrapperStyle}>
+                <div css={userProfileInputWrapperStyle}>
+                  <TextInput css={userNameInputStyle} placeholder="닉네임을 입력해주세요." {...register('name')} />
+                  <Spacing row={8} />
+                  <TextInput
+                    css={userBlogNameInputStyle}
+                    placeholder="블로그명을 입력해주세요."
+                    {...register('blogName')}
+                  />
                 </div>
-              )}
-            </div>
-            <Spacing row={isMobile ? 0 : 29} col={isMobile ? 27 : 0} />
-            <div css={userProfileInfoInputWrapperStyle}>
-              <div css={userProfileInputWrapperStyle}>
-                <TextInput css={userNameInputStyle} placeholder="닉네임을 입력해주세요." {...register('name')} />
-                <Spacing row={8} />
-                <TextInput
-                  css={userBlogNameInputStyle}
-                  placeholder="블로그명을 입력해주세요."
-                  {...register('blogName')}
+
+                <Spacing col={10} />
+                <Textarea
+                  placeholder="소개글을 입력해주세요."
+                  {...register('introduction')}
+                  value={introduction}
+                  maxLength={140}
+                  withCount
                 />
+                <Spacing col={isMobile ? 16 : 7} />
+
+                <Button
+                  color={disableSaveButton ? 'Gray300' : 'Primary100'}
+                  size="medium"
+                  type="submit"
+                  disabled={disableSaveButton}
+                >
+                  <Text type="body14">저장하기</Text>
+                </Button>
               </div>
-
-              <Spacing col={10} />
-              <Textarea
-                placeholder="소개글을 입력해주세요."
-                {...register('introduction')}
-                value={introduction}
-                maxLength={140}
-                withCount
-              />
-              <Spacing col={isMobile ? 16 : 7} />
-
-              <Button
-                color={disableSaveButton ? 'Gray300' : 'Primary100'}
-                size="medium"
-                type="submit"
-                disabled={disableSaveButton}
-              >
-                <Text type="body14">저장하기</Text>
-              </Button>
             </div>
-          </div>
-        </form>
+          </form>
 
-        <Spacing col={69} />
+          <Spacing col={69} />
 
-        <section css={userProfileDetailWrapperStyle}>
-          <ProfileInfoRow labelText="아이디">
-            <span>{accountDetailQuery.data?.profileId}</span>
-          </ProfileInfoRow>
-          <ProfileInfoRow labelText="소셜 계정 연동">
-            <div css={flexBoxStyle}>
-              <img src="/googleIcon.png" alt="login-icon" width={27} />
-              <Spacing row={7} />
-              <Text type="tag12">{accountDetailQuery.data?.email}</Text>
-            </div>
-          </ProfileInfoRow>
-
-          <ProfileInfoRow labelText="이메일 수신 설정">
-            <div css={alarmWrapperStyle}>
+          <section css={userProfileDetailWrapperStyle}>
+            <ProfileInfoRow labelText="아이디">
+              <span>{accountDetailQuery.data?.profileId}</span>
+            </ProfileInfoRow>
+            <ProfileInfoRow labelText="소셜 계정 연동">
               <div css={flexBoxStyle}>
-                <Text type="tag12">배포한 글과 작성한 댓글에 대한 알림을 수신합니다.</Text>
-                <Spacing row={12} />
-                <Switch checked={accountDetailQuery.data?.alarmAgree === 'Y' || false} onChange={handleToggleAlarm} />
-              </div>
-              <Spacing col={16} />
-              <div css={flexBoxStyle}>
-                <Text type="tag12">듀스페이퍼의 업데이트 소식을 수신합니다..</Text>
-                <Spacing row={12} />
-                <Switch
-                  checked={accountDetailQuery.data?.emailAgree === 'Y' || false}
-                  onChange={handleToggleEmailAlarm}
+                <Image
+                  src={accountDetailQuery.data?.platform === 'google' ? '/googleIcon.png' : '/kakaoIcon.png'}
+                  alt={`${accountDetailQuery.data?.platform}-icon`}
+                  width={27}
+                  height={27}
                 />
+                <Spacing row={7} />
+                <Text type="tag12">{accountDetailQuery.data?.email}</Text>
               </div>
-            </div>
-          </ProfileInfoRow>
+            </ProfileInfoRow>
 
-          <ProfileInfoRow labelText="회원 탈퇴">
-            <div>
-              <Button type="button" color="Red100" fixedWidth={119} onClick={handleWithdrawalAccount}>
-                회원 탈퇴하기
-              </Button>
-              <Spacing col={15} />
-              <div>탈퇴 시, 작성하신 글 및 댓글이 모두 삭제되며 복구되지 않습니다.</div>
-            </div>
-          </ProfileInfoRow>
+            <ProfileInfoRow labelText="이메일 수신 설정">
+              <div css={alarmWrapperStyle}>
+                <div css={flexBoxStyle}>
+                  <Text type="tag12">배포한 글과 작성한 댓글에 대한 알림을 수신합니다.</Text>
+                  <Spacing row={12} />
+                  <Switch checked={accountDetailQuery.data?.alarmAgree === 'Y' || false} onChange={handleToggleAlarm} />
+                </div>
+                <Spacing col={16} />
+                <div css={flexBoxStyle}>
+                  <Text type="tag12">듀스페이퍼의 업데이트 소식을 수신합니다..</Text>
+                  <Spacing row={12} />
+                  <Switch
+                    checked={accountDetailQuery.data?.emailAgree === 'Y' || false}
+                    onChange={handleToggleEmailAlarm}
+                  />
+                </div>
+              </div>
+            </ProfileInfoRow>
+
+            <ProfileInfoRow labelText="회원 탈퇴">
+              <div>
+                <Button type="button" color="Red100" fixedWidth={119} onClick={handleOpenWithdrawalConfirm}>
+                  회원 탈퇴하기
+                </Button>
+                <Spacing col={15} />
+                <div>탈퇴 시, 작성하신 글 및 댓글이 모두 삭제되며 복구되지 않습니다.</div>
+              </div>
+            </ProfileInfoRow>
+          </section>
         </section>
       </section>
-    </section>
+
+      <Confirm
+        isShown={isShownWithdrawalConfirm}
+        onClose={handleCloseWithDrawalConfirm}
+        description="정말 탈퇴하시나요?"
+        buttonText="탈퇴하기"
+        buttonTextColor="Red100"
+        onConfirm={handleWithdrawalAccount}
+      />
+    </>
   );
 };
 

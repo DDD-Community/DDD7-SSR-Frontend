@@ -1,4 +1,6 @@
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { BASE_URL, Color, OAUTH_URL, REQUEST_AUTH_URL } from '../../constants';
@@ -18,12 +20,30 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
           <Link href={`${OAUTH_URL}/oauth2/authorization/google`} passHref>
-            <LoginModalSocialBtn>구글로 로그인</LoginModalSocialBtn>
+            <LoginModalSocialBtn>
+              <div css={LoginModalSocialTextContainer}>
+                <div css={LoginModalSocialText}>
+                  구글로 로그인
+                  <div css={LoginModalSocialIcon}>
+                    <Image src="/googleIcon.png" alt="google" width={27} height={27} />
+                  </div>
+                </div>
+              </div>
+            </LoginModalSocialBtn>
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
           <Link href={`${OAUTH_URL}/oauth2/authorization/kakao`} passHref>
-            <LoginModalSocialBtn>카카오톡으로 로그인</LoginModalSocialBtn>
+            <LoginModalSocialBtn>
+              <div css={LoginModalSocialTextContainer}>
+                <div css={LoginModalSocialKakaoText}>
+                  카카오톡으로 로그인
+                  <div css={LoginModalSocialIcon}>
+                    <Image src="/kakaoIcon.svg" alt="google" width={32} height={32} />
+                  </div>
+                </div>
+              </div>
+            </LoginModalSocialBtn>
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
@@ -102,4 +122,27 @@ const LoginModalSocialBtn = styled.button`
   width: 100%;
   height: 100%;
 `;
+
+const LoginModalSocialTextContainer = css`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const LoginModalSocialText = css`
+  position: relative;
+  margin-left: 8%;
+`;
+
+const LoginModalSocialKakaoText = css`
+  position: relative;
+  margin-left: 10%;
+`;
+
+const LoginModalSocialIcon = css`
+  position: absolute;
+  top: -35%;
+  left: -40px;
+`;
+
 export default LoginModal;

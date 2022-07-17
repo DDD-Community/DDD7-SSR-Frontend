@@ -2,6 +2,7 @@ import { css, Global } from '@emotion/react';
 import emotionNormalize from 'emotion-normalize';
 import { GlobalEditorStyle } from './GlobalEditorStyle';
 import { GlobalModalStyle } from './GlobalModalStyle';
+import { GlobalToastStyle } from './GlobalToastStyle';
 
 const GlobalStyle = () => (
   <Global
@@ -29,6 +30,7 @@ const GlobalStyle = () => (
       ${emotionNormalize}
       ${GlobalEditorStyle}
       ${GlobalModalStyle}
+      ${GlobalToastStyle}
     `}
   />
 );
