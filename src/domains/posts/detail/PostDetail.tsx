@@ -16,6 +16,7 @@ import useUser from 'src/domains/shared/hooks/useUser';
 import { Confirm } from 'src/domains/shared/components/Confirm';
 import { useIsShown } from 'src/domains/shared/hooks/useIsShown';
 import { toast } from 'react-toastify';
+import { formatDate } from 'src/domains/shared/utils/date';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -116,21 +117,33 @@ const PostDetail = () => {
     <>
       <section css={postDetailSection}>
         <div css={crewInfoWrapperStyle}>
-          {coWriterProfiles.map((profileImg, index) => (
-            <div key={`${profileImg}${index}`} onClick={() => router.push(`/author/${coWriterIdxs[index]}`)}>
-              <img css={crewProfileImgStyle} src={profileImg} alt="profile" width={32} height={32} />
+          <div>
+            {coWriterProfiles.map((profileImg, index) => (
+              <div key={`${profileImg}${index}`} onClick={() => router.push(`/author/${coWriterIdxs[index]}`)}>
+                <img css={crewProfileImgStyle} src={profileImg} alt="profile" width={32} height={32} />
+              </div>
+            ))}
+            <Spacing row={5} />
+            <div css={crewNameWrapperStyle}>
+              <Text type="tag12" color="White100">
+                {coWriterNames.join(' & ')}
+              </Text>
             </div>
-          ))}
-          <Spacing row={5} />
-          <div css={crewNameWrapperStyle}>
-            <Text type="tag12" color="White100">
-              {coWriterNames.join(' & ')}
+          </div>
+
+          <div>
+            <Text type="tag12" color="Gray600">
+              조회수: {postDetailQuery.data?.boardCount || 0}
             </Text>
           </div>
         </div>
         <Spacing col={16} />
         <Text type="title28" color="White100">
           {postDetailQuery.data?.title}
+        </Text>
+        <Spacing col={8} />
+        <Text color="Gray650" type="tag12">
+          {postDetailQuery.data?.createDate && formatDate(postDetailQuery.data?.createDate)}
         </Text>
         {postDetailQuery.data && <Viewer initialValue={postDetailQuery.data.contents} />}
 
@@ -198,6 +211,12 @@ const postDetailSection = css`
 const crewInfoWrapperStyle = css`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const crewProfileImgStyle = css`
