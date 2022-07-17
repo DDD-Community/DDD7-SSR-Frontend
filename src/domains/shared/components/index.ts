@@ -19,4 +19,4 @@ export * from './Textarea';
 export * from './ProfileImage';
 export * from './CommentList';
 export * from './Comment';
-export * from './PostGrid';
+export * from './Grid';

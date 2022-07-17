@@ -1,8 +1,7 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
-import { EmptyContent, PostGrid, Spacing, Tabs, Text } from '../shared/components';
-import CrewGrid from '../shared/components/Grid/CrewGrid';
+import { EmptyContent, PostGrid, CrewGrid, Spacing, Tabs, Text } from '../shared/components';
 import { useSearchAccountsQuery, useSearchPostsQuery } from './Search.quries';
 
 type SearchTab = 'post' | 'author';

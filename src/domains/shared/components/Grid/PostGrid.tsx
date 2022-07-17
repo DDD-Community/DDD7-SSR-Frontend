@@ -8,7 +8,7 @@ interface PostGridProps {
   loadMore: () => void;
 }
 
-const PostGrid = ({ contents, loadMore }: PostGridProps) => {
+export const PostGrid = ({ contents, loadMore }: PostGridProps) => {
   const { containerRef } = useInfiniteScroll({ dataLength: contents?.length, loadMore });
 
   return (
@@ -27,5 +27,3 @@ const PostWrapperStyle = styled.div`
   gap: 21px;
   width: 1256px;
 `;
-
-export default PostGrid;

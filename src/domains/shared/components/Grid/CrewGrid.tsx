@@ -7,7 +7,7 @@ export interface CrewGridProps {
   loadMore: () => void;
 }
 
-const CrewGrid = ({ contents, loadMore }: CrewGridProps) => {
+export const CrewGrid = ({ contents, loadMore }: CrewGridProps) => {
   const { containerRef } = useInfiniteScroll({ dataLength: contents?.length, loadMore });
 
   return (
@@ -26,5 +26,3 @@ const GridWrapperStyle = styled.div`
   gap: 21px;
   width: 1256px;
 `;
-
-export default CrewGrid;
