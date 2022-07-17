@@ -9,34 +9,29 @@ const withAuth = (WrappedComponent: any) => {
       const [verified, setVerified] = useState<boolean>(false);
       const Router = useRouter();
 
-      const accessToken = localStorage.getItem('dewsToken');
-
-      if (!accessToken) {
-        Router.replace('/');
-        return null;
-      }
-
-      const verifyToken = async () => {
+      const verifyToken = async (accessToken: string | null) => {
         try {
           setAuthToken(accessToken);
           await client.get('/me');
           setVerified(true);
         } catch (e) {
           console.log(e);
-          localStorage.removeItem('dewsToken');
-          localStorage.removeItem('dewsRefreshToken');
           Router.replace('/');
         }
       };
 
       useEffect(() => {
-        verifyToken();
+        const accessToken = localStorage.getItem('dewsToken');
+
+        if (!accessToken) {
+          Router.replace('/');
+        } else {
+          verifyToken(accessToken);
+        }
       }, []);
 
       if (verified) {
         return <WrappedComponent {...props} />;
-      } else {
-        return null;
       }
     }
 
