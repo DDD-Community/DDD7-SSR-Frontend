@@ -39,7 +39,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
                 <div css={LoginModalSocialKakaoText}>
                   카카오톡으로 로그인
                   <div css={LoginModalSocialIcon}>
-                    <Image src="/kakaoIcon.svg" alt="google" width={32} height={32} />
+                    <Image src="/kakaoIcon.png" alt="google" width={32} height={32} />
                   </div>
                 </div>
               </div>
@@ -48,7 +48,16 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
           <Link href={`${OAUTH_URL}/oauth2/authorization/naver`} passHref>
-            <LoginModalSocialBtn>네이버로 로그인</LoginModalSocialBtn>
+            <LoginModalSocialBtn>
+              <div css={LoginModalSocialTextContainer}>
+                <div css={LoginModalSocialKakaoText}>
+                  네이버로 로그인
+                  <div css={LoginModalSocialIcon}>
+                    <Image src="/naverIcon.png" alt="google" width={20} height={19} />
+                  </div>
+                </div>
+              </div>
+            </LoginModalSocialBtn>
           </Link>
         </LoginModalNaverContainer>
       </LoginModalMethodContainer>
