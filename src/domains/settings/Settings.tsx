@@ -120,7 +120,7 @@ const Settings = () => {
           <form onSubmit={handleSaveAccount}>
             <div css={userProfileBaseInfoStyle}>
               <div css={userProfileImageWrapperStyle}>
-                <ProfileImage src={profileImg || undefined} />
+                <ProfileImage src={profileImg || undefined} updatable />
                 {isMobile && (
                   <div>
                     <Button type="button" color="Primary100" size="large">
@@ -137,7 +137,7 @@ const Settings = () => {
               <div css={userProfileInfoInputWrapperStyle}>
                 <div css={userProfileInputWrapperStyle}>
                   <TextInput css={userNameInputStyle} placeholder="닉네임을 입력해주세요." {...register('name')} />
-                  <Spacing row={8} />
+                  <Spacing row={isMobile ? 0 : 8} col={isMobile ? 12 : 0} />
                   <TextInput
                     css={userBlogNameInputStyle}
                     placeholder="블로그명을 입력해주세요."
@@ -303,14 +303,27 @@ const userProfileInfoInputWrapperStyle = css`
 
 const userProfileInputWrapperStyle = css`
   display: flex;
+
+  ${BreakPoint.Mobile()} {
+    width: 100%;
+    flex-direction: column;
+  }
 `;
 
 const userNameInputStyle = css`
   width: 147px;
+
+  ${BreakPoint.Mobile()} {
+    width: 100%;
+  }
 `;
 
 const userBlogNameInputStyle = css`
   width: 300px;
+
+  ${BreakPoint.Mobile()} {
+    width: 100%;
+  }
 `;
 
 const userProfileDetailWrapperStyle = css`
