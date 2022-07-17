@@ -1,5 +1,6 @@
 import DefaultLayout from 'src/domains/layout/DefaultLayout';
 import Notification from 'src/domains/notification/Notification';
+import withAuth from 'src/domains/shared/hooks/withAuth';
 
 const NotificationPage = () => {
   return (
@@ -9,4 +10,4 @@ const NotificationPage = () => {
   );
 };
 
-export default NotificationPage;
+export default withAuth(NotificationPage);
