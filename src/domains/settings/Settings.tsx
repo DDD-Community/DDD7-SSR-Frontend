@@ -37,6 +37,20 @@ const Settings = () => {
   const profileImg = watch('profileImg');
   const introduction = watch('introduction');
 
+  const platformUrl = useMemo(() => {
+    const platform = accountDetailQuery.data?.platform;
+
+    if (platform === 'google') {
+      return '/googleIcon.png';
+    }
+
+    if (platform === 'kakao') {
+      return '/kakaoIcon.png';
+    }
+
+    return '/naverIcon.png';
+  }, [accountDetailQuery.data?.platform]);
+
   const disableSaveButton = useMemo(() => {
     if (!name || !blogName) {
       return true;
@@ -175,12 +189,7 @@ const Settings = () => {
             </ProfileInfoRow>
             <ProfileInfoRow labelText="소셜 계정 연동">
               <div css={flexBoxStyle}>
-                <Image
-                  src={accountDetailQuery.data?.platform === 'google' ? '/googleIcon.png' : '/kakaoIcon.png'}
-                  alt={`${accountDetailQuery.data?.platform}-icon`}
-                  width={27}
-                  height={27}
-                />
+                <Image src={platformUrl} alt={`${accountDetailQuery.data?.platform}-icon`} width={27} height={27} />
                 <Spacing row={7} />
                 <Text type="tag12">{accountDetailQuery.data?.email}</Text>
               </div>

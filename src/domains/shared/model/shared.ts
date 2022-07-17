@@ -4,7 +4,7 @@ export interface PaginationData<T> {
   totalPages: number;
 }
 
-export type Platform = 'google' | 'kakao';
+export type Platform = 'google' | 'kakao' | 'naver';
 export interface User {
   accountIdx: number;
   email: string;
