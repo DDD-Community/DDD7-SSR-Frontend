@@ -166,7 +166,7 @@ const Author = () => {
           </>
         )}
 
-        {selectedTab === 'post' && <AuthorPost accountIdx={accountIdx} />}
+        {selectedTab === 'post' && <AuthorPost accountIdx={accountIdx} isOwner={accountIdx === profile?.accountIdx} />}
         {selectedTab === 'crew' && <AuthorCrew accountIdx={accountIdx} />}
         {selectedTab === 'tag' && <AuthorTag accountIdx={accountIdx} />}
       </section>
