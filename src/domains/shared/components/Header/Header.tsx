@@ -16,6 +16,7 @@ import { css } from '@emotion/react';
 import { Dropdown } from '../Dropdown';
 import DropdownList from '../Dropdown/DropdownList';
 import { useUserStore } from '../../store/user';
+import Image from 'next/image';
 
 const customStyles = {
   overlay: {
@@ -101,12 +102,17 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
             </Button>
           ) : null}
           {isMobile && (
-            <div onClick={openTabMenu} style={{ marginLeft: '15px', marginTop: '5px' }}>
-              <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="20" height="2.5" rx="1.25" fill="white" />
-                <rect y="7.5" width="20" height="2.5" rx="1.25" fill="white" />
-                <rect y="15" width="20" height="2.5" rx="1.25" fill="white" />
-              </svg>
+            <div css={mobileTabContainer}>
+              <div>
+                <Image src="/mag.svg" alt="mgnifier" width={23} height={23} />
+              </div>
+              <div onClick={openTabMenu} style={{ marginLeft: '15px', marginTop: '3px' }}>
+                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="20" height="2.5" rx="1.25" fill="white" />
+                  <rect y="7.5" width="20" height="2.5" rx="1.25" fill="white" />
+                  <rect y="15" width="20" height="2.5" rx="1.25" fill="white" />
+                </svg>
+              </div>
             </div>
           )}
         </div>
@@ -164,4 +170,8 @@ const nameCardCss = css`
   height: 32px;
   justify-content: space-between;
   align-items: center;
+`;
+
+const mobileTabContainer = css`
+  display: flex;
 `;
