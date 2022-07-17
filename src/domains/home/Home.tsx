@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import MultiFilteredSelect from '../shared/components/MultiFilteredSelect/MultiFilteredSelect';
 import { PostGrid } from '../shared/components/PostGrid';
 import TextSelect from '../shared/components/TextSelect/TextSelect';
+import { useBreakPointStore } from '../shared/store/breakPoint';
 import { useGetPostsQuery } from './Home.queries';
 
 export type priodType = 'daily' | 'weekly' | 'monthly';
@@ -11,7 +13,7 @@ export type filteredType = { isTrend: boolean; period: priodType };
 
 const Home = () => {
   const [filteredState, setFilteredState] = useState<filteredType>({ isTrend: false, period: 'weekly' });
-
+  const { isMobile } = useBreakPointStore();
   const getPostsQuery = useGetPostsQuery(filteredState);
   const postList = useMemo(() => getPostsQuery.data?.pages.flatMap((posts) => posts.content), [getPostsQuery.data]);
   const loadMorePost = () => getPostsQuery.fetchNextPage();
@@ -32,7 +34,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div css={HomeGridLayout}>
+    <HomeGridLayout isMobile={isMobile}>
       <div css={HomeSelectContainer}>
         <TextSelect filteredState={filteredState} setFilteredState={setFilteredState} />
         {filteredState.isTrend && (
@@ -40,19 +42,20 @@ const Home = () => {
         )}
       </div>
       {postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
-    </div>
+    </HomeGridLayout>
   );
 };
 
 export default Home;
 
-const HomeGridLayout = css`
+const HomeGridLayout = styled.div<{ isMobile: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   max-width: 1256px;
   margin-top: 131px;
+  margin-top: ${(props) => (props.isMobile ? '35px' : '131px')};
   margin-left: auto;
   margin-right: auto;
 `;

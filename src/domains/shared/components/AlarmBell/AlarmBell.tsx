@@ -1,8 +1,10 @@
 import { css } from '@emotion/react';
+import { useRouter } from 'next/router';
 
 const AlarmBell = () => {
+  const router = useRouter();
   return (
-    <div css={alarmBellContainer}>
+    <div css={alarmBellContainer} onClick={() => router.push('/notification')}>
       <div css={alarmBell}>
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
