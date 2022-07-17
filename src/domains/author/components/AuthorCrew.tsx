@@ -12,7 +12,7 @@ export const AuthorCrew = ({ accountIdx }: AuthorCrewProps) => {
   const getCrewsListQuery = useGetCrewListQuery(accountIdx);
   const crewList = getCrewsListQuery.data;
 
-  const isEmpty = crewList && crewList?.length > 0;
+  const isEmpty = crewList && crewList.length === 0;
 
   return (
     <>
