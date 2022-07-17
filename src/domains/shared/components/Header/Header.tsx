@@ -54,7 +54,7 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
   return (
     <>
       <HeaderContainer>
-        {!isShown ? <Logo onClick={() => Router.push('/')} /> : <div></div>}
+        {!isShown || !isMobile ? <Logo onClick={() => Router.push('/')} /> : <div></div>}
 
         {!isMobile && (
           <SearchBarContainer>
