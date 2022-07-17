@@ -20,8 +20,8 @@ const MyPost = () => {
     [privateMyPostListQuery.data],
   );
 
-  const publicBoardCount = publicPostList?.[0]?.boardCount || 0;
-  const privateBoardCount = privatePostList?.[0]?.boardCount || 0;
+  const publicBoardCount = publicMyPostListQuery.data?.pages[0].totalElements || 0;
+  const privateBoardCount = privateMyPostListQuery.data?.pages[0].totalElements || 0;
 
   const contents = useMemo(
     () => (selectedTab === 'public' ? publicPostList : privatePostList),

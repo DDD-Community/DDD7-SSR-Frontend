@@ -61,8 +61,10 @@ const PostCreate = () => {
   }, [isMobile]);
 
   useEffect(() => {
-    setValue('coWriter.realWriter', 8);
-  }, []);
+    if (user?.accountIdx) {
+      setValue('coWriter.realWriter', user?.accountIdx);
+    }
+  }, [user?.accountIdx, setValue]);
 
   return (
     <section css={createSectionStyle}>
