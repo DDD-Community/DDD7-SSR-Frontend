@@ -1,6 +1,7 @@
 import React from 'react';
 import MyPost from 'src/domains/myPost/MyPost';
 import DefaultLayout from 'src/domains/layout/DefaultLayout';
+import withAuth from 'src/domains/shared/hooks/withAuth';
 
 const MyPostPage = () => {
   return (
@@ -10,4 +11,4 @@ const MyPostPage = () => {
   );
 };
 
-export default MyPostPage;
+export default withAuth(MyPostPage);
