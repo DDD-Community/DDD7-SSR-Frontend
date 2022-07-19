@@ -1,9 +1,20 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
+import { useCallback, useMemo } from 'react';
+import CardRowList from '../shared/components/CardRowList/CardRowList';
 import NotiCard from '../shared/components/NotiCard/NotiCard';
 import { Color } from '../shared/constants';
+import useInfiniteScroll from '../shared/hooks/useInfiniteScroll';
+import { useGetNotificationsQuery } from './Notification.queries';
 
 const Notification = () => {
+  const getNotificationsQuery = useGetNotificationsQuery();
+  const notiList = useMemo(
+    () => getNotificationsQuery.data?.pages.flatMap((noti) => noti.content),
+    [getNotificationsQuery.data],
+  );
+  const loadMoreNoti = useCallback(() => getNotificationsQuery.fetchNextPage(), []);
+
   return (
     <div css={notificationContainer}>
       <div css={notificationHeader}>
@@ -12,12 +23,8 @@ const Notification = () => {
         </span>
         <span css={nitificationHeaderText}>알림</span>
       </div>
-      <NotiCard />
-      <NotiCard />
-      <NotiCard />
-      <NotiCard />
-      <div>hello</div>
-      <div>hello</div>
+
+      {notiList && <CardRowList contents={notiList} loadMore={loadMoreNoti} />}
     </div>
   );
 };

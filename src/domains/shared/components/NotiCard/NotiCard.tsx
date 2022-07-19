@@ -1,42 +1,108 @@
 import { css } from '@emotion/react';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { memo } from 'react';
+import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
+import { Notification } from 'src/domains/notification/Notification.model';
 import { Color, FontSize } from '../../constants';
+import { useAcceptCrewRequireMutation } from '../../queries/crews';
+import { useUserStore } from '../../store/user';
+import { formatDate } from '../../utils/date';
 
-const NotiCard = () => {
+interface NotiCardProps {
+  content: Notification;
+}
+
+const NotiCard = ({ content }: NotiCardProps) => {
+  const queryClient = useQueryClient();
+  const { user } = useUserStore();
+  const router = useRouter();
+
+  const acceptCrewRequire = useAcceptCrewRequireMutation();
+
+  const handleAcceptCrew = (requesterIdx: number, accepterIdx: number) => {
+    if (user?.accountIdx) {
+      acceptCrewRequire.mutate(
+        { requesterIdx, accepterIdx },
+        {
+          onSuccess: () => {
+            toast.success('크루 승인 완료되었습니다.');
+            queryClient.invalidateQueries(['GetNotification']);
+          },
+        },
+      );
+    }
+  };
+
   return (
     <div style={{ position: 'relative', marginBottom: '18px' }}>
-      <div css={notiCheckMark}></div>
+      {user?.accountIdx == content.accepterIdx.accountIdx && content.accepterNoticeCheckYn == 'N' && (
+        <div css={notiCheckMark}></div>
+      )}
+      {user?.accountIdx == content.requesterIdx.accountIdx && content.requesterNoticeCheckYn == 'N' && (
+        <div css={notiCheckMark}></div>
+      )}
       <div css={notiCardContainer}>
         <div css={notiCloseIconBox}>
-          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0.420898" y="0.420898" width="33.159" height="33.159" fill="white" fillOpacity="0.01" />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M24.6451 9.36707C24.1718 8.89382 23.4073 8.89382 22.934 9.36707L17 15.2888L11.066 9.35494C10.5927 8.88169 9.82821 8.88169 9.35495 9.35494C8.88168 9.82819 8.88168 10.5927 9.35495 11.0659L15.289 16.9997L9.35495 22.9335C8.88168 23.4068 8.88168 24.1713 9.35495 24.6445C9.82821 25.1178 10.5927 25.1178 11.066 24.6445L17 18.7107L22.934 24.6445C23.4073 25.1178 24.1718 25.1178 24.6451 24.6445C25.1183 24.1713 25.1183 23.4068 24.6451 22.9335L18.711 16.9997L24.6451 11.0659C25.1062 10.6048 25.1062 9.82819 24.6451 9.36707Z"
-              fill="white"
-            />
-          </svg>
+          <Image src="/ic_close.png" alt="close_icon" width={34} height={34} />
         </div>
-        <div css={notiProfileCard}>
-          <div css={notiProfilePic}>
-            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="20" cy="20" r="20" fill="#34353A" />
-              <path
-                d="M11.3275 30.4424C11.3275 30.4424 9.55762 30.4424 9.55762 28.6725C9.55762 26.9026 11.3275 21.5929 20.1771 21.5929C29.0266 21.5929 30.7966 26.9026 30.7966 28.6725C30.7966 30.4424 29.0266 30.4424 29.0266 30.4424H11.3275ZM20.1771 19.823C21.5853 19.823 22.9359 19.2635 23.9316 18.2678C24.9274 17.272 25.4868 15.9215 25.4868 14.5132C25.4868 13.105 24.9274 11.7544 23.9316 10.7587C22.9359 9.76291 21.5853 9.20349 20.1771 9.20349C18.7689 9.20349 17.4183 9.76291 16.4225 10.7587C15.4268 11.7544 14.8674 13.105 14.8674 14.5132C14.8674 15.9215 15.4268 17.272 16.4225 18.2678C17.4183 19.2635 18.7689 19.823 20.1771 19.823V19.823Z"
-                fill="#7F7F83"
-              />
-            </svg>
+        <div css={notiProfileCard} onClick={() => router.push(`/author/${content.requesterIdx.accountIdx}`)}>
+          {user?.accountIdx === content.accepterIdx.accountIdx && (
+            <>
+              <div css={notiProfilePic}>
+                {content.requesterIdx.profileImg ? (
+                  <div css={UserProfileImgCircle}>
+                    <Image src={content.requesterIdx.profileImg} width={32} height={32} alt="requester Img" />
+                  </div>
+                ) : (
+                  <Image src="./defaultProfileImage.png" width={40} height={40} alt="anonymous Img" />
+                )}
+              </div>
+              <div>
+                <div css={notiName}>{content.requesterIdx.name}</div>
+                <div css={notiDate}>{formatDate(content.requestDateTime)}</div>
+              </div>
+            </>
+          )}
+        </div>
+        {user?.accountIdx === content.accepterIdx.accountIdx && (
+          <>
+            {content.accepted === 'W' && (
+              <div css={notiMsg}>{`${content.requesterIdx.name} 님의 크루 요청이 도착했습니다.`}</div>
+            )}
+            {content.accepted === 'Y' && (
+              <div css={notiMsg}>{`${content.requesterIdx.name} 님의 크루 요청을 승인했습니다.`}</div>
+            )}
+            {content.accepted === 'N' && (
+              <div css={notiMsg}>{`${content.requesterIdx.name} 님이 크루 요청을 거절했습니다.`}</div>
+            )}
+          </>
+        )}
+        {user?.accountIdx === content.requesterIdx.accountIdx && (
+          <>
+            {content.accepted === 'W' && (
+              <div css={notiMsg}>{`${content.accepterIdx.name} 님에게 크루 요청을 보냈습니다.`}</div>
+            )}
+            {content.accepted === 'Y' && (
+              <div css={notiMsg}>{`${content.accepterIdx.name} 님이 크루 요청을 승인했습니다.`}</div>
+            )}
+            {content.accepted === 'N' && (
+              <div css={notiMsg}>{`${content.accepterIdx.name} 님의 크루 요청을 거절했습니다.`}</div>
+            )}
+          </>
+        )}
+
+        {user?.accountIdx === content.accepterIdx.accountIdx && content.accepted === 'W' && (
+          <div css={notiBtnContainer}>
+            <div css={notiAddCrew} onClick={() => handleAcceptCrew(content.requesterIdx.accountIdx, user.accountIdx)}>
+              크루 추가하기
+            </div>
+            <div css={notiGoToBlog} onClick={() => router.push(`/author/${content.requesterIdx.accountIdx}`)}>
+              블로그 바로가기
+            </div>
           </div>
-          <div>
-            <div css={notiName}>Amy</div>
-            <div css={notiDate}>May 6, 2022</div>
-          </div>
-        </div>
-        <div css={notiMsg}>Amy 님의 크루 요청이 도착했습니다.</div>
-        <div css={notiBtnContainer}>
-          <div css={notiAddCrew}>크루 추가하기</div>
-          <div css={notiGoToBlog}>블로그 바로가기</div>
-        </div>
+        )}
       </div>
     </div>
   );
@@ -64,12 +130,22 @@ const notiCloseIconBox = css`
   position: absolute;
   display: flex;
   justify-content: end;
+  cursor: pointer;
 `;
 
 const notiProfileCard = css`
   display: flex;
   align-items: center;
   margin-bottom: 18px;
+  cursor: pointer;
+`;
+
+const UserProfileImgCircle = css`
+  width: 32px;
+  height: 32px;
+  border-radius: 100px;
+  overflow: hidden;
+  background-color: 'yellow';
 `;
 
 const notiProfilePic = css`
@@ -97,6 +173,7 @@ const notiBtnContainer = css`
   display: flex;
   width: 230px;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const notiAddCrew = css`
@@ -123,5 +200,6 @@ const notiGoToBlog = css`
   justify-content: center;
   align-items: center;
   padding-top: 4px;
+  cursor: pointer;
 `;
-export default NotiCard;
+export default memo(NotiCard);

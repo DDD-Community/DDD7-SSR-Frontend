@@ -20,3 +20,11 @@ export interface User {
   updateDate: string;
   platform: Platform;
 }
+
+export interface UserProfile {
+  accountIdx: number;
+  name: string;
+  profileImg: string;
+}
+
+export type AcceptOrWating = 'Y' | 'N' | 'W';
