@@ -1,5 +1,5 @@
-import { useInfiniteQuery } from 'react-query';
-import { GetNotificationsResponse } from './Notification.model';
+import { useInfiniteQuery, useMutation } from 'react-query';
+import { DeleteNotificationsRequest, GetNotificationsResponse } from './Notification.model';
 import NotificationRepository from './Notification.repository';
 
 export const useGetNotificationsQuery = () => {
@@ -18,4 +18,10 @@ export const useGetNotificationsQuery = () => {
       },
     },
   );
+};
+
+export const useDeleteNotiMutation = () => {
+  return useMutation({
+    mutationFn: (ids: DeleteNotificationsRequest) => NotificationRepository.deleteNotifications(ids),
+  });
 };
