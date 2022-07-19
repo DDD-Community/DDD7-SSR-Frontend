@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import { useCallback, useMemo } from 'react';
+import { Loading } from '../shared/components';
 import CardRowList from '../shared/components/CardRowList/CardRowList';
 import NotiCard from '../shared/components/NotiCard/NotiCard';
 import { Color } from '../shared/constants';
@@ -15,6 +16,8 @@ const Notification = () => {
   );
   const loadMoreNoti = useCallback(() => getNotificationsQuery.fetchNextPage(), []);
 
+  const isLoading = getNotificationsQuery.isLoading;
+
   return (
     <div css={notificationContainer}>
       <div css={notificationHeader}>
@@ -24,7 +27,8 @@ const Notification = () => {
         <span css={nitificationHeaderText}>알림</span>
       </div>
 
-      {notiList && <CardRowList contents={notiList} loadMore={loadMoreNoti} />}
+      {isLoading && <Loading />}
+      {!isLoading && notiList && <CardRowList contents={notiList} loadMore={loadMoreNoti} />}
     </div>
   );
 };

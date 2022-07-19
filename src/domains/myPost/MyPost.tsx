@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Spacing, Tabs, Text, PostGrid } from 'src/domains/shared/components';
+import { Spacing, Tabs, Text, PostGrid, Loading } from 'src/domains/shared/components';
 import LabelWithCount from './components/LabelWithCount';
 import { MyPostDisplay } from './MyPost.model';
 import { useMyPostListQuery } from './MyPost.quries';
@@ -27,6 +27,8 @@ const MyPost = () => {
     () => (selectedTab === 'public' ? publicPostList : privatePostList),
     [selectedTab, publicPostList, privatePostList],
   );
+
+  const isLoading = publicMyPostListQuery.isLoading || privateMyPostListQuery.isLoading;
 
   const loadMore = useCallback(() => {
     if (selectedTab === 'public') {
@@ -67,7 +69,8 @@ const MyPost = () => {
 
       <Tabs tabList={tabList} onTabChange={handleTabChange} />
       <Spacing col={(contents?.length || 0) > 0 ? 35 : 55} />
-      <div>{contents && <PostGrid contents={contents} loadMore={loadMore} />}</div>
+      {isLoading && <Loading />}
+      {!isLoading && <div>{contents && <PostGrid contents={contents} loadMore={loadMore} />}</div>}
     </section>
   );
 };
