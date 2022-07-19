@@ -20,7 +20,7 @@ const LoginCallback = () => {
 
       setLoginWithTokens({ token, refreshToken } as QueryParams);
 
-      router.push('/');
+      router.replace('/');
     }
   }, [router]);
 
