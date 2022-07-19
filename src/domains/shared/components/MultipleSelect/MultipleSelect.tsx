@@ -59,7 +59,7 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
           <ul css={ListContainerStyle}>
             {renderedOptions.length > 0 ? (
               renderedOptions.map((renderedOption) => {
-                const optionIndex = value.findIndex((option) => option.value === renderedOption.value);
+                const optionIndex = value.findIndex((optionValue) => optionValue === renderedOption.value);
 
                 return (
                   <li
@@ -67,11 +67,11 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
                     css={ListItemStyle}
                     onClick={() => {
                       if (optionIndex >= 0) {
-                        onChange(value.filter((option) => option.value !== renderedOption.value));
+                        onChange(value.filter((optionValue) => optionValue !== renderedOption.value));
 
                         return;
                       }
-                      onChange([...value, renderedOption]);
+                      onChange([...value, renderedOption.value]);
                     }}
                   >
                     {renderedOption.leftComponent}
@@ -94,22 +94,24 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
       </div>
 
       <ul css={SelectedListContainerStyle}>
-        {value.map((selectedOption) => (
-          <li key={selectedOption.key || selectedOption.value} css={SelectedListItemStyle}>
-            {selectedOption.leftComponent}
-            <Spacing row={3} />
-            {selectedOption.label}
-            <Spacing row={6} />
-            <div
-              css={CloseIconWrapperStyle}
-              onClick={() => {
-                onChange(value.filter((option) => option.value !== selectedOption.value));
-              }}
-            >
-              <Icon icon="Close" color={Color.Gray400} size={24} />
-            </div>
-          </li>
-        ))}
+        {options
+          ?.filter((option) => value.includes(option.value))
+          .map((selectedOption) => (
+            <li key={selectedOption.key || selectedOption.value} css={SelectedListItemStyle}>
+              {selectedOption.leftComponent}
+              <Spacing row={3} />
+              {selectedOption.label}
+              <Spacing row={6} />
+              <div
+                css={CloseIconWrapperStyle}
+                onClick={() => {
+                  onChange(value.filter((optionValue) => optionValue !== selectedOption.value));
+                }}
+              >
+                <Icon icon="Close" color={Color.Gray400} size={24} />
+              </div>
+            </li>
+          ))}
       </ul>
     </>
   );

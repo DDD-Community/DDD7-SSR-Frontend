@@ -31,7 +31,7 @@ const options = [
 ];
 
 const Template: ComponentStory<typeof MultipleSelect> = ({ ...args }) => {
-  const [values, setValues] = useState<ValueOption[]>([]);
+  const [values, setValues] = useState<string[]>([]);
 
   return (
     <MultipleSelect

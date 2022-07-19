@@ -2,10 +2,19 @@ import { useInfiniteQuery, useMutation, useQuery } from 'react-query';
 import { CreateCommentRequest, DeleteCommentRequest, GetCommentsResponse } from './PostDetail.model';
 import PostDetailRepository from './PostDetail.repository';
 
-export const usePostDetailQuery = (postIdx: number) =>
-  useQuery(['getPostDetail', postIdx], () => PostDetailRepository.getPost(postIdx), {
+export const usePostDetailQuery = (postIdx?: number) =>
+  useQuery(['getPostDetail', postIdx], () => PostDetailRepository.getPost(postIdx!), {
     enabled: !!postIdx,
+    staleTime: 1000,
+    cacheTime: 1000,
   });
+
+export const useDeletePostMutation = () => {
+  return useMutation({
+    mutationKey: 'DeletePost',
+    mutationFn: (postIdx: number) => PostDetailRepository.deletePost(postIdx),
+  });
+};
 
 export const useCommentListQuery = (postIdx: number) => {
   return useInfiniteQuery<GetCommentsResponse, Error>(

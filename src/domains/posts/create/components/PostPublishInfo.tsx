@@ -13,15 +13,23 @@ interface PostPublishInfoProps {
   onClose: () => void;
   register: UseFormRegister<CreatePostData>;
   setValue: UseFormSetValue<CreatePostData>;
+  privated: 'Y' | 'N';
   thumbnailImage?: string;
   thumbnailContents?: string;
 }
 
-const PostPublishInfo = ({ onClose, register, setValue, thumbnailImage, thumbnailContents }: PostPublishInfoProps) => {
+const PostPublishInfo = ({
+  onClose,
+  register,
+  setValue,
+  privated,
+  thumbnailImage,
+  thumbnailContents,
+}: PostPublishInfoProps) => {
   const { isMobile } = useBreakPointStore();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(privated === 'N');
 
   const thumbnailUploadMutation = useUploadThumbnailImageMutation();
 

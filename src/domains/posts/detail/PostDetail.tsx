@@ -1,11 +1,12 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
-import { Spacing, Text, Viewer, CommentList } from 'src/domains/shared/components';
+import { Spacing, Text, Viewer, CommentList, Loading } from 'src/domains/shared/components';
 import {
   useCommentListQuery,
   useCreateCommentMutation,
   useDeleteCommentMutation,
+  useDeletePostMutation,
   usePostDetailQuery,
 } from './PostDetail.queries';
 import { Textarea, Button } from 'src/domains/shared/components';
@@ -17,6 +18,7 @@ import { Confirm } from 'src/domains/shared/components/Confirm';
 import { useIsShown } from 'src/domains/shared/hooks/useIsShown';
 import { toast } from 'react-toastify';
 import { formatDate } from 'src/domains/shared/utils/date';
+import styled from '@emotion/styled';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -27,9 +29,19 @@ const PostDetail = () => {
   const user = useUser();
   // TODO: SSR 처리 필요
   const postDetailQuery = usePostDetailQuery(postIdx);
+  const deletePostMutation = useDeletePostMutation();
+
   const commentListQuery = useCommentListQuery(postIdx);
   const createCommentMutation = useCreateCommentMutation();
   const deleteCommentMutation = useDeleteCommentMutation();
+
+  const isPostOwner = useMemo(() => {
+    if (!user?.accountIdx || !postDetailQuery.data) {
+      return false;
+    }
+
+    return postDetailQuery.data?.coWriter.realWriterInfo.accountIdx === user?.accountIdx;
+  }, [postDetailQuery.data, user?.accountIdx]);
 
   const [selectedCommentIdx, setSelectedCommentIdx] = useState<number | null>(null);
 
@@ -86,6 +98,19 @@ const PostDetail = () => {
     );
   };
 
+  const handleUpdatePostClick = () => {
+    router.push(`/posts/create?postId=${[postIdx]}`);
+  };
+
+  const handleDeletePostClick = () => {
+    deletePostMutation.mutate(postIdx, {
+      onSuccess: () => {
+        toast.success('글이 삭제되었어요.');
+        router.push('/');
+      },
+    });
+  };
+
   const handleDeleteCommentClick = (commentIdx: number) => {
     setSelectedCommentIdx(commentIdx);
     handleOpenDeleteCommentConfirm();
@@ -116,73 +141,90 @@ const PostDetail = () => {
   return (
     <>
       <section css={postDetailSection}>
-        <div css={crewInfoWrapperStyle}>
-          <div>
-            {coWriterProfiles.map((profileImg, index) => (
-              <div key={`${profileImg}${index}`} onClick={() => router.push(`/author/${coWriterIdxs[index]}`)}>
-                <img css={crewProfileImgStyle} src={profileImg} alt="profile" width={32} height={32} />
+        {postDetailQuery.isLoading && <Loading />}
+
+        {!postDetailQuery.isLoading && (
+          <>
+            <div css={crewInfoWrapperStyle}>
+              <div>
+                {coWriterProfiles.map((profileImg, index) => (
+                  <div key={`${profileImg}${index}`} onClick={() => router.push(`/author/${coWriterIdxs[index]}`)}>
+                    <img css={crewProfileImgStyle} src={profileImg} alt="profile" width={32} height={32} />
+                  </div>
+                ))}
+                <Spacing row={5} />
+                <div css={crewNameWrapperStyle}>
+                  <Text type="tag12" color="White100">
+                    {coWriterNames.join(' & ')}
+                  </Text>
+                </div>
               </div>
-            ))}
-            <Spacing row={5} />
-            <div css={crewNameWrapperStyle}>
-              <Text type="tag12" color="White100">
-                {coWriterNames.join(' & ')}
-              </Text>
+
+              <div>
+                <Text type="tag12" color="Gray600">
+                  조회수: {postDetailQuery.data?.boardCount || 0}
+                </Text>
+              </div>
             </div>
-          </div>
-
-          <div>
-            <Text type="tag12" color="Gray600">
-              조회수: {postDetailQuery.data?.boardCount || 0}
+            <Spacing col={16} />
+            <Text type="title28" color="White100">
+              {postDetailQuery.data?.title}
             </Text>
-          </div>
-        </div>
-        <Spacing col={16} />
-        <Text type="title28" color="White100">
-          {postDetailQuery.data?.title}
-        </Text>
-        <Spacing col={8} />
-        <Text color="Gray650" type="tag12">
-          {postDetailQuery.data?.createDate && formatDate(postDetailQuery.data?.createDate)}
-        </Text>
-        {postDetailQuery.data && <Viewer initialValue={postDetailQuery.data.contents} />}
-
-        <Spacing col={117} />
-
-        {commentList && (
-          <CommentList
-            totalCounts={totalCommentCount || 0}
-            isLoadMore={commentListQuery.hasNextPage}
-            comments={commentList}
-            onLoadMore={handleLoadMore}
-            userId={user?.accountIdx}
-            handleDeleteComment={handleDeleteCommentClick}
-          />
+            <Spacing col={8} />
+            <div css={postDateWrapperStyle}>
+              <Text color="Gray650" type="tag12">
+                {postDetailQuery.data?.createDate && formatDate(postDetailQuery.data?.createDate)}
+              </Text>
+              {isPostOwner && (
+                <div>
+                  <StyledText color="Primary100" type="tag12" useInline onClick={handleUpdatePostClick}>
+                    수정
+                  </StyledText>
+                  <Spacing row={8} />
+                  <StyledText color="Red100" type="tag12" useInline onClick={handleDeletePostClick}>
+                    삭제
+                  </StyledText>
+                </div>
+              )}
+            </div>
+            {postDetailQuery.data && <Viewer initialValue={postDetailQuery.data.contents} />}
+            <Spacing col={117} />
+            {commentList && (
+              <CommentList
+                totalCounts={totalCommentCount || 0}
+                isLoadMore={commentListQuery.hasNextPage}
+                comments={commentList}
+                onLoadMore={handleLoadMore}
+                userId={user?.accountIdx}
+                handleDeleteComment={handleDeleteCommentClick}
+              />
+            )}
+            <Spacing col={32} />
+            <div css={commentTextareaWrapper}>
+              <div>
+                <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
+                <Spacing row={20} />
+                <Textarea
+                  value={commentText}
+                  onChange={(event) => setCommentText(event.target.value)}
+                  maxLength={1000}
+                  placeholder="댓글을 적어주세요."
+                  withCount
+                />
+              </div>
+              <Spacing col={16} />
+              <Button
+                type="button"
+                color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
+                size="medium"
+                disabled={commentText.length === 0}
+                onClick={handleCreateComment}
+              >
+                <Text type="body14">작성하기</Text>
+              </Button>
+            </div>
+          </>
         )}
-        <Spacing col={32} />
-        <div css={commentTextareaWrapper}>
-          <div>
-            <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
-            <Spacing row={20} />
-            <Textarea
-              value={commentText}
-              onChange={(event) => setCommentText(event.target.value)}
-              maxLength={1000}
-              placeholder="댓글을 적어주세요."
-              withCount
-            />
-          </div>
-          <Spacing col={16} />
-          <Button
-            type="button"
-            color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
-            size="medium"
-            disabled={commentText.length === 0}
-            onClick={handleCreateComment}
-          >
-            <Text type="body14">작성하기</Text>
-          </Button>
-        </div>
       </section>
       <Confirm
         isShown={isShownDeleteCommentConfirm}
@@ -233,6 +275,19 @@ const crewProfileImgStyle = css`
 
 const crewNameWrapperStyle = css`
   display: flex;
+`;
+
+const postDateWrapperStyle = css`
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+  }
+`;
+
+const StyledText = styled(Text)`
+  cursor: pointer;
 `;
 
 const commentTextareaWrapper = css`

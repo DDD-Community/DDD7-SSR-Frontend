@@ -17,16 +17,22 @@ import { Spacing } from '..';
 import { css } from '@emotion/react';
 import { Color } from '../../constants';
 import { EditorMode } from './EditorType';
-import { useBreakPointStore } from '../../store/breakPoint';
 import { useUploadPostImageMutation } from '../../queries/image';
 
 export interface EditorWithForwardedProps extends EditorProps {
   onChange: (value: string) => void;
   onChangeMode?: (type: EditorMode) => void;
+  isUpdateMode?: boolean;
   editorMode?: EditorMode;
 }
 
-const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: EditorWithForwardedProps) => {
+const EditorWithForwarded = ({
+  onChange,
+  onChangeMode,
+  editorMode,
+  isUpdateMode,
+  ...props
+}: EditorWithForwardedProps) => {
   const ref = useRef<Editor>(null);
   const uploadPostImageMutation = useUploadPostImageMutation();
 
@@ -68,6 +74,12 @@ const EditorWithForwarded = ({ onChange, onChangeMode, editorMode, ...props }: E
       ref.current?.getInstance().changeMode(editorMode);
     }
   }, [editorMode]);
+
+  useEffect(() => {
+    if (isUpdateMode && props.initialValue) {
+      ref.current?.getInstance().setMarkdown(props.initialValue);
+    }
+  }, [isUpdateMode, props.initialValue]);
 
   return (
     <section css={editorSectionStyle}>
