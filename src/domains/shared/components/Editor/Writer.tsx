@@ -11,6 +11,7 @@ const Writer: React.FC<EditorWithForwardedProps> = ({
   editorMode,
   hideModeSwitch,
   onChangeMode,
+  isUpdateMode,
 }) => {
   return (
     <Editor
@@ -20,6 +21,7 @@ const Writer: React.FC<EditorWithForwardedProps> = ({
       editorMode={editorMode}
       hideModeSwitch={hideModeSwitch}
       onChangeMode={onChangeMode}
+      isUpdateMode={isUpdateMode}
     />
   );
 };

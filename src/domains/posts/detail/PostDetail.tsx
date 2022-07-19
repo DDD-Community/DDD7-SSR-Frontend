@@ -6,6 +6,7 @@ import {
   useCommentListQuery,
   useCreateCommentMutation,
   useDeleteCommentMutation,
+  useDeletePostMutation,
   usePostDetailQuery,
 } from './PostDetail.queries';
 import { Textarea, Button } from 'src/domains/shared/components';
@@ -17,6 +18,7 @@ import { Confirm } from 'src/domains/shared/components/Confirm';
 import { useIsShown } from 'src/domains/shared/hooks/useIsShown';
 import { toast } from 'react-toastify';
 import { formatDate } from 'src/domains/shared/utils/date';
+import styled from '@emotion/styled';
 
 const PostDetail = () => {
   const queryClient = useQueryClient();
@@ -27,9 +29,19 @@ const PostDetail = () => {
   const user = useUser();
   // TODO: SSR 처리 필요
   const postDetailQuery = usePostDetailQuery(postIdx);
+  const deletePostMutation = useDeletePostMutation();
+
   const commentListQuery = useCommentListQuery(postIdx);
   const createCommentMutation = useCreateCommentMutation();
   const deleteCommentMutation = useDeleteCommentMutation();
+
+  const isPostOwner = useMemo(() => {
+    if (!user?.accountIdx || !postDetailQuery.data) {
+      return false;
+    }
+
+    return postDetailQuery.data?.coWriter.realWriterInfo.accountIdx === user?.accountIdx;
+  }, [postDetailQuery.data, user?.accountIdx]);
 
   const [selectedCommentIdx, setSelectedCommentIdx] = useState<number | null>(null);
 
@@ -84,6 +96,19 @@ const PostDetail = () => {
         },
       },
     );
+  };
+
+  const handleUpdatePostClick = () => {
+    router.push(`/posts/create?postId=${[postIdx]}`);
+  };
+
+  const handleDeletePostClick = () => {
+    deletePostMutation.mutate(postIdx, {
+      onSuccess: () => {
+        toast.success('글이 삭제되었어요.');
+        router.push('/');
+      },
+    });
   };
 
   const handleDeleteCommentClick = (commentIdx: number) => {
@@ -142,9 +167,24 @@ const PostDetail = () => {
           {postDetailQuery.data?.title}
         </Text>
         <Spacing col={8} />
-        <Text color="Gray650" type="tag12">
-          {postDetailQuery.data?.createDate && formatDate(postDetailQuery.data?.createDate)}
-        </Text>
+
+        <div css={postDateWrapperStyle}>
+          <Text color="Gray650" type="tag12">
+            {postDetailQuery.data?.createDate && formatDate(postDetailQuery.data?.createDate)}
+          </Text>
+          {isPostOwner && (
+            <div>
+              <StyledText color="Primary100" type="tag12" useInline onClick={handleUpdatePostClick}>
+                수정
+              </StyledText>
+              <Spacing row={8} />
+              <StyledText color="Red100" type="tag12" useInline onClick={handleDeletePostClick}>
+                삭제
+              </StyledText>
+            </div>
+          )}
+        </div>
+
         {postDetailQuery.data && <Viewer initialValue={postDetailQuery.data.contents} />}
 
         <Spacing col={117} />
@@ -233,6 +273,19 @@ const crewProfileImgStyle = css`
 
 const crewNameWrapperStyle = css`
   display: flex;
+`;
+
+const postDateWrapperStyle = css`
+  display: flex;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+  }
+`;
+
+const StyledText = styled(Text)`
+  cursor: pointer;
 `;
 
 const commentTextareaWrapper = css`
