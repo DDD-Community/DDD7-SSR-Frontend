@@ -1,5 +1,6 @@
-import { useId } from 'react';
+import { useEffect, useId } from 'react';
 import { Notification } from 'src/domains/notification/Notification.model';
+import client from '../../api/client';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import { useUserStore } from '../../store/user';
 import NotiCard from '../NotiCard/NotiCard';
@@ -12,14 +13,17 @@ interface CardRowListProps {
 const CardRowList = ({ contents, loadMore }: CardRowListProps) => {
   const { containerRef } = useInfiniteScroll({ dataLength: contents?.length, loadMore });
   const { user } = useUserStore();
-  const id = useId();
+
+  useEffect(() => {
+    client.put('friends/notice');
+  }, [containerRef]);
 
   return (
     <div ref={containerRef}>
-      {contents.map((content) =>
+      {contents.map((content, idx) =>
         (user?.accountIdx === content.accepterIdx.accountIdx && content.accepterNoticeDelYn === 'N') ||
         (user?.accountIdx === content.requesterIdx.accountIdx && content.requesterNoticeDelYn === 'N') ? (
-          <NotiCard key={id} content={content} />
+          <NotiCard key={idx} content={content} />
         ) : null,
       )}
     </div>
