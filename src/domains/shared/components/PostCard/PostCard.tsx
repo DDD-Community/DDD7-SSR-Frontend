@@ -42,10 +42,10 @@ const PostCard = ({ data }: PostCardProps) => {
     [router],
   );
 
-  const refinedSummaryContents = useMemo(
-    () => data.thumbnailContents.replace(/!\[(.*?)]\((https?:\/\/\S+\.\w+)\)/gi, ''),
-    [data.thumbnailContents],
-  );
+  const refinedSummaryContents = useMemo(() => {
+    const thumbnailContents = data.thumbnailContents || data.contents.slice(0, 400);
+    return thumbnailContents.replace(/!\[(.*?)]\((https?:\/\/\S+\.\w+)\)/gi, '');
+  }, [data.thumbnailContents, data.contents]);
 
   const [coWriterIdxs, coWriterProfiles, coWriterNames] = useMemo(() => {
     if (!data) {
