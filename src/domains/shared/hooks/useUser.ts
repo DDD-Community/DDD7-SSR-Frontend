@@ -12,11 +12,14 @@ export default function useUser(checkToken?: boolean) {
       setAuthToken(currentToken);
       try {
         const data = await client.get('/me').then((response) => response);
+
         login(data);
       } catch (e) {
         clearAuthToken();
         logout();
       }
+    } else {
+      logout();
     }
   };
 
