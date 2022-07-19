@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
-import { EmptyContent, PostGrid, CrewGrid, Spacing, Tabs, Text } from '../shared/components';
+import { EmptyContent, PostGrid, CrewGrid, Spacing, Tabs, Text, Loading } from '../shared/components';
 import { useSearchAccountsQuery, useSearchPostsQuery } from './Search.quries';
 
 type SearchTab = 'post' | 'author';
@@ -61,15 +61,21 @@ const Search = () => {
   const loadMorePost = () => searchPostsQuery.fetchNextPage();
   const loadMoreAccounts = () => searchAccountQuery.fetchNextPage();
 
+  const isLoading = searchPostsQuery.isLoading || searchAccountQuery.isLoading;
   return (
     <section css={searchContainerStyle}>
       <Tabs tabList={tabList} onTabChange={handleTabChange} useUpperLine={false} tabGap={12} useInlineTab />
 
       <Spacing col={isEmpty ? 45 : 60} />
-      <div css={searchGridLayoutStyle}>
-        {selectedTab === 'post' && postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
-        {selectedTab === 'author' && accountList && <CrewGrid contents={accountList} loadMore={loadMoreAccounts} />}
-      </div>
+
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div css={searchGridLayoutStyle}>
+          {selectedTab === 'post' && postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
+          {selectedTab === 'author' && accountList && <CrewGrid contents={accountList} loadMore={loadMoreAccounts} />}
+        </div>
+      )}
 
       {isEmpty && (
         <EmptyContent

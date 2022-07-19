@@ -20,3 +20,4 @@ export * from './ProfileImage';
 export * from './CommentList';
 export * from './Comment';
 export * from './Grid';
+export * from './Loading';

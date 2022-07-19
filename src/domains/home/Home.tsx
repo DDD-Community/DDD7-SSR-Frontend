@@ -4,7 +4,7 @@ import React, { MouseEvent, useCallback, useMemo, useState } from 'react';
 import MultiFilteredSelect from '../shared/components/MultiFilteredSelect/MultiFilteredSelect';
 import TextSelect from '../shared/components/TextSelect/TextSelect';
 import { useBreakPointStore } from '../shared/store/breakPoint';
-import { PostGrid } from '../shared/components';
+import { Loading, PostGrid } from '../shared/components';
 import { useGetPostsQuery } from './Home.queries';
 
 export type periodType = 'daily' | 'weekly' | 'monthly';
@@ -41,7 +41,8 @@ const Home = () => {
           <MultiFilteredSelect value={filteredState.period} onChangeSelectValue={handleChange} options={options} />
         )}
       </div>
-      {postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
+      {getPostsQuery.isLoading && <Loading />}
+      {!getPostsQuery.isLoading && postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
     </HomeGridLayout>
   );
 };
