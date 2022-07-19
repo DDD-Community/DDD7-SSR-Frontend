@@ -45,6 +45,10 @@ const NotiCard = ({ content }: NotiCardProps) => {
           onSuccess: () => {
             queryClient.invalidateQueries(['GetNotification']);
           },
+          onError: () => {
+            alert('로그인 정보가 만료됐습니다.');
+            router.replace('/');
+          },
         },
       );
     }
