@@ -125,14 +125,7 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
               />
 
               <MobileSearchBarMag>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M6.66683 1.33337C9.6146 1.33337 12.0002 3.72192 12.0002 6.66705C12.0002 7.95942 11.5405 9.14481 10.7753 10.0681L14.687 13.9798L13.9799 14.6869L10.0683 10.7752C9.14536 11.5401 7.96021 12 6.66683 12C3.71975 12 1.3335 9.61115 1.3335 6.66705C1.3335 3.72192 3.71975 1.33337 6.66683 1.33337ZM6.66683 2.33337C4.27285 2.33337 2.3335 4.27339 2.3335 6.66705C2.3335 9.05989 4.27307 11 6.66683 11C9.06102 11 11.0002 9.06015 11.0002 6.66705C11.0002 4.27313 9.06124 2.33337 6.66683 2.33337Z"
-                    fill="white"
-                  />
-                </svg>
+                <Image src="/mag.svg" alt="mgnifier" width={16} height={16} />
               </MobileSearchBarMag>
             </MobileSearchBarContainer>
           )}
@@ -142,11 +135,7 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
                 <Image src="/mag.svg" alt="mgnifier" width={23} height={23} />
               </div>
               <div onClick={openTabMenu} style={{ marginLeft: '15px', marginTop: '3px', cursor: 'pointer' }}>
-                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <rect width="20" height="2.5" rx="1.25" fill="white" />
-                  <rect y="7.5" width="20" height="2.5" rx="1.25" fill="white" />
-                  <rect y="15" width="20" height="2.5" rx="1.25" fill="white" />
-                </svg>
+                <Image src="/hambergur.png" alt="menu" width={20} height={18} />
               </div>
             </div>
           )}
