@@ -1,12 +1,14 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import client, { setAuthToken } from '../api/client';
+import { useUserStore } from '../store/user';
 
 const withAuth = (WrappedComponent: any) => {
   // eslint-disable-next-line react/display-name
   return (props: JSX.IntrinsicAttributes) => {
     if (typeof window !== 'undefined') {
       const [verified, setVerified] = useState<boolean>(false);
+      const { logout } = useUserStore();
       const Router = useRouter();
 
       const verifyToken = async (accessToken: string | null) => {
@@ -16,6 +18,7 @@ const withAuth = (WrappedComponent: any) => {
           setVerified(true);
         } catch (e) {
           console.log(e);
+          logout();
           Router.replace('/');
         }
       };
