@@ -5,6 +5,11 @@ export interface GetNotificationsRequest {
   size: number;
 }
 
+export interface DeleteNotificationsRequest {
+  requesterIdx: number;
+  accepterIdx: number;
+}
+
 export type Notification = {
   requesterIdx: UserProfile;
   accepterIdx: UserProfile;
