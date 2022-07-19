@@ -5,6 +5,7 @@ import { memo } from 'react';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
 import { Notification } from 'src/domains/notification/Notification.model';
+import { useDeleteNotiMutation } from 'src/domains/notification/Notification.queries';
 import { Color, FontSize } from '../../constants';
 import { useAcceptCrewRequireMutation } from '../../queries/crews';
 import { useUserStore } from '../../store/user';
@@ -20,6 +21,7 @@ const NotiCard = ({ content }: NotiCardProps) => {
   const router = useRouter();
 
   const acceptCrewRequire = useAcceptCrewRequireMutation();
+  const deleteNotiMutation = useDeleteNotiMutation();
 
   const handleAcceptCrew = (requesterIdx: number, accepterIdx: number) => {
     if (user?.accountIdx) {
@@ -28,6 +30,19 @@ const NotiCard = ({ content }: NotiCardProps) => {
         {
           onSuccess: () => {
             toast.success('크루 승인 완료되었습니다.');
+            queryClient.invalidateQueries(['GetNotification']);
+          },
+        },
+      );
+    }
+  };
+
+  const handleCloseNoti = (requesterIdx: number, accepterIdx: number) => {
+    if (user?.accountIdx) {
+      deleteNotiMutation.mutate(
+        { requesterIdx, accepterIdx },
+        {
+          onSuccess: () => {
             queryClient.invalidateQueries(['GetNotification']);
           },
         },
@@ -44,7 +59,10 @@ const NotiCard = ({ content }: NotiCardProps) => {
         <div css={notiCheckMark}></div>
       )}
       <div css={notiCardContainer}>
-        <div css={notiCloseIconBox}>
+        <div
+          css={notiCloseIconBox}
+          onClick={() => handleCloseNoti(content.requesterIdx.accountIdx, content.accepterIdx.accountIdx)}
+        >
           <Image src="/ic_close.png" alt="close_icon" width={34} height={34} />
         </div>
         <div css={notiProfileCard} onClick={() => router.push(`/author/${content.requesterIdx.accountIdx}`)}>
