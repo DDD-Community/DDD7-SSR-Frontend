@@ -4,14 +4,14 @@ export interface ValueOption {
   key?: string | number;
   leftComponent?: React.ReactNode;
   label: string;
-  value: string | number;
+  value: string;
 }
 
 export interface MultipleSelectProps {
   disabled?: boolean;
   options?: ValueOption[];
-  value: ValueOption[];
-  onChange: (newValue: ValueOption[]) => void;
+  value: string[];
+  onChange: (newValue: string[]) => void;
   placeholder?: string;
   emptyListMessage?: string;
 }
