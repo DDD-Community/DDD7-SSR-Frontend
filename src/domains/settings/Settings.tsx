@@ -33,7 +33,10 @@ const Settings = () => {
 
   const [isShownWithdrawalConfirm, handleOpenWithdrawalConfirm, handleCloseWithDrawalConfirm] = useIsShown(false);
 
-  const { register, watch, reset, handleSubmit, setValue } = useForm<AccountProfile>();
+  const { register, watch, reset, handleSubmit, setValue, formState } = useForm<AccountProfile>();
+  const { dirtyFields } = formState;
+  const isEdited = Object.keys(dirtyFields).length > 0;
+
   const name = watch('name');
   const blogName = watch('blogName');
   const profileImg = watch('profileImg');
@@ -54,11 +57,11 @@ const Settings = () => {
   }, [accountDetailQuery.data?.platform]);
 
   const disableSaveButton = useMemo(() => {
-    if (!name || !blogName) {
+    if (!name || !blogName || !isEdited) {
       return true;
     }
     return false;
-  }, [name, blogName]);
+  }, [name, blogName, isEdited]);
 
   const handleSaveAccount = handleSubmit((data) => {
     saveAccountInfoMutation.mutate(data, {
