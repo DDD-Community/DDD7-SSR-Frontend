@@ -116,7 +116,9 @@ const Settings = () => {
   };
 
   const handleChangeProfileImage = (url: string) => {
-    setValue('profileImg', url);
+    setValue('profileImg', url, {
+      shouldDirty: true,
+    });
   };
 
   useEffect(() => {
