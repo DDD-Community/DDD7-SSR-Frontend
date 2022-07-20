@@ -45,6 +45,8 @@ const PostDetail = () => {
 
   const [selectedCommentIdx, setSelectedCommentIdx] = useState<number | null>(null);
 
+  const [isShownDeletePostConfirm, handleOpenDeletePostConfirm, handleCloseDeletePostConfirm] = useIsShown(false);
+
   const [isShownDeleteCommentConfirm, handleOpenDeleteCommentConfirm, handleCloseDeleteCommentConfirm] =
     useIsShown(false);
 
@@ -88,9 +90,7 @@ const PostDetail = () => {
       },
       {
         onSuccess: () => {
-          toast.success('댓글이 작성되었어요.', {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+          toast.success('댓글이 작성되었어요.');
           queryClient.invalidateQueries(['CommentList', postIdx]);
           setCommentText('');
         },
@@ -105,8 +105,8 @@ const PostDetail = () => {
   const handleDeletePostClick = () => {
     deletePostMutation.mutate(postIdx, {
       onSuccess: () => {
+        router.back();
         toast.success('글이 삭제되었어요.');
-        router.push('/');
       },
     });
   };
@@ -181,7 +181,7 @@ const PostDetail = () => {
                     수정
                   </StyledText>
                   <Spacing row={8} />
-                  <StyledText color="Red100" type="tag12" useInline onClick={handleDeletePostClick}>
+                  <StyledText color="Red100" type="tag12" useInline onClick={handleOpenDeletePostConfirm}>
                     삭제
                   </StyledText>
                 </div>
@@ -226,6 +226,14 @@ const PostDetail = () => {
           </>
         )}
       </section>
+      <Confirm
+        isShown={isShownDeletePostConfirm}
+        onClose={handleCloseDeletePostConfirm}
+        onConfirm={handleDeletePostClick}
+        description="포스트를 삭제하시나요?"
+        buttonTextColor="Red100"
+        buttonText="삭제하기"
+      />
       <Confirm
         isShown={isShownDeleteCommentConfirm}
         onClose={handleCloseDeleteCommentConfirm}

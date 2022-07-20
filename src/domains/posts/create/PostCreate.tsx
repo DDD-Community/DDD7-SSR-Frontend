@@ -9,8 +9,7 @@ import PostPublishInfo from './components/PostPublishInfo';
 import { Button, MultipleSelect, Spacing, Switch, Text } from 'src/domains/shared/components';
 import { CreatePostData } from './PostCreate.model';
 import { usePostCreateMutation, usePostUpdateMutation } from './PostCreate.queries';
-import Router, { useRouter } from 'next/router';
-import { ValueOption } from 'src/domains/shared/components/MultipleSelect/MultipleSelectTypes';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useBreakPointStore } from 'src/domains/shared/store/breakPoint';
 import { EditorMode } from 'src/domains/shared/components/Editor/EditorType';
@@ -24,8 +23,8 @@ import { useQueryClient } from 'react-query';
 const PostCreate = () => {
   const queryClient = useQueryClient();
 
-  const { query } = useRouter();
-  const postId = query.postId ? Number(query.postId) : undefined;
+  const router = useRouter();
+  const postId = router.query.postId ? Number(router.query.postId) : undefined;
   const postCreateMutation = usePostCreateMutation();
   const postDetailQuery = usePostDetailQuery(postId);
   const postUpdateMutation = usePostUpdateMutation();
@@ -50,13 +49,13 @@ const PostCreate = () => {
 
     if (isUpdateMode && postId) {
       postUpdateMutation.mutate(
-        { postIdx: postId, data: requestData },
+        { postIdx: postId, data: { ...requestData, privated: requestData.privated || 'N' } },
         {
           onSuccess: (result) => {
             toast.success('글이 업데이트 되었어요.');
 
             queryClient.setQueryData(['getPostDetail', result.postIdx], result);
-            Router.push(
+            router.push(
               {
                 pathname: `/posts/[postIdx]`,
                 query: {
@@ -78,7 +77,7 @@ const PostCreate = () => {
 
         queryClient.setQueryData(['getPostDetail', result.postIdx], result);
 
-        Router.push(
+        router.push(
           {
             pathname: `/posts/[postIdx]`,
             query: {

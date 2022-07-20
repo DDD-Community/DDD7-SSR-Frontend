@@ -29,7 +29,7 @@ const PostPublishInfo = ({
   const { isMobile } = useBreakPointStore();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [isPublic, setIsPublic] = useState(privated === 'N');
+  const [isPublic, setIsPublic] = useState(privated ? privated === 'N' : true);
 
   const thumbnailUploadMutation = useUploadThumbnailImageMutation();
 
