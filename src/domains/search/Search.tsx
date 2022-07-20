@@ -64,6 +64,10 @@ const Search = () => {
   const isLoading = searchPostsQuery.isLoading || searchAccountQuery.isLoading;
   return (
     <section css={searchContainerStyle}>
+      <Text type="title24" color="White100">
+        검색 결과
+      </Text>
+      <Spacing col={6} />
       <Tabs tabList={tabList} onTabChange={handleTabChange} useUpperLine={false} tabGap={12} useInlineTab />
 
       <Spacing col={isEmpty ? 45 : 60} />
