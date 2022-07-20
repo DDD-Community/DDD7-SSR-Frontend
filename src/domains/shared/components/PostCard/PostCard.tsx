@@ -167,7 +167,7 @@ const crewInfoWrapperStyle = css`
 `;
 
 const EllipsisText = styled(Text)`
-  overflow-x: hidden;
+  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
