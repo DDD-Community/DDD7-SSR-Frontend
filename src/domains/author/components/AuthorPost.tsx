@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useAuthorPostListQuery } from '../Author.quries';
-import { EmptyContent, Text, Button, PostGrid, Spacing } from 'src/domains/shared/components';
+import { EmptyContent, Text, Button, PostGrid, Spacing, Loading } from 'src/domains/shared/components';
 import { useRouter } from 'next/router';
 
 interface AuthorPostProps {
@@ -19,19 +19,24 @@ export const AuthorPost = ({ accountIdx, isOwner }: AuthorPostProps) => {
 
   const loadMorePost = () => authorPostListQuery.fetchNextPage();
 
+  const isFetched = authorPostListQuery.isFetched;
   const isEmpty = !postList || postList.length === 0;
 
   const onClickCreatePost = () => {
     router.push('/posts/create');
   };
 
+  if (!isFetched) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Spacing col={isEmpty ? 60 : 45} />
       <div>
-        {!isEmpty && postList ? (
-          <PostGrid contents={postList} loadMore={loadMorePost} />
-        ) : (
+        {!isEmpty && postList && <PostGrid contents={postList} loadMore={loadMorePost} />}
+
+        {isEmpty && (
           <EmptyContent
             icon="Exclamation"
             iconColor="Primary100"

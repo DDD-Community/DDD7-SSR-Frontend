@@ -86,7 +86,7 @@ const TabMenu = ({ closeTabMenu }: { closeTabMenu: () => void }) => {
             </svg>
           </span>
         </div>
-        <AlarmBell />
+        {user && <AlarmBell />}
         {/* <Dropdown
           TitleComponent={<AlarmBell />}
           listNamesAndCallback={[

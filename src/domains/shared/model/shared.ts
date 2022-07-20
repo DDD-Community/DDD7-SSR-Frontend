@@ -9,7 +9,7 @@ export interface User {
   accountIdx: number;
   email: string;
   name: string;
-  profileImg: string | null;
+  profileImg?: string;
   role: string;
   withdrawal: string;
   alarmAgree: string;
