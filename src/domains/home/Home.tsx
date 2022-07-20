@@ -12,7 +12,7 @@ export type periodType = 'daily' | 'weekly' | 'monthly';
 export type filteredType = { isTrend: boolean; period: periodType };
 
 const Home = () => {
-  const [filteredState, setFilteredState] = useState<filteredType>({ isTrend: false, period: 'weekly' });
+  const [filteredState, setFilteredState] = useState<filteredType>({ isTrend: true, period: 'weekly' });
   const { isMobile } = useBreakPointStore();
   const getPostsQuery = useGetPostsQuery(filteredState);
   const postList = useMemo(() => getPostsQuery.data?.pages.flatMap((posts) => posts.content), [getPostsQuery.data]);
