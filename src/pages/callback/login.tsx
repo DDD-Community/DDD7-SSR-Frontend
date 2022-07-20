@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+import { Loading } from 'src/domains/shared/components';
 
 interface QueryParams {
   token: string;
@@ -24,7 +25,7 @@ const LoginCallback = () => {
     }
   }, [router]);
 
-  return <h1>Loading...</h1>;
+  return <Loading />;
 };
 
 export default LoginCallback;
