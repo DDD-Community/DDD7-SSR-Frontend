@@ -78,7 +78,7 @@ const NotiCard = ({ content }: NotiCardProps) => {
                     <Image src={content.requesterIdx.profileImg} width={32} height={32} alt="requester Img" />
                   </div>
                 ) : (
-                  <Image src="./defaultProfileImage.png" width={40} height={40} alt="anonymous Img" />
+                  <Image src="/defaultProfileImage.png" width={40} height={40} alt="anonymous Img" />
                 )}
               </div>
               <div>
