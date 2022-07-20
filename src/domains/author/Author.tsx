@@ -109,7 +109,7 @@ const Author = () => {
       <section css={authorContainerStyle}>
         <div css={authorTopStyle}>
           <div css={authorBaseInfoWrapperStyle}>
-            <ProfileImage src={undefined} updatable={false} />
+            <ProfileImage src={profile?.profileImg} updatable={false} />
             <div css={authorBaseInfoStyle}>
               <Text type="title24" color="White100">
                 {accountDetailQuery.data?.name}

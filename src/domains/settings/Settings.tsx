@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
 import { toast } from 'react-toastify';
@@ -24,6 +24,7 @@ const Settings = () => {
   const { isMobile } = useBreakPointStore();
 
   const user = useUser();
+  const profileImageRef = useRef<HTMLInputElement>(null);
 
   const accountDetailQuery = useAccountDetailQuery(user?.accountIdx);
   const saveAccountInfoMutation = useSaveAccountInfoMutation();
@@ -32,7 +33,7 @@ const Settings = () => {
 
   const [isShownWithdrawalConfirm, handleOpenWithdrawalConfirm, handleCloseWithDrawalConfirm] = useIsShown(false);
 
-  const { register, watch, reset, handleSubmit } = useForm<AccountProfile>();
+  const { register, watch, reset, handleSubmit, setValue } = useForm<AccountProfile>();
   const name = watch('name');
   const blogName = watch('blogName');
   const profileImg = watch('profileImg');
@@ -111,6 +112,10 @@ const Settings = () => {
     }
   };
 
+  const handleChangeProfileImage = (url: string) => {
+    setValue('profileImg', url);
+  };
+
   useEffect(() => {
     reset({
       name: accountDetailQuery.data?.name || '',
@@ -131,18 +136,47 @@ const Settings = () => {
           <form onSubmit={handleSaveAccount}>
             <div css={userProfileBaseInfoStyle}>
               <div css={userProfileImageWrapperStyle}>
-                <ProfileImage src={profileImg || undefined} updatable />
-                {isMobile && (
-                  <div>
-                    <Button type="button" color="Primary100" size="large">
-                      이미지 업로드
-                    </Button>
-                    <Spacing col={12} />
-                    <Button type="button" color="Gray300" size="large">
-                      이미지 제거
-                    </Button>
-                  </div>
-                )}
+                <ProfileImage
+                  ref={profileImageRef}
+                  src={profileImg || undefined}
+                  updatable
+                  onChange={handleChangeProfileImage}
+                />
+
+                <div>
+                  {isMobile && (
+                    <>
+                      <Button
+                        type="button"
+                        color="Primary100"
+                        size="large"
+                        onClick={() => {
+                          console.log(profileImageRef.current);
+                          profileImageRef.current?.click();
+                        }}
+                      >
+                        이미지 업로드
+                      </Button>
+                      <Spacing col={12} />
+                    </>
+                  )}
+
+                  {profileImg && (
+                    <>
+                      <Spacing col={isMobile ? 0 : 14} />
+                      <Button
+                        type="button"
+                        color="Gray500"
+                        size="large"
+                        onClick={() => {
+                          setValue('profileImg', '');
+                        }}
+                      >
+                        이미지 제거
+                      </Button>
+                    </>
+                  )}
+                </div>
               </div>
               <Spacing row={isMobile ? 0 : 29} col={isMobile ? 27 : 0} />
               <div css={userProfileInfoInputWrapperStyle}>
@@ -275,8 +309,14 @@ const userProfileBaseInfoStyle = css`
 
 const userProfileImageWrapperStyle = css`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+
   flex: 1 0 auto;
+
+  ${BreakPoint.Mobile()} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 
   & > div {
     display: flex;
