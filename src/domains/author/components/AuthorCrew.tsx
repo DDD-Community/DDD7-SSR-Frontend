@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import React from 'react';
-import { EmptyContent, Spacing } from 'src/domains/shared/components';
+import { EmptyContent, Loading, Spacing } from 'src/domains/shared/components';
 import { useGetCrewListQuery } from 'src/domains/shared/queries/crews';
 import { CrewItem } from './CrewItem';
 
@@ -12,13 +12,18 @@ export const AuthorCrew = ({ accountIdx }: AuthorCrewProps) => {
   const getCrewsListQuery = useGetCrewListQuery(accountIdx);
   const crewList = getCrewsListQuery.data;
 
+  const isFetched = getCrewsListQuery.isFetched;
   const isEmpty = !crewList || crewList.length === 0;
+
+  if (!isFetched) {
+    return <Loading />;
+  }
 
   return (
     <>
       <Spacing col={isEmpty ? 60 : 45} />
       <div>
-        {crewList && !isEmpty ? (
+        {crewList && !isEmpty && (
           <ul css={crewGridStyle}>
             {crewList.map((crew) => (
               <CrewItem
@@ -30,9 +35,9 @@ export const AuthorCrew = ({ accountIdx }: AuthorCrewProps) => {
               />
             ))}
           </ul>
-        ) : (
-          <EmptyContent icon="Exclamation" iconColor="Primary100" description="추가된 크루가 없습니다." />
         )}
+
+        {isEmpty && <EmptyContent icon="Exclamation" iconColor="Primary100" description="추가된 크루가 없습니다." />}
       </div>
     </>
   );
