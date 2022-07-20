@@ -12,12 +12,14 @@ const GlobalStyle = () => (
         padding: 0;
         box-sizing: border-box;
       }
-      html,
+      html {
+        font-family: 'Inter', sans-serif;
+      }
+      ,
       body,
       #__next {
         height: 100%;
         background-color: #191a1c;
-        font-family: -apple-system, sans-serif;
       }
 
       body.Overflow--hidden {
