@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
+import { toast } from 'react-toastify';
 import { Text, Spacing, TextInput, Button, ProfileImage, Switch } from '../shared/components';
 import { Confirm } from '../shared/components/Confirm';
 import { Textarea } from '../shared/components/Textarea';
@@ -61,12 +62,8 @@ const Settings = () => {
   const handleSaveAccount = handleSubmit((data) => {
     saveAccountInfoMutation.mutate(data, {
       onSuccess: (result) => {
-        queryClient.setQueryData(['AccountDetail', user?.accountIdx], {
-          blogName: result.blogName,
-          profileImg: result.profileImg,
-          name: result.name,
-          introduction: result.introduction,
-        });
+        toast.success('프로필이 저장되었습니다.');
+        queryClient.setQueryData(['AccountDetail', user?.accountIdx], result);
       },
     });
   });
