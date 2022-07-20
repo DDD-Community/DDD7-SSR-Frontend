@@ -107,14 +107,13 @@ const commentAuthorInfoStyle = css`
 const commentBodyStyle = (isLineOver: boolean, isShowCommentNextLine: boolean) => css`
   display: block;
   max-height: none;
-  overflow: auto;
+  overflow: hidden;
   -webkit-line-clamp: unset;
 
   ${isLineOver &&
   !isShowCommentNextLine &&
   css`
     display: -webkit-box;
-    overflow: hidden;
     -webkit-line-clamp: 5;
     text-overflow: ellipsis;
     -webkit-box-orient: vertical;
