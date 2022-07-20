@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 import { BASE_URL, Color, OAUTH_URL, REQUEST_AUTH_URL } from '../../constants';
 import { Icon } from '../Icon';
+import { Text } from '../Text';
 
 interface LoginModalProps {
   onClose: () => void;
@@ -23,7 +24,9 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialText}>
-                  구글로 로그인
+                  <Text type={'title16'} color={'Gray900'}>
+                    구글로 로그인
+                  </Text>
                   <div css={LoginModalSocialIcon}>
                     <Image src="/googleIcon.png" alt="google" width={27} height={27} />
                   </div>
@@ -37,7 +40,9 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialKakaoText}>
-                  카카오톡으로 로그인
+                  <Text type={'title16'} color={'Gray900'}>
+                    카카오톡으로 로그인
+                  </Text>
                   <div css={LoginModalSocialIcon}>
                     <Image src="/kakaoIcon.png" alt="google" width={32} height={32} />
                   </div>
@@ -51,7 +56,9 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialKakaoText}>
-                  네이버로 로그인
+                  <Text type={'title16'} color={'Gray900'}>
+                    네이버로 로그인
+                  </Text>
                   <div css={LoginModalSocialIconNaver}>
                     <Image src="/naverIcon.png" alt="naver" width={20} height={19} />
                   </div>
