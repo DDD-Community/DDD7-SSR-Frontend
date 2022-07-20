@@ -37,7 +37,7 @@ const CrewCardContainerStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 20px;
+  padding: 0 20px;
   width: 296px;
   height: 240px;
   background-color: ${Color.Gray850};
