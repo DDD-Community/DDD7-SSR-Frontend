@@ -199,30 +199,35 @@ const PostDetail = () => {
                 handleDeleteComment={handleDeleteCommentClick}
               />
             )}
-            <Spacing col={32} />
-            <div css={commentTextareaWrapper}>
-              <div>
-                <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
-                <Spacing row={20} />
-                <Textarea
-                  value={commentText}
-                  onChange={(event) => setCommentText(event.target.value)}
-                  maxLength={1000}
-                  placeholder="댓글을 적어주세요."
-                  withCount
-                />
-              </div>
-              <Spacing col={16} />
-              <Button
-                type="button"
-                color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
-                size="medium"
-                disabled={commentText.length === 0}
-                onClick={handleCreateComment}
-              >
-                <Text type="body14">작성하기</Text>
-              </Button>
-            </div>
+
+            {user?.accountIdx && (
+              <>
+                <Spacing col={32} />
+                <div css={commentTextareaWrapper}>
+                  <div>
+                    <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
+                    <Spacing row={20} />
+                    <Textarea
+                      value={commentText}
+                      onChange={(event) => setCommentText(event.target.value)}
+                      maxLength={1000}
+                      placeholder="댓글을 적어주세요."
+                      withCount
+                    />
+                  </div>
+                  <Spacing col={16} />
+                  <Button
+                    type="button"
+                    color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
+                    size="medium"
+                    disabled={commentText.length === 0}
+                    onClick={handleCreateComment}
+                  >
+                    <Text type="body14">작성하기</Text>
+                  </Button>
+                </div>
+              </>
+            )}
           </>
         )}
       </section>

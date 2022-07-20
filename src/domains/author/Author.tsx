@@ -109,7 +109,7 @@ const Author = () => {
       <section css={authorContainerStyle}>
         <div css={authorTopStyle}>
           <div css={authorBaseInfoWrapperStyle}>
-            <ProfileImage src={undefined} updatable={false} />
+            <ProfileImage src={accountDetailQuery.data?.profileImg} updatable={false} />
             <div css={authorBaseInfoStyle}>
               <Text type="title24" color="White100">
                 {accountDetailQuery.data?.name}
@@ -123,16 +123,26 @@ const Author = () => {
 
           {!accountDetailQuery.data?.owner && (
             <>
-              {accountDetailQuery.data?.crew ? (
+              {accountDetailQuery.data?.isCrew === 'Y' && (
                 <Button type="button" color="Red100" size="medium" onClick={handleOpenDeleteCrewConfirm}>
                   <Text type="body14" color="White100">
                     크루 해제하기
                   </Text>
                 </Button>
-              ) : (
+              )}
+
+              {accountDetailQuery.data?.isCrew === 'N' && (
                 <Button type="button" color="Primary100" size="medium" onClick={handleRequireCrew}>
                   <Text type="body14" color="White100">
                     크루 추가하기
+                  </Text>
+                </Button>
+              )}
+
+              {accountDetailQuery.data?.isCrew === 'W' && (
+                <Button type="button" color="Gray500" size="medium" disabled>
+                  <Text type="body14" color="White100">
+                    크루 승낙 대기
                   </Text>
                 </Button>
               )}

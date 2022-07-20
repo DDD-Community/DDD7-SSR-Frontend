@@ -14,7 +14,7 @@ export interface AccountDetail {
   crewCount: number;
   postCount: number;
 
-  crew: boolean;
+  isCrew: 'N' | 'Y' | 'W';
   owner: boolean;
   alarmAgree: 'Y' | 'N';
   emailAgree: 'Y' | 'N';

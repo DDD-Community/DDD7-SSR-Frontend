@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import React from 'react';
 import { Color } from '../../constants';
+import { BreakPoint } from '../../hooks/useMediaQuery';
 
 export const Loading = () => {
   return (
@@ -27,6 +28,12 @@ const loadingStyle = css`
   background-size: 14px 14px;
   background-repeat: no-repeat;
   animation: m 1s infinite alternate;
+
+  ${BreakPoint.Mobile()} {
+    width: 48px;
+    height: 25px;
+    background-size: 12px 12px;
+  }
 
   @keyframes m {
     0% {
