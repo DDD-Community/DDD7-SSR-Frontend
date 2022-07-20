@@ -40,10 +40,13 @@ const customStyles = {
 };
 
 const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
+  const ref = useRef<HTMLInputElement>(null);
+
   const [isShown, onOpen, onclose] = useIsShown(false);
   const router = useRouter();
   const [searchText, setSearchText] = useState<string>((router.query.text as string) || '');
   const { showModal, showOnModal, showOffModal } = useLoginModalStore();
+  const [searchInputPlaceholder, setSearchInputPlaceholder] = useState('검색어를 입력하세요.');
 
   const { isMobile } = useBreakPointStore();
   const { user } = useUserStore();
@@ -66,9 +69,25 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
       setSearchText(text);
 
       goToSearchPage(e.target.value);
+      e.target.focus();
     },
     [goToSearchPage],
   );
+
+  const searchInputOnFocus = () => {
+    setSearchInputPlaceholder('');
+  };
+
+  const searchInputOnBlur = () => {
+    setSearchInputPlaceholder('검색어를 입력하세요.');
+  };
+
+  useEffect(() => {
+    const isSearchPage = router.pathname.includes('/search');
+    if (ref.current && isSearchPage) {
+      ref.current.focus();
+    }
+  }, [router.pathname]);
 
   return (
     <>
@@ -78,10 +97,13 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
         {!isMobile && (
           <SearchBarContainer>
             <TextInput
+              ref={ref}
               value={searchText}
-              placeholder="검색어를 입력하세요"
+              placeholder={searchInputPlaceholder}
               variant="search"
               onChange={onChangeTextOnSearchBar}
+              onBlur={searchInputOnBlur}
+              onFocus={searchInputOnFocus}
             />
 
             <SearchBarMag>
@@ -118,10 +140,13 @@ const Header = ({ openTabMenu }: { openTabMenu: () => void }) => {
                 <Image src="/left_arrow.svg" alt="leftArrow" width={11} height={17} />
               </div>
               <TextInput
+                ref={ref}
                 value={searchText}
                 placeholder="검색어를 입력하세요"
                 variant="search"
                 onChange={onChangeTextOnSearchBar}
+                onBlur={searchInputOnBlur}
+                onFocus={searchInputOnFocus}
               />
 
               <MobileSearchBarMag>

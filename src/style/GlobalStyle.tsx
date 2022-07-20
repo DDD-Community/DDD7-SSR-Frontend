@@ -7,15 +7,52 @@ import { GlobalToastStyle } from './GlobalToastStyle';
 const GlobalStyle = () => (
   <Global
     styles={css`
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 100;
+        src: url(/fonts/NotoSansKR-Thin.otf) format('opentype');
+      }
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 300;
+        src: url(/fonts/NotoSansKR-Light.otf) format('opentype');
+      }
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 400;
+        src: url(/fonts/NotoSansKR-Regular.otf) format('opentype');
+      }
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 500;
+        src: url(/fonts/NotoSansKR-Medium.otf) format('opentype');
+      }
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 700;
+        src: url(/fonts/NotoSansKR-Bold.otf) format('opentype');
+      }
+      @font-face {
+        font-family: 'Noto Sans KR';
+        font-style: normal;
+        font-weight: 900;
+        src: url(/fonts/NotoSansKR-Black.otf) format('opentype');
+      }
+
       * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
       }
       html {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Noto Sans KR', 'Inter', sans-serif;
       }
-      ,
+
       body,
       #__next {
         height: 100%;

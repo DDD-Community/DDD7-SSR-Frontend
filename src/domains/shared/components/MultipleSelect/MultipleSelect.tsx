@@ -8,6 +8,7 @@ import { TextInput } from '../TextInput';
 import { MultipleSelectProps } from './MultipleSelectTypes';
 
 const ESC_KEY = 'Escape';
+const ENTER_KEY = 'Enter';
 
 const MultipleSelect: React.FC<MultipleSelectProps> = ({
   options,
@@ -36,6 +37,10 @@ const MultipleSelect: React.FC<MultipleSelectProps> = ({
     if (e.key === ESC_KEY) {
       e.currentTarget.blur();
       setIsFocus(false);
+    }
+
+    if (e.key === ENTER_KEY) {
+      e.preventDefault();
     }
   };
 

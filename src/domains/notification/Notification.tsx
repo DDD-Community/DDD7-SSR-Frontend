@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import Image from 'next/image';
 import { useCallback, useMemo } from 'react';
-import { Loading } from '../shared/components';
+import { EmptyContent, Loading } from '../shared/components';
 import CardRowList from '../shared/components/CardRowList/CardRowList';
 import NotiCard from '../shared/components/NotiCard/NotiCard';
 import { Color } from '../shared/constants';
@@ -28,6 +28,7 @@ const Notification = () => {
       </div>
 
       {isLoading && <Loading />}
+      {notiList?.length === 0 && <EmptyContent description="알림 내용이 존재하지 않습니다." />}
       {!isLoading && notiList && <CardRowList contents={notiList} loadMore={loadMoreNoti} />}
     </div>
   );
