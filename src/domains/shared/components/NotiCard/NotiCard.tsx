@@ -208,7 +208,6 @@ const notiAddCrew = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 4px;
 `;
 
 const notiGoToBlog = css`
@@ -221,7 +220,6 @@ const notiGoToBlog = css`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-top: 4px;
   cursor: pointer;
 `;
 export default memo(NotiCard);
