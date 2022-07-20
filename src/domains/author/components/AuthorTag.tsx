@@ -14,7 +14,7 @@ export const AuthorTag = ({ accountIdx }: AuthorTagProps) => {
   );
   const loadMorePost = () => authorTaggedPostListQuery.fetchNextPage();
 
-  const isEmpty = postList && postList?.length > 0;
+  const isEmpty = !postList || postList.length === 0;
 
   return (
     <>
