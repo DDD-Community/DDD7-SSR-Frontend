@@ -5,8 +5,6 @@ import PostDetailRepository from './PostDetail.repository';
 export const usePostDetailQuery = (postIdx?: number) =>
   useQuery(['getPostDetail', postIdx], () => PostDetailRepository.getPost(postIdx!), {
     enabled: !!postIdx,
-    staleTime: 1000,
-    cacheTime: 1000,
   });
 
 export const useDeletePostMutation = () => {
