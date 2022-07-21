@@ -14,6 +14,7 @@ import { useAccountDetailQuery } from '../shared/queries/account';
 import { Confirm } from '../shared/components/Confirm';
 import { useIsShown } from '../shared/hooks/useIsShown';
 import { toast } from 'react-toastify';
+import { AuthorIntro } from './components/AuthorIntro';
 
 const Author = () => {
   const queryClient = useQueryClient();
@@ -153,29 +154,13 @@ const Author = () => {
         <Spacing col={62} />
         <Tabs tabList={tabList} onTabChange={handleTabChange} />
         {selectedTab === 'author' && (
-          <>
-            <Spacing col={45} />
-
-            <div>
-              <div>
-                <Text type="body16" color="White100">
-                  소개
-                </Text>
-                <Spacing col={24} />
-                <PreWrapText type="tag12" color="White100">
-                  {accountDetailQuery.data?.introduction}
-                </PreWrapText>
-              </div>
-              <Spacing col={42} />
-              <div>
-                <Text type="body16" color="White100">
-                  업적
-                </Text>
-              </div>
-            </div>
-          </>
+          <AuthorIntro
+            introduction={accountDetailQuery.data?.introduction || ''}
+            postCount={accountDetailQuery.data?.postCount || 0}
+            commentCount={accountDetailQuery.data?.commentCount || 0}
+            crewCount={accountDetailQuery.data?.crewCount || 0}
+          />
         )}
-
         {selectedTab === 'post' && <AuthorPost accountIdx={accountIdx} isOwner={accountIdx === profile?.accountIdx} />}
         {selectedTab === 'crew' && <AuthorCrew accountIdx={accountIdx} />}
         {selectedTab === 'tag' && <AuthorTag accountIdx={accountIdx} />}
