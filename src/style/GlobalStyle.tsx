@@ -55,7 +55,7 @@ const GlobalStyle = () => (
 
       body,
       #__next {
-        height: 100%;
+        height: 100vh;
         background-color: #191a1c;
       }
 

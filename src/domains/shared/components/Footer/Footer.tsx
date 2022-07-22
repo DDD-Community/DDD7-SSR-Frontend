@@ -31,6 +31,7 @@ const FooterLine = styled.div`
 `;
 
 const FooterContainer = styled.footer`
+  margin-top: 30px;
   height: 58px;
   color: white;
 `;
