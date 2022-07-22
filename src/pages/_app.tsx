@@ -33,7 +33,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       <QueryClientProvider client={queryClient}>
         <GlobalStyle />
         <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
         <ToastContainer
           theme="dark"
           position="top-right"
