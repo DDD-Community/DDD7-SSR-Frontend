@@ -42,8 +42,6 @@ export type FontSizeType = keyof typeof FontSize;
 
 export const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const OAUTH_URL = process.env.NEXT_PUBLIC_LOGIN_API_URL;
-
 export const DEFAULT_POST_IMAGE = '/defaultPostImage.png';
 export const DEFAULT_PROFILE_IMAGE = '/defaultProfileImage.png';
 

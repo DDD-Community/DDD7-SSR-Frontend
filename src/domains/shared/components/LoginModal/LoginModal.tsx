@@ -20,7 +20,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
       </LoginModalCloseBtn>
       <LoginModalMethodContainer>
         <LoginModalGoogleContainer>
-          <Link href={`${OAUTH_URL}/oauth2/authorization/google`} passHref>
+          <Link href={`${BASE_URL}/oauth2/authorization/google`} passHref>
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialText}>
@@ -36,7 +36,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
           </Link>
         </LoginModalGoogleContainer>
         <LoginModalKakaoContainer>
-          <Link href={`${OAUTH_URL}/oauth2/authorization/kakao`} passHref>
+          <Link href={`${BASE_URL}/oauth2/authorization/kakao`} passHref>
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialKakaoText}>
@@ -52,7 +52,7 @@ const LoginModal = ({ onClose }: LoginModalProps) => {
           </Link>
         </LoginModalKakaoContainer>
         <LoginModalNaverContainer>
-          <Link href={`${OAUTH_URL}/oauth2/authorization/naver`} passHref>
+          <Link href={`${BASE_URL}/oauth2/authorization/naver`} passHref>
             <LoginModalSocialBtn>
               <div css={LoginModalSocialTextContainer}>
                 <div css={LoginModalSocialKakaoText}>
