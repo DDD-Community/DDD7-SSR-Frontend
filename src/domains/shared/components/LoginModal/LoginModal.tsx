@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { BASE_URL, Color, OAUTH_URL, REQUEST_AUTH_URL } from '../../constants';
+import { BASE_URL, Color } from '../../constants';
 import { Icon } from '../Icon';
 import { Text } from '../Text';
 
