@@ -45,8 +45,6 @@ const PostDetail = () => {
 
   const [selectedCommentIdx, setSelectedCommentIdx] = useState<number | null>(null);
 
-  const [isShownDeletePostConfirm, handleOpenDeletePostConfirm, handleCloseDeletePostConfirm] = useIsShown(false);
-
   const [isShownDeleteCommentConfirm, handleOpenDeleteCommentConfirm, handleCloseDeleteCommentConfirm] =
     useIsShown(false);
 
@@ -90,7 +88,9 @@ const PostDetail = () => {
       },
       {
         onSuccess: () => {
-          toast.success('댓글이 작성되었어요.');
+          toast.success('댓글이 작성되었어요.', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
           queryClient.invalidateQueries(['CommentList', postIdx]);
           setCommentText('');
         },
@@ -105,8 +105,8 @@ const PostDetail = () => {
   const handleDeletePostClick = () => {
     deletePostMutation.mutate(postIdx, {
       onSuccess: () => {
-        router.back();
         toast.success('글이 삭제되었어요.');
+        router.push('/');
       },
     });
   };
@@ -181,7 +181,7 @@ const PostDetail = () => {
                     수정
                   </StyledText>
                   <Spacing row={8} />
-                  <StyledText color="Red100" type="tag12" useInline onClick={handleOpenDeletePostConfirm}>
+                  <StyledText color="Red100" type="tag12" useInline onClick={handleDeletePostClick}>
                     삭제
                   </StyledText>
                 </div>
@@ -199,46 +199,37 @@ const PostDetail = () => {
                 handleDeleteComment={handleDeleteCommentClick}
               />
             )}
-
-            {user?.accountIdx && (
-              <>
-                <Spacing col={32} />
-                <div css={commentTextareaWrapper}>
-                  <div>
-                    <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
-                    <Spacing row={20} />
-                    <Textarea
-                      value={commentText}
-                      onChange={(event) => setCommentText(event.target.value)}
-                      maxLength={1000}
-                      placeholder="댓글을 적어주세요."
-                      withCount
-                    />
-                  </div>
-                  <Spacing col={16} />
-                  <Button
-                    type="button"
-                    color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
-                    size="medium"
-                    disabled={commentText.length === 0}
-                    onClick={handleCreateComment}
-                  >
-                    <Text type="body14">작성하기</Text>
-                  </Button>
-                </div>
-              </>
-            )}
+            <Spacing col={32} />
+            <div css={commentTextareaWrapper}>
+              <div>
+                {user?.profileImg ? (
+                  <Image src={user?.profileImg} width={48} height={48} alt="profile-image" />
+                ) : (
+                  <Image src={DEFAULT_PROFILE_IMAGE} width={48} height={48} alt="profile-image" />
+                )}
+                <Spacing row={20} />
+                <Textarea
+                  value={commentText}
+                  onChange={(event) => setCommentText(event.target.value)}
+                  maxLength={1000}
+                  placeholder="댓글을 적어주세요."
+                  withCount
+                />
+              </div>
+              <Spacing col={16} />
+              <Button
+                type="button"
+                color={commentText.length === 0 ? 'Gray700' : 'Primary100'}
+                size="medium"
+                disabled={commentText.length === 0}
+                onClick={handleCreateComment}
+              >
+                <Text type="body14">작성하기</Text>
+              </Button>
+            </div>
           </>
         )}
       </section>
-      <Confirm
-        isShown={isShownDeletePostConfirm}
-        onClose={handleCloseDeletePostConfirm}
-        onConfirm={handleDeletePostClick}
-        description="포스트를 삭제하시나요?"
-        buttonTextColor="Red100"
-        buttonText="삭제하기"
-      />
       <Confirm
         isShown={isShownDeleteCommentConfirm}
         onClose={handleCloseDeleteCommentConfirm}
