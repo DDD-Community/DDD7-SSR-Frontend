@@ -174,7 +174,7 @@ const Settings = () => {
                         color="Gray500"
                         size="large"
                         onClick={() => {
-                          setValue('profileImg', '');
+                          setValue('profileImg', '', { shouldDirty: true });
                         }}
                       >
                         이미지 제거
